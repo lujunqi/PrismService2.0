@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+                        http://www.springframework.org/schema/aop   
+                        http://www.springsource.org/schema/aop/spring-aop-3.0.xsd  
+                        http://www.springframework.org/schema/tx  
+                            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	<bean name="m_unit" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="EL:TEXT">
+					<value><![CDATA[
+<input type="text" class="text w160" name="%1$s" value="%2$s"/>
+]]>
+					</value>
+				</entry>
+				<entry key="EL:CHECKBOX">
+					<value><![CDATA[
+<span><input type="checkbox" name="%1$s" class="checkbox" value="%2$s" %4$s /><span class="el">%3$s</span></span>
+]]>
+					</value>
+				</entry>
+				<entry key="EL:RADIO">
+					<value><![CDATA[
+<span><input type="radio" name="%1$s" class="radio" value="%2$s" %4$s /><span class="el">%3$s</span></span>
+]]>
+					</value>
+				</entry>
+				<entry key="EL:HIDDEN">
+					<value><![CDATA[
+<input type="hidden" name="%1$s" value="%2$s" >
+]]>
+					</value>
+				</entry>
+				<entry key="EL:SELECT">
+					<value><![CDATA[
+<select name="%1$s">%2$s</select>
+]]>
+					</value>
+				</entry>
+				<entry key="EL:DATE">
+					<value><![CDATA[
+<input type="text" name="begin_%1$s" style="width:84px;" class="text" value="%2$s" readonly="readonly"
+ onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" />-
+<input type="text" name="end_%1$s" style="width:84px;" class="text" value="%3$s" readonly="readonly"
+ onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" />
+]]>
+					</value>
+				</entry>
+				<entry key="EL:WIN">
+					<value><![CDATA[
+<input type="hidden" name="%1$s" ><a href="javascript:win('%2$s')">选择</a>
+]]>
+					</value>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

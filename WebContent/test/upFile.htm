@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>测试</title>
+<meta charset="utf-8">
+<link href="../plug/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="../plug/bootstrap/css/fileinput.min.css" media="all"
+	rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../scripts/jquery.js"></script>
+<script type="text/javascript" src="../prism/prismTemplete.js"></script>
+
+
+<script type="text/javascript">
+
+	$(init);
+	function init() {
+
+		var obj = {
+			a : "a1",
+			b : "b1",
+			c : function() {
+				return [ 1, 2, 3, 4 ]
+			},
+			d : function() {
+				return "xx";
+			}
+		};
+		var def = {
+			e : "def_e"
+		};
+		var cmd = new prismTemplete();
+		cmd.func_def = function(){
+			return "ddd";
+		}
+		//
+		cmd.data("obj", obj);
+		cmd.data("def", def);
+		
+		//cmd.preview($("#t_ft"));
+		
+		var url = "../pa/family_tree.s";
+		$.post(url, function(data) {
+			cmd.data("ft", data);
+			cmd.option = function(obj, val) {
+				var html = "";
+				var param = obj.attr("data-param");
+				var val = cmd.getValue(param);
+
+				var sex_array = {
+					"1" : "男",
+					"2" : "女"
+				};
+				for (key in sex_array) {
+					var tmp = "";
+					if (key == val) {
+						tmp = " selected ";
+					}
+					html += "<option "+tmp+" value='"+key+"'>" + sex_array[key]
+							+ "</option>";
+				}
+
+				obj.html(html);
+			};
+			cmd.preview($("#t_ft"));
+		}, "json");
+		
+	}
+</script>
+</head>
+<body>
+	<div id="t_ft">
+		<a id="xx">sssss</a> <a id="zz">sssss</a> <a id="yy">sssss</a>
+
+		<div id="test">
+			<p data-exp="obj.a"></p>
+			<p data-exp="obj.b"></p>
+			<div data-exp="obj.c" data-method="list" data-map='c'>
+				[<a data-exp="c">qq</a>,<a data-exp="obj.b"></a>]/
+			</div>
+			<p data-exp="obj.d"></p>ss
+			<p data-exp="obj.e" data-default='{"func_def":"x"}'></p>ss
+			<p data-exp="obj.f" data-default='fff'></p>ss
+
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>FT_NAME</th>
+					<th>FT_SEX</th>
+					<th>操作</th>
+
+				</tr>
+			</thead>
+			<tbody id="" data-method="list" data-map='m' data-exp="ft">
+				<tr>
+					<td data-exp="m.ft_id"></td>
+					<td data-exp="m.ft_name"></td>
+					<td><select data-exp="sex" data-param="m.ft_sex"
+						data-method="option">
+
+					</select></td>
+					<td data-exp="m" data-method="format">{{ft_id}}=={{ft_name}}</td>
+				</tr>
+			</tbody>
+		</table> 
+	</div>
+</body>
+</html>

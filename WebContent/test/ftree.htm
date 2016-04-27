@@ -1,0 +1,90 @@
+<html>
+<head>
+
+<link href="../plug/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="ftree.css" rel="stylesheet">
+
+<script type="text/javascript" src="../scripts/jquery.js"></script>
+<script src="../plug/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="layer/layer.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$.post("../pa/family_vtree.s", function(data) {
+			$("#tree").html(data);
+			$('.tree li:has(ul)').addClass('parent_li').find(' > span').attr(
+					'title', 'Collapse this branch');
+			$("span", ".tree").click(function() {
+				var children = $(this).parent('li').find(' > ul');
+				if (children.is(":visible")) {
+					children.hide("fast");
+				} else {
+					children.show("fast");
+				}
+			});
+		});
+
+		
+	});
+	function init_tree() {
+		$.post("../pa/family_tree.s", function(data) {
+			var root = $("#tree > ul");
+			root.html("");
+			for (i in data) {
+				var id = data[i]["ft_id"];
+				var sup_id = data[i]["sup_ft_id"];
+				var name = data[i]["ft_name"];
+				var html = '<li><a href="javascript:void(1);" id="id' + id
+						+ '">' + name + '</a></li>';
+				var parent_node = $("#id" + sup_id, root);
+				if (parent_node.length > 0) {//´æÔÚ
+
+				}
+			}
+		}, "json");
+	}
+</script>
+</head>
+<body>
+
+	<div class="tree" id="tree">
+		<ul>
+			<li><span><i class="icon-folder-open"></i> Parent</span> <a
+				href="">Goes somewhere</a>
+				<ul>
+					<li><span><i class="icon-minus-sign"></i> Child</span> <a
+						href="">Goes somewhere</a>
+						<ul>
+							<li><span><i class="icon-leaf"></i> Grand Child</span> <a
+								href="">Goes somewhere</a></li>
+						</ul></li>
+					<li><span><i class="icon-minus-sign"></i> Child</span> <a
+						href="">Goes somewhere</a>
+						<ul>
+							<li><span><i class="icon-leaf"></i> Grand Child</span> <a
+								href="">Goes somewhere</a></li>
+							<li><span><i class="icon-minus-sign"></i> Grand Child</span>
+								<a href="">Goes somewhere</a>
+								<ul>
+									<li><span><i class="icon-minus-sign"></i> Great
+											Grand Child</span> <a href="">Goes somewhere</a>
+										<ul>
+											<li><span><i class="icon-leaf"></i> Great great
+													Grand Child</span> <a href="">Goes somewhere</a></li>
+											<li><span><i class="icon-leaf"></i> Great great
+													Grand Child</span> <a href="">Goes somewhere</a></li>
+										</ul></li>
+									<li><span><i class="icon-leaf"></i> Great Grand
+											Child</span> <a href="">Goes somewhere</a></li>
+									<li><span><i class="icon-leaf"></i> Great Grand
+											Child</span> <a href="">Goes somewhere</a></li>
+								</ul></li>
+							<li><span><i class="icon-leaf"></i> Grand Child</span> <a
+								href="">Goes somewhere</a></li>
+						</ul></li>
+				</ul></li>
+		</ul>
+	</div>
+
+
+</body>
+</html>

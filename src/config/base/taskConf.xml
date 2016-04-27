@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+                        http://www.springframework.org/schema/aop   
+                        http://www.springsource.org/schema/aop/spring-aop-3.0.xsd  
+                        http://www.springframework.org/schema/tx  
+                        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                        http://www.springframework.org/schema/task
+    					http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="tlsy" method="jobWeiXin" cron="0 44 15 * * ?" />
+		<!-- <task:scheduled ref="taskJob" method="jobWeiXin" cron="0 0/12 * * * ?" /> -->
+		
+	</task:scheduled-tasks>
+	<!-- 收益 -->
+	<bean id="tlsy" class="com.jpush.TaskJob">
+		<property name="connection" ref="DBConnection" />
+		<property name="sql" value="tlsy" />
+		<property name="title" value="通联收益" />
+	</bean>
+	<!-- 新审批 -->
+	<bean id="taskJob" class="com.jpush.TaskJob">
+		<property name="connection" ref="DBConnection" />
+		<property name="sql" value="nappr" />
+		<property name="title" value="业务待审" />
+		
+	</bean>
+	
+</beans>

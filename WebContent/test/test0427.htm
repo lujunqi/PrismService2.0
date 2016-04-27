@@ -1,0 +1,37 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>masonry瀑布流布局jquery插接件</title>
+<script src="../scripts/jquery.js" type="text/javascript"></script>
+<script src="../wq_page/js/masonry.pkgd.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function rnd(min, max) {
+        var tmp = min;
+        if (max < min) { min = max; max = tmp; }
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    var i = 0,j=5;
+    function Add() {
+        j += i;
+        for (; i < j; i++)
+            $('#test').prepend('<li class="box" style="height:' + rnd(100, 250) + 'px">test' + i + '</li>');
+        // $('#test').masonry('appended', $('#test li[class="box"]'));
+        $('#test').masonry('reload');
+    }
+    function doMasonry() {
+       
+    }
+  window.onload=function () {
+        $('#test').masonry({
+            itemSelector: '.box'
+        });
+    };
+</script>
+<style type="text/css">
+    ul{list-style:none;}
+    .box{width:150px;float:left;border:solid 1px black;margin:0px 5px 5px 5px;}</style>
+</head><body>
+<input type="button" value="添加项目" onclick="Add()" />
+<ul id="test">
+
+</ul></body></html>
