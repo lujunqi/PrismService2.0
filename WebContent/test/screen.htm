@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>远程桌面</title>
+<meta charset="utf-8">
+<script type="text/javascript" src="../scripts/jquery.js"></script>
+<script type="text/javascript">
+$(init);
+function init(){
+	$("#a23").click(function(){
+		
+		listener();
+	});
+}
+function listener(){
+	$.post("../listener",{method:"get"},function(data){
+		alert(data);
+		if(data.status){
+			
+		}
+		setTimeout("listener()",500);
+	},"jsonp");
+}
+</script>
+</head>
+<body>
+<a id="a23">xxxx</a>
+
+</body>
+</html>
