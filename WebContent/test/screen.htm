@@ -5,26 +5,32 @@
 <meta charset="utf-8">
 <script type="text/javascript" src="../scripts/jquery.js"></script>
 <script type="text/javascript">
-$(init);
-function init(){
-	$("#a23").click(function(){
-		
+	$(init);
+	function init() {
 		listener();
-	});
-}
-function listener(){
-	$.post("../listener",{method:"get"},function(data){
-		alert(data);
-		if(data.status){
-			
-		}
-		setTimeout("listener()",500);
-	},"jsonp");
-}
+	}
+	function listener() {
+		$.ajax({
+			url : '../listener',
+			dataType : "jsonp",
+			jsonp : "jsonpcallback",
+			data : {
+				"method" : "get"
+			},
+			success : function(data) {
+				if (data != null) {
+					var $ul = $("<ul></ul>");
+					$("<li/>").text(data["id"] + " " + decodeURI(data["name"])).appendTo($ul);
+					$("#a23").append($ul);
+				}
+				setTimeout("listener()", 500);
+			}
+		});
+	}
 </script>
 </head>
 <body>
-<a id="a23">xxxx</a>
+	<a id="a23">xxxx</a>
 
 </body>
 </html>

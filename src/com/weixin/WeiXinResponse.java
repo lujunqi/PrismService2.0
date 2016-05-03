@@ -65,6 +65,25 @@ public class WeiXinResponse {
 		}
 		return userId;
 	}
+	//获取 AccessToken
+	public String getAccessToken(String appid, String secret,String code) {
+		Object accessToken = session.getAttribute("AccessToken");
+		if (accessToken != null) {
+			return accessToken + "";
+		}
+		 
+		String url = String
+				.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%1$s&secret=%2$s&code=%3$s&grant_type=authorization_code",
+						appid, secret,code);
+		JsonUtil ju = new JsonUtil();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> jmap = (Map<String, Object>) ju.toObject(HttpWeb
+				.getGetResponse(url));
+		System.out.println(jmap);
+		session.setAttribute("AccessToken", jmap.get("access_token"));
+		return jmap.get("access_token") + "";
+
+	}
 
 	// 获取企业AccessToken
 	public String getCoAccessToken(String corpid, String corpsecret) {

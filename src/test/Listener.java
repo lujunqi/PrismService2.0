@@ -1,7 +1,11 @@
 package test;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.prism.common.JsonUtil;
 
 /**
  * Servlet implementation class Listener
@@ -34,7 +40,12 @@ public class Listener extends HttpServlet {
 			set(value);
 		}
 		if ("get".equals(method)) {
-			get();
+			PrintWriter out = res.getWriter();
+			String jsonp = req.getParameter("jsonpcallback");
+			String str = get();
+			str = jsonp + "(" + str + ")";
+			System.out.println(str);
+			out.print(str);
 		}
 	}
 
@@ -45,9 +56,10 @@ public class Listener extends HttpServlet {
 		try {
 			String str = list.get(0);
 			list.remove(0);
+			System.out.println(str + "============");
 			return str;
 		} catch (Exception e) {
-			return "Null()";
+			return null;
 		}
 	}
 

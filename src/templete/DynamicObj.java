@@ -10,6 +10,7 @@ public abstract class DynamicObj {
 		return add(c, r, value, c, r, "String");
 	}
 
+	
 	public Map<String,Object> add(int c, int r, Object value, String type) {
 		return add(c, r, value, c, r, type);
 	}
