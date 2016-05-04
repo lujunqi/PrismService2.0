@@ -3,9 +3,9 @@
 	isELIgnored="false"%>
 <%@page import="com.weixin.*"%>
 <%
-String code = request.getParameter("code");
-WeiXinResponse w = new WeiXinResponse(session);
-w.getAccessToken("wx627f086f1403f471", "38c69c5e96c50f57bd4c93de86da1d9b", code);
+	/* String code = request.getParameter("code");
+	 WeiXinResponse w = new WeiXinResponse(session);
+	 w.getAccessToken("wx627f086f1403f471", "38c69c5e96c50f57bd4c93de86da1d9b", code); */
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -14,12 +14,13 @@ w.getAccessToken("wx627f086f1403f471", "38c69c5e96c50f57bd4c93de86da1d9b", code)
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>çå¸æµ</title>
+<title>物料超市</title>
 <link href="css/style.css" rel="stylesheet" media="all">
 <link href="../plug/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <script src="../scripts/jquery.js" type="text/javascript"></script>
 <script src="js/masonry.pkgd.min.js" type="text/javascript"></script>
 <script src="js/imagesloaded.pkgd.min.js" type="text/javascript"></script>
+<script src="js/layer/layer.js" type="text/javascript"></script>
 
 
 
@@ -39,26 +40,28 @@ w.getAccessToken("wx627f086f1403f471", "38c69c5e96c50f57bd4c93de86da1d9b", code)
 		var $container = $('#con1_1');
 
 		for (var i = 1; i < 13; i++) {
-			var grid = $('<div class="grid"><img src="img/'+i+'.jpg" ></div>');
+			var grid = $('<div class="grid"><img src="img/'+i+'.jpg" ><div>xxxx</div></div>');
 			$container.append(grid);//.masonry();
 		}
 		$container.imagesLoaded(function() {
 			$container.masonry();
+			$(".grid").each(function() {
+				$(this).click(function() {
+					layer.open({
+						btn : [ 'OK' ],
+						content : $(this).html()
+					});
+				});
+			});
+
 		});
-		for (var i = 1; i < 13; i++) {
-			var grid = $('<div class="grid"><img src="img/'+i+'.jpg" ></div>');
-			$container.append(grid);//.masonry();
-		}
-		$container.imagesLoaded(function() {
-			$container.masonry();
-		});
-		
 	}
+	
 </script>
 </head>
 <body>
 	<div class="wrapper">
-		<h3>çå¸æµå®ä¾</h3>
+		<h3>物料超市</h3>
 		<div id="con1_1"></div>
 	</div>
 </body>

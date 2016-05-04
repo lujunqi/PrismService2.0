@@ -55,6 +55,7 @@ public class HttpWeb {
 		return html;
 	}
 
+	
 	public static String getGetResponse(String url) {
 		String html = "";
 		// 构造HttpClient的实例

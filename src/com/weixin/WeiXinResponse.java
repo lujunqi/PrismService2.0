@@ -65,6 +65,8 @@ public class WeiXinResponse {
 		}
 		return userId;
 	}
+	
+	
 	//获取 AccessToken
 	public String getAccessToken(String appid, String secret,String code) {
 		Object accessToken = session.getAttribute("AccessToken");
