@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	
+	<bean id="slt" class="com.prism.service.impl.basic.NormalSltService">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	<bean id="upt" class="com.prism.service.impl.basic.NormalUptService">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	<bean id="total" class="com.prism.service.impl.basic.NormalSltService">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	
+	<bean id="s" class="com.prism.service.impl.basic.NormalSltService">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	
+	
+	<bean id="excel" class="com.prism.service.impl.basic.ExcelOutputService">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	
+	<bean id="c" class="com.prism.service.impl.basic.NormalCallService">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	
+	
+	<bean id="u" class="com.prism.service.impl.basic.NormalUptService">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	
+	<bean id="v" class="com.prism.service.impl.basic.NormalHTMLService">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	
+</beans>

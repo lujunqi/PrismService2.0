@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+                        http://www.springframework.org/schema/aop   
+                        http://www.springsource.org/schema/aop/spring-aop-3.0.xsd  
+                        http://www.springframework.org/schema/tx  
+                            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	<!-- 公司信息列表  -->
+	<bean id="co_view" class="com.prism.service.impl.basic.NormalHTMLService">
+		<property name="sourceMap">
+			<map>
+				<entry key="VIEWNAME" value="查询公司" />
+				<entry key="MAPPING">
+					<list>
+						<array>
+							<value>公司名称</value>
+							<value>#@CO_NAME#</value>
+						</array>
+						<array>
+							<value>公司性质</value>
+							<value>#@CO_ATTR#</value>
+						</array>
+						<array>
+							<value>公司联系电话</value>
+							<value>#@CO_TEL#</value>
+						</array>
+						<array>
+							<value>公司地址</value>
+							<value>#@CO_ADD#</value>
+						</array>
+						<array>
+							<value>公司维护人员</value>
+							<value>#@SAFE_USER_ID#</value>
+						</array>
+						<array>
+							<value>备注</value>
+							<value>#@CO_REMARK#</value>
+						</array>
+						<array>
+							<value>最后一次修改时间</value>
+							<value>#@VERSION_DATE#</value>
+						</array>
+						
+						
+						<array>
+							<value>操作</value>
+							<value>#@func:func_co#</value>
+						</array>
+					</list>
+				</entry>
+				<entry key="QUERY">
+					<list>
+						<value>$el.text("公司名称","CO_NAME")</value>
+						<value>$el.text("联系电话","CO_TEL")</value>
+					</list>
+				</entry>
+				<entry key="DATAURL" value="co_list.do" /><!-- 明细 -->
+				<entry key="DATAURLTOTAL" value="co_list_total.do" /><!-- 总记录数 -->
+				<entry key="JS_SRC" value="jsp/manager/manager_list.js" /><!-- js -->
+				
+				<entry key="BUTTON">
+					<list>
+						<value><![CDATA[<span class="mr5"><a class="btn" href="javascript:win('url:jsp/manager/co_info_win.jsp','新增公司','user_add.do')">新增</a></span>]]></value>
+					</list>
+				</entry>
+				<entry key="TEMPLATE" value="/page/model_list.jsp" /><!-- 模板 -->
+			</map>
+		</property>
+	</bean>
+	<!-- 用户 -->
+	<bean id="menu_view" class="com.prism.service.impl.basic.NormalHTMLService">
+		<property name="sourceMap">
+			<map>
+				<entry key="VIEWNAME" value="查询用户" />
+				<entry key="MAPPING">
+					<list>
+						<array>
+							<value>菜单ID</value>
+							<value>#@MENU_ID#</value>
+						</array>
+						<array>
+							<value>菜单名称</value>
+							<value>#@MENU_NAME#</value>
+						</array>
+						<array>
+							<value>菜单地址</value>
+							<value>#@MENU_URL#</value>
+						</array>
+						<array>
+							<value>上级菜单ID</value>
+							<value>#@SUP_MENU_ID#</value>
+						</array>
+						<array>
+							<value>菜单等级</value>
+							<value>#@LV#</value>
+						</array>
+						
+						<array>
+							<value>操作</value>
+							<value>#@func:func_menu#</value>
+						</array>
+					</list>
+				</entry>
+				<entry key="DATAURL" value="menu_list.do" /><!-- 明细 -->
+				<entry key="JS_SRC" value="jsp/manager/manager_list.js" /><!-- js -->
+				<entry key="TEMPLATE" value="/page/model_list.jsp" /><!-- 模板 -->
+			</map>
+		</property>
+	</bean>
+
+</beans>

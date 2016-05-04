@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>远程桌面</title>
+<meta charset="utf-8">
+<script type="text/javascript" src="../scripts/jquery.js"></script>
+<script type="text/javascript">
+	$(init);
+	function init() {
+		$("#a23").click(function(){
+			alert(11)
+			$.post("../listener",{"method" : "set","value":'{"name":"xxx","id":1}'},function(data){
+				
+			});
+		});
+	}
+	
+</script>
+</head>
+<body>
+	<a id="a23">xxxx</a>
+
+</body>
+</html>

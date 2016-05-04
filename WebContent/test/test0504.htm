@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../scripts/require.js"></script>
+<script type="text/javascript">
+require.config({
+paths: {"jquery": "../scripts/jquery","prismTemplete":"../prism/prismTemplete"}
+});
+require(['jquery',"prismTemplete"], function ($,prismTemplete){
+	$("#a1").html("<b>sss</b>");
+	var obj = {};
+	obj.a = "xo";
+	var cmd = new prismTemplete();
+	cmd.data("obj", obj);
+	cmd.preview($("#a1"));
+	var cmd2 = new prismTemplete();
+	var obj2 = {};
+	obj2.b = "xo1";
+	cmd2.data("obj2", obj2);
+	cmd2.preview($("#div1"));
+});
+</script>
+</head>
+<body>
+<a id="a1" data-exp="obj.a"></a>
+<div id="div1">
+[<a id="a1" data-exp="obj.a"></a>][
+<a id="a1" data-exp="obj2.b"></a>]
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+                        http://www.springframework.org/schema/aop   
+                        http://www.springsource.org/schema/aop/spring-aop-3.0.xsd  
+                        http://www.springframework.org/schema/tx  
+                            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	<bean id="tat_view" class="com.prism.service.impl.basic.NormalHTMLService">
+		<property name="sourceMap">
+			<map>
+				<entry key="VIEWNAME" value="商户信息" />
+				<entry key="MAPPING">
+					<list>
+						<array>
+							<value>终端ID</value>
+							<value>#@TEMINAL_INFO_ID#</value>
+						</array>
+						<array>
+							<value>业务ID</value>
+							<value>#@APPPAY_ID#</value>
+						</array>
+						<array>
+							<value>业务类型</value>
+							<value>#@APPTYPE#</value>
+						</array>
+						<array>
+							<value>商户编号</value>
+							<value>#@TERM_ID1#</value>
+						</array>
+						<array>
+							<value>机具编号</value>
+							<value>#@TERM_ID2#</value>
+						</array>
+
+						<array>
+							<value>操作</value>
+							<value>#@func:func_oper#</value>
+						</array>
+
+					</list>
+				</entry>
+				<entry key="QUERY">
+					<value>
+						$q.add($el.text("商户编号","TERM_ID1"));
+						$q.add($el.text("终端编号","TERM_ID2"));
+
+					</value>
+
+				</entry>
+				<entry key="DATAURL" value="tat_list.do" /><!-- 明细 -->
+
+				<entry key="JS_SRC" value="jsp/hntl/tat_list.js" /><!-- js -->
+
+				<entry key="TEMPLATE" value="/page/model_list.jsp" /><!-- 模板 -->
+			</map>
+		</property>
+	</bean>
+	<bean id="upay_view" class="com.prism.service.impl.basic.NormalHTMLService">
+		<property name="sourceMap">
+			<map>
+				<entry key="VIEWNAME" value="银联查询" />
+				<entry key="MAPPING">
+					<list>
+						<array>
+							<value>商户名称</value>
+							<value>#@UNIT_NAME#</value>
+						</array>
+					</list>
+				</entry>
+
+				<entry key="DATAURL" value="upay_list.do" /><!-- 明细 -->
+				<entry key="TEMPLATE" value="/page/model_list.jsp" /><!-- 模板 -->
+			</map>
+		</property>
+	</bean>
+</beans>
