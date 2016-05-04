@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd 
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+          
+	<!-- 登录检测 -->
+	<bean id="login" class="com.prism.service.impl.basic.NormalSltService">
+		<property name="sourceMap">
+			<map>
+				<entry key="SQL">
+					<value>
+<![CDATA[
+SELECT U.USER_ID, U.USER_NAME,U.USER_MOBILE
+  FROM SM_USER U
+ WHERE U.LOGIN_NAME = ${USER_ACC}
+   AND U.LOGIN_PWD = ${USER_PWD}
+]]>
+					</value>
+				</entry>
+				<entry key="VIEW" value="$v.toJson()" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="ManagerAop" class="manager.ManagerAop" />
+	<aop:config>
+		<aop:aspect ref="ManagerAop">
+			<aop:around method="loginCheck" pointcut="bean(login)" />
+			<aop:around method="logs" pointcut="execution(* com.prism.service.impl.basic.*.service())" />
+			
+		</aop:aspect>
+	</aop:config>
+	<!-- 菜单树 -->
+	<bean id="index" class="com.prism.service.impl.basic.NormalSltService">
+		<property name="sourceMap">
+			<map>
+				<entry key="SQL">
+					<value>
+<![CDATA[
+SELECT M.MENU_ID,
+       M.MENU_URL,
+       M.MENU_NAME,
+       0 LV,
+       CONCAT('C', M.SUP_MENU_ID) SUP_MENU
+  FROM SM_MENU M
+
+ ORDER BY SUP_MENU_ID, M.MENU_ORDER
+]]>
+					</value>
+				</entry>
+				<entry key="FORWARD" value="index.jsp" />
+			</map>
+		</property>
+	</bean>
+</beans>
