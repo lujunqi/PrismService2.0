@@ -81,7 +81,7 @@ public class WeiXinResponse {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> jmap = (Map<String, Object>) ju.toObject(HttpWeb
 				.getGetResponse(url));
-		System.out.println(jmap);
+		System.out.println("======"+jmap);
 		session.setAttribute("AccessToken", jmap.get("access_token"));
 		return jmap.get("access_token") + "";
 

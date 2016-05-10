@@ -51,60 +51,14 @@ a:hover, a:active{
 	display:block;
 }
 
-/* Footer */
-#footer{
-	width:100%;
-	position:fixed;
-	padding-left:20px;
-	bottom:0;
-	left:0;
-	line-height:20px;
-	color:#888;
-	font-size:13px;
-	background:rgb(0, 0, 0);
-	background:rgba(0, 0, 0, 0.8);
-	z-index:99;
-}
-#footer span{
-	display:block;
-}
+
 
 /* clearfix */
 .clearfix {
 	clear:both;
 }
 
-/* wrapper css */
-#wrapper{
 
-	width:100%;
-}
-#wrapper hgroup{
-	text-align:center;
-}
-#wrapper h2{
-	margin:5px 0;
-	color:#FF6D99;
-	text-shadow:1px 1px 2px #A50031;
-	font-size:33px;
-	font-family:Arial Narrow, Arial, sans-serif;
-}
-#wrapper h3{
-	font-style:italic;
-	font-weight:normal;
-	font-size:18px;
-	text-shadow:1px 1px 0 #fff;
-	color:#888;
-	margin:5px 0;
-}
-
-#container{
-	position:relative;
-	width:1100px;
-	margin:0 auto 25px;
-	padding-bottom: 10px;
-	
-}
 img {
 	border: none;
 }
@@ -136,9 +90,14 @@ img {
 .grid p {
 	padding: 0px;
 	font-size: 12px;
-	text-align: center;
+	text-align: right;
 	color: #333;
 	white-space: normal;
+}
+.grid .stage_price{
+	text-align:right;
+	color:#f00;
+	
 }
 .grid{
 	position: absolute;
@@ -157,23 +116,16 @@ img {
 	-o-transition: top 1s ease, left 1s ease;
 	-ms-transition: top 1s ease, left 1s ease;
 }
-
-.grid strong {
-	border-bottom:1px solid #ccc;
-	margin:10px 0;
-	display:block;
-	padding:0 0 5px;
-	font-size:17px;
+.footer{
+	text-align: center;
 }
-.grid .meta{
-	text-align:right;
-	color:#777;
-	font-style:italic;
+.footer a{
+	margin: 5px;
+	cursor: pointer;
 }
-.grid .imgholder img{
-	max-width:100%;
-	background:#ccc;
-	display:block;
+.vline{
+	display: block;
+	
 }
 
 @media screen and (max-width : 1240px) {

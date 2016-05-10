@@ -8,8 +8,8 @@
 	$(init);
 	function init() {
 		$("#a23").click(function(){
-			alert(11)
-			$.post("../listener",{"method" : "set","value":'{"name":"xxx","id":1}'},function(data){
+			
+			$.post("../listener",{"method" : "set","value":'{"name":"'+$("#name").val()+'","id":1}'},function(data){
 				
 			});
 		});
@@ -19,6 +19,7 @@
 </head>
 <body>
 	<a id="a23">xxxx</a>
-
+	<input id="name" value="xx">
+	
 </body>
 </html>

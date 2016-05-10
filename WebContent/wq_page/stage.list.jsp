@@ -3,9 +3,11 @@
 	isELIgnored="false"%>
 <%@page import="com.weixin.*"%>
 <%
-	/* String code = request.getParameter("code");
-	 WeiXinResponse w = new WeiXinResponse(session);
-	 w.getAccessToken("wx627f086f1403f471", "38c69c5e96c50f57bd4c93de86da1d9b", code); */
+/* 	String code = request.getParameter("code");
+	WeiXinResponse w = new WeiXinResponse(session);
+	w.getAccessToken("wx04dabb281487ea75",
+			"wx04dabb281487ea75:18138868310walwjk", code); */
+request.setAttribute("user_id", 1);
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -21,48 +23,34 @@
 <script src="js/masonry.pkgd.min.js" type="text/javascript"></script>
 <script src="js/imagesloaded.pkgd.min.js" type="text/javascript"></script>
 <script src="js/layer/layer.js" type="text/javascript"></script>
-
-
-
+<script src="../prism/prismTemplete.js" type="text/javascript"></script>
+<script type="text/javascript" src="stage.list.js" ></script>
 <script type="text/javascript">
-	$(function() {
-		mas();
-		$(window).on("orientationchange", function(event) {
-			if (event.orientation) {
-				var $container = $('#con1_1');
-				$container.imagesLoaded(function() {
-					$container.masonry();
-				});
-			}
-		});
-	});
-	function mas() {
-		var $container = $('#con1_1');
-
-		for (var i = 1; i < 13; i++) {
-			var grid = $('<div class="grid"><img src="img/'+i+'.jpg" ><div>xxxx</div></div>');
-			$container.append(grid);//.masonry();
-		}
-		$container.imagesLoaded(function() {
-			$container.masonry();
-			$(".grid").each(function() {
-				$(this).click(function() {
-					layer.open({
-						btn : [ 'OK' ],
-						content : $(this).html()
-					});
-				});
-			});
-
-		});
-	}
-	
+var user_id = ${user_id };
 </script>
 </head>
 <body>
+
 	<div class="wrapper">
 		<h3>物料超市</h3>
-		<div id="con1_1"></div>
+		<div id="con1_1" data-exp="data" data-method="list" data-map="map">
+			<div class="grid">
+
+				<div class="context">
+					<img data-exp="map" data-method="attr"
+						data-attr='{"src":"attr.stage_url"}'>
+					<div data-exp="map.stage_name"></div>
+					<div data-exp="map.stage_desc"></div>
+	
+					<p class="stage_price" data-exp="map.stage_price"></p>
+				</div>
+				<div class="footer"  data-exp="map" data-method="attr"
+						data-attr='{"data-id":"attr.stage_id"}'>
+				 <a class="favorites">收藏</a><a class="orders" >订购</a>
+				</div>
+			</div>
+
+		</div>
 	</div>
 </body>
 </html>

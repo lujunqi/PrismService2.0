@@ -44,7 +44,7 @@ public class Listener extends HttpServlet {
 			String jsonp = req.getParameter("jsonpcallback");
 			String str = get();
 			str = jsonp + "(" + str + ")";
-			System.out.println(str);
+//			System.out.println(str);
 			out.print(str);
 		}
 	}
@@ -70,7 +70,6 @@ public class Listener extends HttpServlet {
 		if (list == null) {
 			list = new ArrayList<String>();
 		}
-		System.out.println(list);
 		if (value != null) {
 			list.add(value);
 		}
