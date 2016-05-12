@@ -34,6 +34,7 @@ var user_id = ${user_id };
 	<div class="wrapper">
 		<h3>物料超市</h3>
 		<div id="con1_1" data-exp="data" data-method="list" data-map="map">
+			
 			<div class="grid">
 
 				<div class="context">
@@ -46,7 +47,7 @@ var user_id = ${user_id };
 				</div>
 				<div class="footer"  data-exp="map" data-method="attr"
 						data-attr='{"data-id":"attr.stage_id"}'>
-				 <a class="favorites">收藏</a><a class="orders" >订购</a>
+				 <a class="favorites" data-exp="map" data-method="funcFav">收藏</a><a class="order" data-method="jData" data-exp="map">订购</a>
 				</div>
 			</div>
 

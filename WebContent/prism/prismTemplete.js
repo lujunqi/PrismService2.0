@@ -12,13 +12,17 @@ var prismTemplete  = function() {
 			}
 		}
 	};// def默认
+	this.jData = function(obj,val){
+		var key = obj.attr("data-exp");
+		obj.data(key,val);
+	};//jquery元素data
 	this.attr = function(obj, val) {
 		var data_attr = obj.attr("data-attr");
 		this.$prism__property["attr"] = val;
 		var data_attr_obj = $.parseJSON(data_attr);
 		for (key in data_attr_obj) {
 			var data_exp = data_attr_obj[key];
-			var data_value = this.getValue(data_exp);
+			var data_value = this.getValue(data_exp,obj);
 			if (data_value != null) {
 				obj.attr(key, data_value);
 			}
@@ -45,11 +49,10 @@ var prismTemplete  = function() {
 		obj.html("");
 		for (i in val) {
 			var list_templete = obj.data("templete_prism_$$");
-			var $div = $("<div></div>");
-			$div.html(list_templete);
+			$div = $(list_templete);
 			this.$prism__property[map] = val[i];
 			this.preview($div);
-			obj.append($div.html());
+			obj.append($div);
 			delete this.$prism__property[map];
 		}
 	};// loop
@@ -63,7 +66,7 @@ var prismTemplete  = function() {
 			var that = $this;
 			var data_exp = that.attr("data-exp");
 			var data_method = that.attr("data-method");
-			var val = self.getValue(data_exp);
+			var val = self.getValue(data_exp,that);
 			if (data_method == null) {
 				data_method = "html";
 			}
