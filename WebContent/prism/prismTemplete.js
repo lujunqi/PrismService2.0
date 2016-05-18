@@ -97,6 +97,7 @@ var prismTemplete  = function() {
 				if (ex.indexOf("{") == 0) {// 调用函数方式
 					var tmp = $.parseJSON(ex);
 					for ( var func_name in tmp) {
+						console.log(exps[i-1]);
 						ex = self[func_name](tmp[func_name]);
 						break;
 					}

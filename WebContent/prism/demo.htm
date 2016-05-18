@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>prismTemplete api</title>
+<style type="text/css">
+body {
+	font-size: 14px;
+}
+
+ul li {
+	list-style: none;
+}
+li{
+border-bottom:dotted #999 1px;
+margin-top:10px;
+}
+a{
+cursor: pointer;
+}
+a:hover {
+	text-decoration: underline;
+	color: #ff0000;
+	background: transparent;
+}
+
+a:link, a:visited {
+	text-decoration: underline;
+	color: #900b09;
+	background: transparent;
+}
+
+a:link, a:visited {
+	text-decoration: underline;
+	color: #900b09;
+	background: transparent;
+}
+
+h2 {
+	padding: 0;
+	margin: 0;
+}
+
+pre {
+	width: 685px;
+	margin: 10px 0 0 0;
+	padding: 10px;
+	border: 0;
+	border: 1px dotted #785;
+	background: #f5f5f5;
+}
+</style>
+<script type="text/javascript" src="prismTemplete.js"></script>
+<script type="text/javascript" src="jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+$(init);
+function init(){
+	$("#btnDemo1").click(demo1);
+	$("#btnDemo2").click(demo2);
+	$("#btnDemo3").click(demo3);
+	$("#btnDemo4").click(demo4);
+	
+}
+function demo1(){
+	var obj =  {"name":"张三","sex":"M"};
+	var cmd = new prismTemplete();
+	cmd.data("d",obj);
+	cmd.preview($("#demo1"));
+}
+function demo2(){
+	var obj = [{"name":"张三","sex":"M"},{"name":"李四","sex":"M"},{"name":"王妞","sex":"F"}];
+	var cmd = new prismTemplete();
+	cmd.data("d",obj);
+	cmd.mSex = function(val){
+		return val;
+	};
+	cmd.preview($("#demo2"));
+}
+function demo3(){
+	var obj = {};
+	obj["title"] = "自定义title";
+	obj["val"] = "自定义value";
+	var cmd = new prismTemplete();
+	cmd.data("d",obj);
+	cmd.preview($("#demo3"));
+}
+function demo4(){
+	var obj = {};
+	obj["name"] = "张三";
+	obj["sex"] = "M";
+	var cmd = new prismTemplete();
+	cmd.getSex = function(obj,val){
+		if(val=="F"){
+			obj.val("女");
+		}else{
+			obj.val("男");
+		}
+	};
+	cmd.data("d",obj);
+	cmd.preview($("#demo4"));
+}
+</script>
+</head>
+<body>
+	<ul>
+		<li>
+			<h2>基本方法</h2>
+			<div>
+				<p>将对象属性回填到元素中</p>
+				javascript代码
+				<pre>
+var obj =  {"name":"张三","sex":"M"};
+var cmd = new prismTemplete();
+cmd.data("d",obj);
+cmd.preview($("#demo1"));
+</pre>
+				html代码
+				<pre>
+姓名：
+&lt;div id=&quot;demo1&quot; data-exp=&quot;d.name&quot;&gt;&lt;/div&gt;
+</pre>
+				<a  id="btnDemo1">亲自试一试</a>
+				<div>
+姓名：
+<div id="demo1" data-exp="d.name"></div>
+</div>
+			</div>
+		</li>
+		
+		<li>
+			<h2>遍历数组</h2>
+			<div>
+				<p>遍历数组回填入元素中</p>
+				javascript代码
+				<pre>
+var obj = [{"name":"张三","sex":"M"},{"name":"李四","sex":"M"},{"name":"王妞","sex":"F"}];
+var cmd = new prismTemplete();
+cmd.data("d",obj);
+cmd.preview($("#demo2"));
+</pre>
+				html代码
+				<pre>&lt;div id=&quot;demo2&quot; data-exp=&quot;d&quot; data-method=&quot;list&quot; data-map=&quot;map&quot;&gt;<br>&lt;span&gt;[&lt;a data-exp=&quot;map.name&quot;&gt;&lt;/a&gt;]&lt;/span&gt;<br>&lt;/div&gt;</pre>
+				<a  id="btnDemo2">亲自试一试</a>
+				<div>
+
+<div id="demo2" data-exp="d" data-method="list" data-map="map">
+<span>[<a data-exp="map.name"></a><b data-exp='map.{"mSex":"sex"}'></b>]</span>
+</div>
+</div>
+			</div>
+		</li>
+		<li>
+		<h2>设置元素属性</h2>
+		<div>
+				javascript代码
+				<pre>
+var obj = {};
+obj["title"] = "自定义title";
+obj["val"] = "自定义value";
+var cmd = new prismTemplete();
+cmd.data("d",obj);
+cmd.preview($("#demo3"));
+</pre>
+				html代码
+				<pre>
+&lt;input id=&quot;demo3&quot; data-exp=&quot;d&quot; data-method=&quot;attr&quot;
+data-attr='{&quot;value&quot;:&quot;attr.val&quot;,&quot;title&quot;:&quot;attr.title&quot;}'&gt;
+</pre>
+				<a  id="btnDemo3">亲自试一试</a>
+				<div>
+
+	<input id="demo3" data-exp="d" data-method="attr" data-attr='{"value":"attr.val","title":"attr.title"}'>
+</div>
+			</div>
+		</li>
+		<li>
+		<h2>自定义函数</h2>
+		<div>
+				javascript代码
+				<pre>
+var obj = {};
+obj["name"] = "张三";
+obj["sex"] = "M";
+var cmd = new prismTemplete();
+cmd.getSex = function(obj,val){
+	if(val=="F"){
+		obj.val("女");
+	}else{
+		obj.val("男");
+	}
+};
+cmd.data("d",obj);
+cmd.preview($("#demo4"));
+</pre>
+				html代码
+				<pre>
+&lt;input id=&quot;demo4&quot; data-exp=&quot;d&quot; data-method=&quot;getSex&quot;&gt;
+</pre>
+				<a  id="btnDemo4">亲自试一试</a>
+				<div>
+
+	<input id="demo4" data-exp="d" data-method="getSex">
+</div>
+			</div>
+		</li>
+		
+	</ul>
+</body>
+</html>
