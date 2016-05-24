@@ -36,10 +36,7 @@ function mas() {
 function gridOpen() {
 	$(".grid > .context").each(function() {
 		$(this).click(function() {
-			layer.open({
-				btn : [ 'OK' ],
-				content : $(this).html()
-			});
+			window.location.href="single.jsp"; 
 		});
 	});
 }

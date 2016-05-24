@@ -17,12 +17,10 @@ request.setAttribute("user_id", 1);
 	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>物料超市</title>
-<link href="css/style.css" rel="stylesheet" media="all">
 <link href="../plug/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <script src="../scripts/jquery.js" type="text/javascript"></script>
 <script src="js/masonry.pkgd.min.js" type="text/javascript"></script>
 <script src="js/imagesloaded.pkgd.min.js" type="text/javascript"></script>
-<script src="js/layer/layer.js" type="text/javascript"></script>
 <script src="../prism/prismTemplete.js" type="text/javascript"></script>
 <script type="text/javascript" src="stage.list.js" ></script>
 <script type="text/javascript">
