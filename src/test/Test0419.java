@@ -1,111 +1,88 @@
 package test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-
-import org.apache.catalina.loader.WebappClassLoader;
-
-import templete.DynamicObj;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 public class Test0419 {
 
 	public static void main(String[] args) throws Exception {
-		String fileName = "e:/dclass/TT2.java";
-		Test0419 t0419 = new Test0419();
-		File file = new File(fileName);
-		// 编译
-		t0419.compiler(file);
-		// 执行
-		DynamicObj dynamic = t0419.run(file,DynamicObj.class);
-		Map<String,Object> param = new HashMap<String,Object>();
-		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		for(int i=0;i<10;i++){
-			Map<String,Object> m = new HashMap<String,Object>();
-			m.put("c1", "v"+i);
-			list.add(m);
-		}
-		param.put("this",list);
-		dynamic.run(list);
-	}
+		while (true) {
+			HttpClient httpclient = new DefaultHttpClient();
 
-	@SuppressWarnings("unchecked")
-	private <T> T run(File file, Class<T> c) throws MalformedURLException,
-			ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
-		String fileName = file.getName();
-		fileName = fileName.substring(0, fileName.length() - 5);
-		URL[] urls = new URL[] { new URL(new File(file.getParent()).toURI()
-				+ "") };
-		
-//		@SuppressWarnings("resource")
-		URLClassLoader ucl = new URLClassLoader(urls);
-		c = (Class<T>) ucl.loadClass(fileName);
-		System.out.println(ucl.findResource(fileName));
-		return c.newInstance();
-	}
+			// 新建Http post请求
+			HttpPost httppost = new HttpPost("http://www.xgpx.net/tp/cz1.asp?cz_s=62&cz.x=18&cz.y=9&cz=%B2%E9%D5%D2&from=timeline&isappinstalled=0");
 
-	private void compiler(File file) {
-		String filePath = file.getAbsolutePath();
-		String fileName = file.getName();
-		File pfile = new File(file.getParentFile(), fileName.replaceAll("\\.",
-				"-"));
-		pfile.mkdir();
-		File markfile = new File(pfile, getMd5ByFile(file));
-		if (!markfile.exists()) {
-			JavaCompiler compiler2 = ToolProvider.getSystemJavaCompiler();
-			int results = compiler2.run(null, null, null, filePath);
-			if (results == 0) {
-				try {
-					File[] f = pfile.listFiles();
-					for (int i = 0; i < f.length; i++) {
-						f[i].delete();
-					}
-					markfile.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
+			// 处理请求，得到响应
+			HttpResponse response = httpclient.execute(httppost);
+
+			// String set_cookie =
+			// response.getFirstHeader("Set-Cookie").getValue();
+
+			// 打印Cookie值
+			// System.out.println(set_cookie.substring(0,set_cookie.indexOf(";")));
+
+			// 打印返回的结果
+			HttpEntity entity = response.getEntity();
+
+			StringBuilder result = new StringBuilder();
+			if (entity != null) {
+				InputStream instream = entity.getContent();
+				BufferedReader br = new BufferedReader(new InputStreamReader(instream));
+				String temp = "";
+				while ((temp = br.readLine()) != null) {
+					String str = new String(temp.getBytes(), "GBK");
+					result.append(str + "\n");
 				}
 			}
-		}
+			httppost = new HttpPost("http://www.xgpx.net/tp/View.asp?id=62");
 
-	}
+			// 处理请求，得到响应
+			response = httpclient.execute(httppost);
 
-	private String getMd5ByFile(File file) {
-		String value = null;
-		FileInputStream in = null;
-		try {
-			in = new FileInputStream(file);
-			MappedByteBuffer byteBuffer = in.getChannel().map(
-					FileChannel.MapMode.READ_ONLY, 0, file.length());
-			MessageDigest md5 = MessageDigest.getInstance("MD5");
-			md5.update(byteBuffer);
-			BigInteger bi = new BigInteger(1, md5.digest());
-			value = bi.toString(16);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (null != in) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+			// String set_cookie =
+			// response.getFirstHeader("Set-Cookie").getValue();
+
+			// 打印Cookie值
+			// System.out.println(set_cookie.substring(0,set_cookie.indexOf(";")));
+
+			// 打印返回的结果
+			entity = response.getEntity();
+			if (entity != null) {
+				InputStream instream = entity.getContent();
+				BufferedReader br = new BufferedReader(new InputStreamReader(instream));
+				String temp = "";
+				while ((temp = br.readLine()) != null) {
+					String str = new String(temp.getBytes(), "GBK");
+					System.out.println(str);
 				}
 			}
+//			writeHTMLtoFile(entity, "d:\\xx.htm");
+			System.out.println("=====");
 		}
-		return value;
 	}
+
+	public static void writeHTMLtoFile(HttpEntity entity, String pathName) throws Exception {
+
+		byte[] bytes = new byte[(int) entity.getContentLength()];
+
+		FileOutputStream fos = new FileOutputStream(pathName);
+
+		bytes = EntityUtils.toByteArray(entity);
+
+		fos.write(bytes);
+
+		fos.flush();
+
+		fos.close();
+	}
+
 }
