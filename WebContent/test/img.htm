@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+<style type="text/css">
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+</style>
+<script type="text/javascript" src="../scripts/jquery.js"></script>
+</head>
+<body>
+	<video id="video"  style='width: 640px; height: 480px'></video>
+	<button id='picture' onClick="init()">PICTURE</button>
+    <input type="file" id="tt">
+	<canvas id="canvas" width="640" height="480"></canvas>
+	<img src="" id="img" style="display:none;">
+	<script type="text/javascript">
+
+		function init(){
+			var image = new Image();
+			alert($("#tt").val());
+			image.src = $("#tt").val();
+	
+			alert(image.width);
+			var img = $("#img");
+			alert($("#tt").val());
+			 img.attr("src",$("#tt").val()).load(function(){
+				 alert(img.width()+"==="+img.height());
+			 });
+			
+			
+		}
+	</script>
+</body>
+</html>

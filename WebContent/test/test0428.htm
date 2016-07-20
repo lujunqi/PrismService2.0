@@ -4,22 +4,22 @@
 <title>远程桌面</title>
 <meta charset="utf-8">
 <script type="text/javascript" src="../scripts/jquery.js"></script>
+<script type="text/javascript" src="../plug/other/jsonpath.js"></script>
+
 <script type="text/javascript">
 	$(init);
 	function init() {
-		$("#a23").click(function(){
-			
-			$.post("file:///E:/dd/rtp1.xls",{"method" : "set","value":'{"name":"'+$("#name").val()+'","id":1}'},function(data){
-				
-			});
-		});
+		$.post("areafile.json",function(data){
+			alert(data);
+			var j = jsonPath(data,"$.province[@id='110000']");
+			console.log(j);
+		},"json");
 	}
 	
 </script>
 </head>
 <body>
-	<a id="a23">xxxx</a>
-	<input id="name" value="xx">
+	
 	
 </body>
 </html>
