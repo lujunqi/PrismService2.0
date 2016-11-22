@@ -68,12 +68,16 @@ function demo1(){
 	cmd.preview($("#demo1"));
 }
 function demo2(){
-	var obj = [{"name":"张三","sex":"M"},{"name":"李四","sex":"M"},{"name":"王妞","sex":"F"}];
+	var obj = {"data":[{"name":"张三","sex":"M"},{"name":"李四","sex":"M"},{"name":"王妞","sex":"F"}],"c":"--"};
 	var cmd = new prismTemplete();
+
+
+	
 	cmd.data("d",obj);
-	cmd.mSex = function(val){
-		return val;
-	};
+	cmd.data("mSex",function(obj,val){
+		obj.html("yyy");
+	});
+	
 	cmd.preview($("#demo2"));
 }
 function demo3(){
@@ -136,6 +140,9 @@ cmd.preview($("#demo1"));
 var obj = [{"name":"张三","sex":"M"},{"name":"李四","sex":"M"},{"name":"王妞","sex":"F"}];
 var cmd = new prismTemplete();
 cmd.data("d",obj);
+cmd.sex = function(obj,val){
+obj.html("xxx"+val)
+}
 cmd.preview($("#demo2"));
 </pre>
 				html代码
@@ -143,8 +150,8 @@ cmd.preview($("#demo2"));
 				<a  id="btnDemo2">亲自试一试</a>
 				<div>
 
-<div id="demo2" data-exp="d" data-method="list" data-map="map">
-<span>[<a data-exp="map.name"></a><b data-exp='map.{"mSex":"sex"}'></b>]</span>
+<div id="demo2" data-exp="d.data" data-method="grid" data-map="map">
+<span>[<a data-exp="map.name"></a><b data-exp='map.sex' data-method='mSex'></b><b data-exp="d.c"></b>]</span>
 </div>
 </div>
 			</div>

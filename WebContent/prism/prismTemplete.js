@@ -1,4 +1,4 @@
-var prismTemplete  = function() {
+var prismTemplete = function() {
 	this.$prism__property = {};
 	this.html = function(obj, val) {
 		obj.html(val);
@@ -12,23 +12,23 @@ var prismTemplete  = function() {
 			}
 		}
 	};// def默认
-	this.jData = function(obj,val){
+	this.jData = function(obj, val) {
 		var key = obj.attr("data-exp");
-		obj.data(key,val);
-	};//jquery元素data
+		obj.data(key, val);
+	};// jquery元素data
 	this.attr = function(obj, val) {
 		var data_attr = obj.attr("data-attr");
 		this.$prism__property["attr"] = val;
 		var data_attr_obj = $.parseJSON(data_attr);
 		for (key in data_attr_obj) {
 			var data_exp = data_attr_obj[key];
-			var data_value = this.getValue(data_exp,obj);
+			var data_value = this.getValue(data_exp, obj);
 			if (data_value != null) {
 				obj.attr(key, data_value);
 			}
 		}
 		delete this.$prism__property["attr"];
-	};//设置属性
+	};// 设置属性
 	this.text = function(obj, val) {
 		obj.text(val);
 		this.def(obj, val);
@@ -56,6 +56,33 @@ var prismTemplete  = function() {
 			delete this.$prism__property[map];
 		}
 	};// loop
+	this.grid = function(obj, val) {
+		var map = obj.attr("data-map");
+		if (obj.data("templete_prism_$$") == null) {
+			obj.data("templete_prism_$$", obj.html());
+		}
+		obj.html("");
+		for (i in val) {
+			var $cmd = new prismTemplete();
+			var $templete = $(obj.data("templete_prism_$$"));
+			var $div = $("<div></div>");
+			$div.html($templete);
+			for (key in this.$prism__property) {
+				if (!$cmd[key]) {
+					if (typeof $cmd.$prism__property[key] == "function") {
+						$cmd[key] = this.$prism__property[key];
+						this[key] = function(obj, val) {
+						};
+					}
+				}
+
+			}
+			$cmd.data(map, val[i]);
+			$cmd.preview($div);
+			obj.append($div.html());
+		}
+
+	}// grid
 	this.data = function(key, val) {
 		this.$prism__property[key] = val;
 	};// data
@@ -66,7 +93,7 @@ var prismTemplete  = function() {
 			var that = $this;
 			var data_exp = that.attr("data-exp");
 			var data_method = that.attr("data-method");
-			var val = self.getValue(data_exp,that);
+			var val = self.getValue(data_exp, that);
 			if (data_method == null) {
 				data_method = "html";
 			}
@@ -97,7 +124,7 @@ var prismTemplete  = function() {
 				if (ex.indexOf("{") == 0) {// 调用函数方式
 					var tmp = $.parseJSON(ex);
 					for ( var func_name in tmp) {
-						console.log(exps[i-1]);
+						console.log(exps[i - 1]);
 						ex = self[func_name](tmp[func_name]);
 						break;
 					}
@@ -120,7 +147,7 @@ var prismTemplete  = function() {
 		return val;
 	};// getValue
 };
-if(typeof define == "function"){
+if (typeof define == "function") {
 	define("prismTemplete", [], function() {
 		return prismTemplete;
 	});
