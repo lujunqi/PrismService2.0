@@ -69,7 +69,7 @@ var prismTemplete = function() {
 			$div.html($templete);
 			for (key in this.$prism__property) {
 				if (!$cmd[key]) {
-					if (typeof $cmd.$prism__property[key] == "function") {
+					if (typeof this.$prism__property[key] == "function") {
 						$cmd[key] = this.$prism__property[key];
 						this[key] = function(obj, val) {
 						};
