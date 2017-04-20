@@ -43,13 +43,14 @@ public class NormalSltService extends BaseService {
 			} else if (sourceMap.containsKey("SQL")) {
 				list = selectResult("SQL");
 			}
+			
 			String action = (String) reqMap.get("_action");
 			// list 内容修饰
-			
+
 			if (sourceMap.containsKey("AFTER_RESULT")) {
-				ApplicationContext context = (ApplicationContext)getRequest().getAttribute("context");
+				ApplicationContext context = (ApplicationContext) getRequest().getAttribute("context");
 				getRequest().setAttribute("this", list);
-				Templete templete = (Templete)context.getBean(sourceMap.get("AFTER_RESULT")+"");
+				Templete templete = (Templete) context.getBean(sourceMap.get("AFTER_RESULT") + "");
 				templete.service(sourceMap, getRequest());
 			} else {
 
@@ -72,11 +73,8 @@ public class NormalSltService extends BaseService {
 
 			// FORWARD 页面跳转
 			if (sourceMap.containsKey("FORWARD")) {
-				getRequest()
-						.setAttribute("TEMPLATE", sourceMap.get("TEMPLATE"));
-				getRequest().getRequestDispatcher(
-						(String) sourceMap.get("FORWARD")).forward(
-						getRequest(), getResponse());
+				getRequest().setAttribute("TEMPLATE", sourceMap.get("TEMPLATE"));
+				getRequest().getRequestDispatcher((String) sourceMap.get("FORWARD")).forward(getRequest(), getResponse());
 			}
 			// REDIRECT 页面重定向
 			if (sourceMap.containsKey("REDIRECT")) {

@@ -1,8 +1,6 @@
 <%@ page language="java" import="java.util.*,java.net.*"
 	pageEncoding="UTF-8"%>
-<%
-	
-%>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -14,13 +12,12 @@
 <script type="text/javascript" src="scripts/common.js"></script>
 <script type="text/javascript" src="plug/layer/layer.js"></script>
 <script type="text/javascript">
+<%
+session.setAttribute("user_acc","ljq");
+if(session.getAttribute("user_acc")==null){
+}
+%>
 </script>
-<!--[if IE 6]>
-<script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js" ></script>
-<script type="text/javascript">
-	DD_belatedPNG.fix('.pngfix');
-</script>
-<![endif]-->
 </head>
 
 <body class="fluid">
@@ -46,9 +43,7 @@
 		<!--/#header-->
 
 		<div class="section clearfix">
-			<div class="hidden">
-				<h2>Site Content</h2>
-			</div>
+
 			<div class="content clearfix">
 				<iframe class="mainFrame" id="main" name="main" src="welcome.html"
 					frameborder="0" scrolling="yes" hidefocus></iframe>
@@ -59,12 +54,10 @@
 				<ul class="sideNav">
 					<li class="major">
 						<h2 class="subtit">
-							<a class="" href="#" target="main"><span class="">物料管理</span></a>
+							<a class="" href="#" target="main"><span class="">业务管理</span></a>
 						</h2>
 						<ul class="sublist">
-							<li><a target="main" href="pa/stage.v">舞台管理</a></li>
-							<li><a target="main" href="materiel/mobile_list.jsp">音响管理</a></li>
-							<li><a target="main" href="materiel/insurer_list.jsp">其他妈妈</a></li>
+							<li><a target="main" href="pa/lb_cust_infos.v">资料录入</a></li>
 						</ul>
 					</li>
 
@@ -73,14 +66,11 @@
 							<a class="" href="#"><span class="">系统管理</span></a>
 						</h2>
 						<ul class="sublist">
-							<li><a class="" href="javascript:();"><span class="">用户管理</span></a></li>
+							<li><a target="main" href="pa/lb_user.v">用户管理</a></li>
 						</ul>
+						
 					</li>
-					<li class="major">
-						<h2 class="subtit">
-							<a class="" href="#"><span class="">查询统计</span></a>
-						</h2>
-					</li>
+					
 				</ul>
 			</div>
 			<!--/.sidebar -->

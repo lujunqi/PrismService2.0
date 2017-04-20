@@ -1,10 +1,13 @@
-var prismTemplete  = function() {
+var prismTemplete = function() {
 	this.$prism__property = {};
+	this.currentElement = null;
 	this.html = function(obj, val) {
+		this.currentElement = obj;
 		obj.html(val);
 		this.def(obj, val);
 	};// html
 	this.def = function(obj, val) {
+		this.currentElement = obj;
 		if (val == null) {
 			var def = obj.attr("data-default");
 			if (def != null) {
@@ -12,28 +15,27 @@ var prismTemplete  = function() {
 			}
 		}
 	};// def默认
-	this.jData = function(obj,val){
-		var key = obj.attr("data-exp");
-		obj.data(key,val);
-	};//jquery元素data
 	this.attr = function(obj, val) {
+		this.currentElement = obj;
 		var data_attr = obj.attr("data-attr");
 		this.$prism__property["attr"] = val;
 		var data_attr_obj = $.parseJSON(data_attr);
 		for (key in data_attr_obj) {
 			var data_exp = data_attr_obj[key];
-			var data_value = this.getValue(data_exp,obj);
+			var data_value = this.getValue(data_exp);
 			if (data_value != null) {
 				obj.attr(key, data_value);
 			}
 		}
 		delete this.$prism__property["attr"];
-	};//设置属性
+	};// 设置属性
 	this.text = function(obj, val) {
+		this.currentElement = obj;
 		obj.text(val);
 		this.def(obj, val);
 	};// text
 	this.format = function(obj, val) {
+		this.currentElement = obj;
 		var str = obj.html();
 		for (m in val) {
 			var re = new RegExp('\\{\\{' + m + '\\}\\}', 'gm');
@@ -41,21 +43,61 @@ var prismTemplete  = function() {
 		}
 		obj.html(str);
 	};// format
-	this.list = function(obj, val) {
+	this.list = function(obj, val) {// 废弃
+		this.currentElement = obj;
+		var map = obj.attr("data-map");
+		if (obj.data("templete_prism_$$") == null) {
+			obj.data("templete_prism_$$", obj.html());
+		}
+		obj.html("");
+		this.$prism__property.map = [];
+		for (i in val) {
+			var list_templete = obj.data("templete_prism_$$");
+			var $div = $("<div></div>");
+			
+			$div.html(list_templete);
+			$("[data-exp]",$div).each(function(){
+				var exp = $(this).attr("data-exp");
+				var maps = exp.split(".");
+				if($.inArray(map,maps)!=-1){
+					maps.splice($.inArray(map,maps)+1,0,i);
+				}
+				$(this).attr("data-exp",maps.join("."));
+			});
+			obj.append($div.children());
+			this.$prism__property.map.push(val[i]);
+		}
+
+	};// loop
+	this.grid = function(obj, val) {
+		this.currentElement = obj;
 		var map = obj.attr("data-map");
 		if (obj.data("templete_prism_$$") == null) {
 			obj.data("templete_prism_$$", obj.html());
 		}
 		obj.html("");
 		for (i in val) {
-			var list_templete = obj.data("templete_prism_$$");
-			$div = $(list_templete);
-			this.$prism__property[map] = val[i];
-			this.preview($div);
-			obj.append($div);
-			delete this.$prism__property[map];
+			var $cmd = new prismTemplete();
+			var $templete = $(obj.data("templete_prism_$$"));
+			var $div = $("<div></div>");
+			$div.html($templete);
+			for (key in this.$prism__property) {
+				if (!$cmd[key]) {
+					if (typeof this.$prism__property[key] == "function") {
+						$cmd[key] = this.$prism__property[key];
+						this[key] = function(obj, val) {
+						};
+					}
+				}
+
+			}
+			val[i]["_index"] = i;
+			$cmd.data(map, val[i]);
+			$cmd.preview($div);
+			obj.append($div.html());
 		}
-	};// loop
+
+	}// grid
 	this.data = function(key, val) {
 		this.$prism__property[key] = val;
 	};// data
@@ -66,7 +108,12 @@ var prismTemplete  = function() {
 			var that = $this;
 			var data_exp = that.attr("data-exp");
 			var data_method = that.attr("data-method");
-			var val = self.getValue(data_exp,that);
+			var exp111 = data_exp.split(":");
+			if(exp111.length==2){
+				data_exp = exp111[1];
+				data_method = exp111[0];
+			}
+			var val = self.getValue(data_exp);
 			if (data_method == null) {
 				data_method = "html";
 			}
@@ -76,6 +123,11 @@ var prismTemplete  = function() {
 			var that = $(this);
 			var data_exp = that.attr("data-exp");
 			var data_method = that.attr("data-method");
+			var exp111 = data_exp.split(":");
+			if(exp111.length==2){
+				data_exp = exp111[1];
+				data_method = exp111[0];
+			}
 			var val = self.getValue(data_exp, that);
 			if (data_method == null) {
 				data_method = "html";
@@ -83,10 +135,12 @@ var prismTemplete  = function() {
 			try {
 				self[data_method](that, val);
 			} catch (e) {
-				console.log(e);
+//				if (this.debug)
+					console.log(data_method + "===" + e);
 			}
 		});
 	};// preview
+	this.debug = false;
 	this.getValue = function(data_exp, that) {
 		var self = this;
 		var exps = data_exp.split(".");
@@ -94,14 +148,7 @@ var prismTemplete  = function() {
 		try {
 			for (i in exps) {
 				var ex = exps[i];
-				if (ex.indexOf("{") == 0) {// 调用函数方式
-					var tmp = $.parseJSON(ex);
-					for ( var func_name in tmp) {
-						console.log(exps[i-1]);
-						ex = self[func_name](tmp[func_name]);
-						break;
-					}
-				}
+				
 				if (val == null) {
 					val = self.$prism__property[ex];
 				} else {
@@ -115,13 +162,21 @@ var prismTemplete  = function() {
 				}
 			}
 		} catch (e) {
+			if (this.debug) {
+				console.log(e)
+			}
+
 			val = null;
 		}
 		return val;
 	};// getValue
 };
-if(typeof define == "function"){
+if (typeof define == "function") {
 	define("prismTemplete", [], function() {
 		return prismTemplete;
 	});
+}
+
+String.prototype.replaceAll = function(s1, s2) {
+	return this.replace(new RegExp(s1, "gm"), s2);
 }

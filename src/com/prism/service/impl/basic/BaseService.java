@@ -58,6 +58,12 @@ public class BaseService implements Service {
 			sessionMap.put(name, value);
 		}
 		reqMap.put("session", sessionMap);
+		
+		if ("TRUE".equals(sourceMap.get("DEBUGGER"))) {
+			System.out.println(sourceMap);
+			System.out.println(reqMap);
+		}
+		
 		// json参数 单数据为String，多数据为List<Map>
 		if (sourceMap.containsKey("JSON")) {
 			JsonUtil ju = new JsonUtil();

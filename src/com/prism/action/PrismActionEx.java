@@ -59,6 +59,7 @@ public class PrismActionEx extends HttpServlet {
 			req.setAttribute("reqMap", reqMap);
 			req.setAttribute("context", context);
 			req.setAttribute("DBConnection", context.getBean("DBConnection"));
+			
 			vm.setRequest(req);
 			vm.setResponse(res);
 			vm.service();
