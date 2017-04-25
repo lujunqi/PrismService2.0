@@ -11,37 +11,37 @@
 	<bean name="m_unit" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
-				<entry key="EL:TEXT">
+				<entry key="TEXT">
 					<value><![CDATA[
-<input type="text" class="text w160" name="%1$s" value="%2$s"/>
+<input type="text" name="%1$s" id="%1$s" %2$s class="layui-input">
 ]]>
 					</value>
 				</entry>
-				<entry key="EL:CHECKBOX">
+				<entry key="CHECKBOX">
 					<value><![CDATA[
 <span><input type="checkbox" name="%1$s" class="checkbox" value="%2$s" %4$s /><span class="el">%3$s</span></span>
 ]]>
 					</value>
 				</entry>
-				<entry key="EL:RADIO">
+				<entry key="RADIO">
 					<value><![CDATA[
 <span><input type="radio" name="%1$s" class="radio" value="%2$s" %4$s /><span class="el">%3$s</span></span>
 ]]>
 					</value>
 				</entry>
-				<entry key="EL:HIDDEN">
+				<entry key="HIDDEN">
 					<value><![CDATA[
 <input type="hidden" name="%1$s" value="%2$s" >
 ]]>
 					</value>
 				</entry>
-				<entry key="EL:SELECT">
+				<entry key="SELECT">
 					<value><![CDATA[
 <select name="%1$s">%2$s</select>
 ]]>
 					</value>
 				</entry>
-				<entry key="EL:DATE">
+				<entry key="DATE">
 					<value><![CDATA[
 <input type="text" name="begin_%1$s" style="width:84px;" class="text" value="%2$s" readonly="readonly"
  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" />-
@@ -50,7 +50,7 @@
 ]]>
 					</value>
 				</entry>
-				<entry key="EL:WIN">
+				<entry key="WIN">
 					<value><![CDATA[
 <input type="hidden" name="%1$s" ><a href="javascript:win('%2$s')">选择</a>
 ]]>

@@ -34,6 +34,10 @@ var prismTemplete = function() {
 		obj.text(val);
 		this.def(obj, val);
 	};// text
+	this.val = function(obj, val) {
+		this.currentElement = obj;
+		obj.val(val);
+	};// val
 	this.format = function(obj, val) {
 		this.currentElement = obj;
 		var str = obj.html();
@@ -94,7 +98,7 @@ var prismTemplete = function() {
 			val[i]["_index"] = i;
 			$cmd.data(map, val[i]);
 			$cmd.preview($div);
-			obj.append($div.html());
+			obj.append($div.children());
 		}
 
 	}// grid

@@ -14,36 +14,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="css/global-min.css" />
 <link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
 <!-- 引入jquery -->
 <script type="text/javascript" src="scripts/jquery.js"></script>
 <script type="text/javascript" src="prism/prismTemplete.js"></script>
 <script type="text/javascript" src="plug/layer/layer.js"></script>
 <script type="text/javascript">
-if (top.layer != undefined) {
-	layer = top.layer;
-}
-var cmd = new prismTemplete();
-var dataUrl = ${DATAURL};
-$(function() {
-	$.get(dataUrl["list"], {}, function(res) {
-		
-		cmd.data("d", res);
-		cmd.preview($("#list"));
-		
-	}, "json");
-});
+	if (top.layer != undefined) {
+		layer = top.layer;
+	}
+	var param = {};
+	var dataUrl = "${DATAURL}";
+	$(init);
+	function init() {
+		$.get(dataUrl, param, function(res) {
+			var cmd = new prismTemplete();
+			setCmd(cmd);
+			cmd.data("d", res);
+			cmd.preview($("#list"));
+		}, "json");
+	}
+	function setCmd(cmd) {
 <%String mapping = request.getAttribute("MAPPING")+"";
-if(mapping.indexOf("*/")!=-1){
-	out.println(mapping.substring(mapping.indexOf("*/")+2));
-}%>
-	
+	if(mapping.indexOf("*/")!=-1){
+		out.println(mapping.substring(mapping.indexOf("*/")+2));
+	}%>
+	}
 </script>
-<script type="text/javascript" src="page/model_list.js"></script>
-<%
-	if(request.getAttribute("SCRIPT")!=null){
-	out.println("<script type=\"text/javascript\" src=\""+request.getAttribute("SCRIPT")+"\"></script>");
-}
-%>
+
+<script type="text/javascript" src="page/model_list_templete.js"></script>
+
 </head>
 
 <body class="mainBody">
@@ -62,8 +62,8 @@ if(mapping.indexOf("*/")!=-1){
 
 				<%
 					if(request.getAttribute("BUTTON")!=null){
-						Map<String,Object> button = (Map<String,Object>)request.getAttribute("BUTTON");
-						for(Map.Entry<String,Object> en: button.entrySet()){
+												Map<String,Object> button = (Map<String,Object>)request.getAttribute("BUTTON");
+												for(Map.Entry<String,Object> en: button.entrySet()){
 				%>
 				<a class="fr" href="javascript:<%=en.getValue()%>"><i
 					class="icon icon-plus mr5"></i><%=en.getKey()%></a> <span
@@ -76,18 +76,22 @@ if(mapping.indexOf("*/")!=-1){
 		<div class="wrap-inner">
 			<div id="search_div" class="frmList clearfix"></div>
 		</div>
-		<div class="wrap-inner" style="">
-			<table id="" class="comTabList" width="100%" border="0"
-				cellspacing="0" cellpadding="0">
+		<div class="layui-form">
+			<table class="layui-table">
+				<colgroup>
+					<col width="150">
+					<col width="200">
+					<col>
+				</colgroup>
 				<thead>
 					<tr>
 						<%
 							if(request.getAttribute("COL")!=null){
-											Map<String,Object> map_key = (Map<String,Object>)request.getAttribute("COL");
-											for(Map.Entry<String,Object> en: map_key.entrySet()){
-												out.print("<th>"+en.getKey()+"</th>" );
-											}
-										}
+																							Map<String,Object> map_key = (Map<String,Object>)request.getAttribute("COL");
+																							for(Map.Entry<String,Object> en: map_key.entrySet()){
+																								out.print("<th>"+en.getKey()+"</th>" );
+																							}
+																						}
 						%>
 					</tr>
 				</thead>
@@ -96,16 +100,17 @@ if(mapping.indexOf("*/")!=-1){
 					<tr class="">
 						<%
 							if(request.getAttribute("COL")!=null){
-											Map<String,Object> map_val = (Map<String,Object>)request.getAttribute("COL");
-											for(Map.Entry<String,Object> en: map_val.entrySet()){
-												out.print("<td data-exp='"+en.getValue()+"'>11</td>" );
-											}
-										}
+																							Map<String,Object> map_val = (Map<String,Object>)request.getAttribute("COL");
+																							for(Map.Entry<String,Object> en: map_val.entrySet()){
+																								out.print("<td data-exp='"+en.getValue()+"'>11</td>" );
+																							}
+																						}
 						%>
 
 					</tr>
 				</tbody>
 			</table>
+
 			<div>
 				<div class="plr10 ptb5">
 					<div id="pages" style="display: none;" class="pages tr clearfix">

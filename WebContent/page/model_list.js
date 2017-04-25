@@ -31,12 +31,12 @@ function info(v_id,v_area) {
 			var body = layer.getChildFrame('body', index);
 			var param = {id : v_id}
 			$.post(dataUrl["info"], param, function(data) {
-				$("[name]", $(body)).each(function() {
-					var name = $(this).attr("name");
-					if (data[0][name] != undefined) {
-						$(this).parent().html(data[0][name]);
-					}
-				});
+				if(data.length>0){
+					var cmd = new prismTemplete();
+					cmd.data("map",data[0]);
+					cmd.preview($("form",body));
+				}
+				
 			}, "json");
 		}
 	});
