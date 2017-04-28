@@ -17,9 +17,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
 <!-- 引入jquery -->
 <script type="text/javascript" src="scripts/jquery.js"></script>
-<script type="text/javascript" src="prism/prismTemplete.js"></script>
+<script type="text/javascript" src="prism/prismTemplete.js?1"></script>
 <script type="text/javascript" src="plug/layer/layer.js"></script>
+
+
 <script type="text/javascript">
+	
 	if (top.layer != undefined) {
 		layer = top.layer;
 	}
@@ -29,21 +32,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function init() {
 		$.get(dataUrl, param, function(res) {
 			var cmd = new prismTemplete();
-			setCmd(cmd);
+			
+			${CALLBACK}
+			
 			cmd.data("d", res);
 			cmd.preview($("#list"));
 		}, "json");
 	}
-	function setCmd(cmd) {
-<%String mapping = request.getAttribute("MAPPING")+"";
-	if(mapping.indexOf("*/")!=-1){
-		out.println(mapping.substring(mapping.indexOf("*/")+2));
-	}%>
-	}
+
+
 </script>
 
-<script type="text/javascript" src="page/model_list_templete.js"></script>
-
+<script type="text/javascript" src="page/model_list_templete.js?qS"></script>
 </head>
 
 <body class="mainBody">
@@ -79,8 +79,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="layui-form">
 			<table class="layui-table">
 				<colgroup>
-					<col width="150">
-					<col width="200">
+					<%
+
+					if(request.getAttribute("colgroup")!=null){
+						List<?> colgroup = (List<?>)request.getAttribute("colgroup");
+						for(int i=0;i<colgroup.size();i++){
+							out.print("<col width=\""+colgroup.get(i)+"\">");
+						}
+					}
+					%>
+					
 					<col>
 				</colgroup>
 				<thead>
@@ -102,7 +110,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							if(request.getAttribute("COL")!=null){
 																							Map<String,Object> map_val = (Map<String,Object>)request.getAttribute("COL");
 																							for(Map.Entry<String,Object> en: map_val.entrySet()){
-																								out.print("<td data-exp='"+en.getValue()+"'>11</td>" );
+																								out.print("<td data-exp='"+en.getValue()+"'></td>" );
 																							}
 																						}
 						%>

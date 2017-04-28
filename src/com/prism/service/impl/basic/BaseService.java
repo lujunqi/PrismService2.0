@@ -58,7 +58,11 @@ public class BaseService implements Service {
 			sessionMap.put(name, value);
 		}
 		reqMap.put("session", sessionMap);
-		
+		//登录验证
+		if(session.getAttribute("user_acc1")==null){
+			res.setStatus (250);
+		}
+		// 调试
 		if ("TRUE".equals(sourceMap.get("DEBUGGER"))) {
 			System.out.println(sourceMap);
 			System.out.println(reqMap);

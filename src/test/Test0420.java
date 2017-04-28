@@ -11,16 +11,47 @@ import java.util.Map;
 
 import com.prism.dbutil.DBCommand;
 import com.prism.dbutil.DBConnection;
+import com.prism.exception.DAOException;
 
 public class Test0420 {
+	public static void main(String[] args) throws Exception{
+		String sql = "SELECT u.*,us.user_m_acc FROM (select * from lb_user where user_acc != ${user_acc<STRING>}) u LEFT JOIN"+ 
+		"(select user_m_acc,user_s_acc from lb_user_acc_sm where user_m_acc = ${user_acc<STRING>}) us "+
+		"on u.user_acc = us.user_s_acc";
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("user_acc", "lb");
 
-	public static void main(String[] args) throws Exception {
+		
+		db(sql,map);
+
+		
+	}
+	private static void db(String sql,Map<String, Object> map) throws DAOException {
+		DBConnection dconn = new DBConnection();
+		dconn.setJDBC(new HashMap<String, String>() {
+			private static final long serialVersionUID = 1L;
+			{
+				put("driverClassName", "com.mysql.jdbc.Driver");
+				put("url", "jdbc:mysql://127.0.01:3306/prism");
+				put("username", "root");
+				put("password", "lost");
+			}
+		});
+
+		DBCommand cmd = new DBCommand(dconn);
+
+		System.out.println(cmd.executeSelect(sql, map));;
+		dconn.closeConnection();
+	}
+	public static void main1(String[] args) throws Exception {
 		//long last = 0;
 		Map<String,Long> lasts = new HashMap<String,Long>();
 		@SuppressWarnings("serial")
 		List<String> names = new ArrayList<String>() {
 			{
 				add("lb_cust_info_upt");
+				add("lb_cust_info_add");
+				
 				add("lb_cust_info");
 				add("lb_cust_infos");
 			}

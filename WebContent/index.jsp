@@ -1,5 +1,6 @@
-<%@ page language="java" import="java.util.*,java.net.*"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*"
+	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+	isELIgnored="false"%>
 
 <!DOCTYPE HTML>
 <html>
@@ -12,15 +13,25 @@
 <script type="text/javascript" src="scripts/common.js"></script>
 <script type="text/javascript" src="plug/layer/layer.js"></script>
 <script type="text/javascript">
+$(function(){
 <%
 session.setAttribute("user_acc","ljq");
-if(session.getAttribute("user_acc")==null){
+session.setAttribute("user_id","1");
+if(session.getAttribute("user_acc")!=null){
+	out.println("$('#my_user_acc').val('"+session.getAttribute("user_acc")+"');");
+	out.println("$('#my_user_id').val('"+session.getAttribute("user_id")+"');");
+	
 }
 %>
+});
+
+
 </script>
 </head>
 
 <body class="fluid">
+<input id="my_user_id" type="hidden"/>
+<input id="my_user_acc" type="hidden"/>
 
 	<div class="container">
 		<div id="header">
@@ -57,7 +68,9 @@ if(session.getAttribute("user_acc")==null){
 							<a class="" href="#" target="main"><span class="">业务管理</span></a>
 						</h2>
 						<ul class="sublist">
-							<li><a target="main" href="pa/lb_cust_infos.v">资料录入</a></li>
+							<li><a target="main" href="pa/lb_gathers.v">信息员管理</a></li>
+							<li><a target="main" href="pa/lb_cust_infos.v">客户管理</a></li>
+							
 						</ul>
 					</li>
 

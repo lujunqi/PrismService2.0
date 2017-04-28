@@ -20,6 +20,21 @@ VMControl vm = new VMControl(request);
 %>
 <base href="<%=basePath%>">
 <link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
+<script type="text/javascript" src="scripts/jquery.js"></script>
+<script type="text/javascript"  src="plug/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript">
+layui.use(['form', 'layedit', 'laydate'], function(){
+	 
+});
+function callBack(req){
+	
+	layui.use(['form', 'layedit', 'laydate'], function(){
+		${CALLBACK}
+		layui.form().render();
+	});
+	
+}
+</script>
 <meta charset="utf-8">
 </head>
 <body>
@@ -36,7 +51,7 @@ if(request.getAttribute("COL")!=null){
 	for(Map.Entry<String,Object> en: map_val.entrySet()){
 		String div = String.format("<div class=\"layui-form-item\">"+
 				"	<label class=\"layui-form-label\">%1$s</label>"+
-				"	<div class=\"layui-input-block\">%2$s</div></div>",en.getKey(),vm.control((Map<String,String>)en.getValue()));
+				"	<div class=\"layui-input-block\">%2$s</div></div>",en.getKey(),vm.control((Map<String,Object>)en.getValue()));
 	 	out.println(div);
 			
 	}

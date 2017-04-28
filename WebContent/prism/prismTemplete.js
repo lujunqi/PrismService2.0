@@ -15,6 +15,18 @@ var prismTemplete = function() {
 			}
 		}
 	};// def默认
+	/**layer UI控件定制 begin **/
+	this.TEXT = function(obj, val) {
+		obj.val(val);
+	};//文本控件
+	this.RADIO = function(obj, val) {
+		$(":radio",obj).each(function(){
+			 if($(this).val()==val){
+				 $(this).attr("checked","checked");
+			 }
+		});
+	};//单选框
+	/**layer UI控件定制 end **/
 	this.attr = function(obj, val) {
 		this.currentElement = obj;
 		var data_attr = obj.attr("data-attr");
