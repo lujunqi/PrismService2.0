@@ -11,6 +11,11 @@
 <base href="<%=basePath%>">
 <link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
 <meta charset="utf-8">
+<script type="text/javascript">
+function callBack(req){
+	
+}
+</script>
 </head>
 <body>
 	<div style="margin: 10px;">

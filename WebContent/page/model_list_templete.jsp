@@ -9,6 +9,7 @@
 <%
 	String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+long v = new Date().getTime();
 %>
 <base href="<%=basePath%>">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -17,33 +18,69 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
 <!-- 引入jquery -->
 <script type="text/javascript" src="scripts/jquery.js"></script>
-<script type="text/javascript" src="prism/prismTemplete.js?1"></script>
-<script type="text/javascript" src="plug/layer/layer.js"></script>
+<script type="text/javascript" src="scripts/jquery_extend.js?<%=v%>"></script>
 
+<script type="text/javascript" src="prism/prismTemplete.js?<%=v%>"></script>
+<script type="text/javascript" src="plug/layer/layer.js"></script>
+<script type="text/javascript" src="plug/layui/layui.js" charset="utf-8"></script>
 
 <script type="text/javascript">
-	
 	if (top.layer != undefined) {
 		layer = top.layer;
 	}
 	var param = {};
+	param["_page"]=0;
+	param["_offset"]=20;
+	
 	var dataUrl = "${DATAURL}";
 	$(init);
 	function init() {
-		$.get(dataUrl, param, function(res) {
-			var cmd = new prismTemplete();
-			
-			${CALLBACK}
-			
-			cmd.data("d", res);
-			cmd.preview($("#list"));
-		}, "json");
+		param["_page"]=0;
+		slt();
+		total();
 	}
+function slt(){
+	$.get(dataUrl, param, function(res, textStatus, jqXHR) {
 
+		var cmd = new prismTemplete();
 
+		${CALLBACK}
+		
+
+		cmd.data("d", res);
+		cmd.preview($("#list"));
+	}, "json");
+}
+function total(){
+	layui.use([ 'laypage', 'layer' ], function() {
+		var laypage = layui.laypage, layer = layui.layer;
+		
+<%if(request.getAttribute("TOTAL")!=null){%>
+var total_url = "${TOTAL}";
+$.get(total_url,param,function(data){
+	var $total =  data[0]["total"];
+	laypage({
+		cont : 'pages',
+		pages : Math.ceil($total/param["_offset"]),
+		groups : 5,
+		first : false,
+		last : false,
+		jump : function(obj, first) {
+			if (!first) {
+				param["_page"]= (obj.curr-1)*param["_offset"];
+				slt();
+			}
+		}
+	});	
+},"json");
+
+<%}%>
+
+	});
+}
 </script>
 
-<script type="text/javascript" src="page/model_list_templete.js?qS"></script>
+<script type="text/javascript" src="page/model_list_templete.js?<%=v%>"></script>
 </head>
 
 <body class="mainBody">
@@ -62,8 +99,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 				<%
 					if(request.getAttribute("BUTTON")!=null){
-												Map<String,Object> button = (Map<String,Object>)request.getAttribute("BUTTON");
-												for(Map.Entry<String,Object> en: button.entrySet()){
+																Map<String,Object> button = (Map<String,Object>)request.getAttribute("BUTTON");
+																for(Map.Entry<String,Object> en: button.entrySet()){
 				%>
 				<a class="fr" href="javascript:<%=en.getValue()%>"><i
 					class="icon icon-plus mr5"></i><%=en.getKey()%></a> <span
@@ -80,26 +117,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<table class="layui-table">
 				<colgroup>
 					<%
-
-					if(request.getAttribute("colgroup")!=null){
-						List<?> colgroup = (List<?>)request.getAttribute("colgroup");
-						for(int i=0;i<colgroup.size();i++){
-							out.print("<col width=\""+colgroup.get(i)+"\">");
-						}
-					}
+						if(request.getAttribute("colgroup")!=null){
+												List<?> colgroup = (List<?>)request.getAttribute("colgroup");
+												for(int i=0;i<colgroup.size();i++){
+													out.print("<col width=\""+colgroup.get(i)+"\">");
+												}
+											}
 					%>
-					
+
 					<col>
 				</colgroup>
 				<thead>
 					<tr>
 						<%
 							if(request.getAttribute("COL")!=null){
-																							Map<String,Object> map_key = (Map<String,Object>)request.getAttribute("COL");
-																							for(Map.Entry<String,Object> en: map_key.entrySet()){
-																								out.print("<th>"+en.getKey()+"</th>" );
-																							}
-																						}
+																															Map<String,Object> map_key = (Map<String,Object>)request.getAttribute("COL");
+																															for(Map.Entry<String,Object> en: map_key.entrySet()){
+																																out.print("<th>"+en.getKey()+"</th>" );
+																															}
+																														}
 						%>
 					</tr>
 				</thead>
@@ -108,27 +144,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<tr class="">
 						<%
 							if(request.getAttribute("COL")!=null){
-																							Map<String,Object> map_val = (Map<String,Object>)request.getAttribute("COL");
-																							for(Map.Entry<String,Object> en: map_val.entrySet()){
-																								out.print("<td data-exp='"+en.getValue()+"'></td>" );
-																							}
-																						}
+																															Map<String,Object> map_val = (Map<String,Object>)request.getAttribute("COL");
+																															for(Map.Entry<String,Object> en: map_val.entrySet()){
+																																out.print("<td data-exp='"+en.getValue()+"'></td>" );
+																															}
+																														}
 						%>
 
 					</tr>
 				</tbody>
+
 			</table>
 
 			<div>
-				<div class="plr10 ptb5">
-					<div id="pages" style="display: none;" class="pages tr clearfix">
-						<span class="batch fl mr10" style="display: none;"> </span> <span
-							class="info fl"> <em>共有<b id="total_pages"></b>条数据，当前第<b
-								id="curr_pages">1</b>页
-						</em>
-						</span> <span id="pagesList" class="list"> </span>
-					</div>
-				</div>
+				<div class="plr10 ptb5" id="pages"></div>
 			</div>
 		</div>
 		<div class="wrap-btm clearfix">

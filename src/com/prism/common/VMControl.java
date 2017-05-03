@@ -40,9 +40,20 @@ public class VMControl {
 
 	public String control(Map<String, Object> map) {
 
-		
 		Map<String, myString> result = new HashMap<String, myString>();
 		result.put("TEXT", new myString() {
+			@Override
+			public String get() {
+				String html = m_unit.get(map.get("TYPE"));
+				vc = new VelocityContext();
+				for (Map.Entry<String, Object> en : map.entrySet()) {
+					vc.put(en.getKey(), en.getValue());
+				}
+
+				return getResultfromContent(html);
+			}
+		});
+		result.put("PASSWORD", new myString() {
 			@Override
 			public String get() {
 				String html = m_unit.get(map.get("TYPE"));
@@ -53,6 +64,7 @@ public class VMControl {
 				return getResultfromContent(html);
 			}
 		});
+
 		result.put("RADIO", new myString() {
 			@Override
 			public String get() {
@@ -61,6 +73,7 @@ public class VMControl {
 				for (Map.Entry<String, Object> en : map.entrySet()) {
 					vc.put(en.getKey(), en.getValue());
 				}
+			
 				return getResultfromContent(html);
 			}
 		});
@@ -85,8 +98,9 @@ public class VMControl {
 		}
 
 	}
+
 	@SuppressWarnings("unchecked")
-	private void initData(Map<String, Object> map){
+	private void initData(Map<String, Object> map) {
 		Map<String, Object> sourceMap = (Map<String, Object>) req.getAttribute("sourceMap");
 		Map<String, Object> reqMap = (Map<String, Object>) req.getAttribute("reqMap");
 		if (map.containsKey("DSQL")) {
@@ -106,6 +120,7 @@ public class VMControl {
 			map.put("LIST", getList(sql, reqMap));
 		}
 	}
+
 	private List<Map<String, Object>> getList(String sql, Map<String, Object> reqMap) {
 		DBConnection dbConn = (DBConnection) req.getAttribute("DBConnection");
 		DBCommand cmd = new DBCommand(dbConn);

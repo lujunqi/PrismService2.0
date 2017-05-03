@@ -58,16 +58,20 @@ public class BaseService implements Service {
 			sessionMap.put(name, value);
 		}
 		reqMap.put("session", sessionMap);
-		//登录验证
-		if(session.getAttribute("user_acc1")==null){
-			res.setStatus (250);
+		// 登录验证
+		if (session.getAttribute("user_acc") == null) {
+
+			if (!"YES".equals(sourceMap.get("FILTER"))) {
+				res.setStatus(250);
+				return;
+			}
 		}
 		// 调试
 		if ("TRUE".equals(sourceMap.get("DEBUGGER"))) {
 			System.out.println(sourceMap);
 			System.out.println(reqMap);
 		}
-		
+
 		// json参数 单数据为String，多数据为List<Map>
 		if (sourceMap.containsKey("JSON")) {
 			JsonUtil ju = new JsonUtil();
@@ -93,8 +97,7 @@ public class BaseService implements Service {
 	}
 
 	// SELECT
-	protected List<Map<String, Object>> selectResult(String key)
-			throws BMOException {
+	protected List<Map<String, Object>> selectResult(String key) throws BMOException {
 		String sql = (String) sourceMap.get(key);
 		DBCommand cmd = new DBCommand(dbConn);
 		try {
@@ -112,8 +115,7 @@ public class BaseService implements Service {
 		}
 	}
 
-	protected List<Map<String, Object>> selectResult(String key, int minnum,
-			int maxnum) throws BMOException {
+	protected List<Map<String, Object>> selectResult(String key, int minnum, int maxnum) throws BMOException {
 		String sql = (String) sourceMap.get(key);
 		DBCommand cmd = new DBCommand(dbConn);
 		try {

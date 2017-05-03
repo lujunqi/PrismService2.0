@@ -86,9 +86,10 @@ function upt(req) {
 
 			var param = $("form", $(body)).serializeObject();
 			$.extend(req["param"], param);
-			layer["req"] = req;
-
-			return ;
+			
+			if(!verify($(body),$(layero).find("iframe")[0].contentWindow.p_verify)){
+				return;
+			}
 			$.post(req["upt"], req["param"], function(data) {
 				if (data["code"] == '1' && data["result"] > 0) {
 					msg("操作成功");
@@ -118,6 +119,8 @@ function upt(req) {
 					};
 					
 					cmd.preview($("form", $(body)));
+					
+					$(layero).find("iframe")[0].contentWindow.callBack(req);
 				}
 			}, "json");
 		}
@@ -144,8 +147,9 @@ function add(req) {
 				req["param"] = {}
 			}
 			$.extend(req["param"],param);
-			console.log(req["param"])
-			console.log(param)
+			if(!verify($(body),$(layero).find("iframe")[0].contentWindow.p_verify)){
+				return;
+			}
 			$.post(req["add"], req["param"], function(data) {
 				if (data["code"] == '1' && data["result"] > 0) {
 					msg("操作成功");
@@ -171,8 +175,22 @@ function add(req) {
 		}
 	})
 }
-function required(){
+function verify(body,$verify){
+	var flag = true;
 	
+	$("[p_verify]",body).each(function(){
+		var v = $(this).attr("p_verify");
+		$verify[v]($(this));
+		if($(this).attr("v_check")!="Y"){
+			$(this).addClass("layui-form-danger");
+			$(this).focus();
+			msg($(this).attr("v_check"));
+			flag = false;
+		}else{
+			$(this).removeClass("layui-form-danger");
+		}
+	});
+	return flag;
 }
 function msg(info) {
 	layer.msg(info, {
@@ -180,15 +198,3 @@ function msg(info) {
 		icon : 6
 	});
 }
-$.fn.serializeObject = function() {
-	var obj = {};
-	var count = 0;
-	$.each(this.serializeArray(), function(i, o) {
-		var n = o.name, v = o.value;
-		count++;
-		obj[n] = obj[n] === undefined ? v : $.isArray(obj[n]) ? obj[n].concat(v) : [ obj[n], v ];
-	});
-	// obj.nameCounts = count + "";//表单name个数
-	// return JSON.stringify(obj);
-	return obj;
-};

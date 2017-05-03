@@ -21,6 +21,7 @@ VMControl vm = new VMControl(request);
 <base href="<%=basePath%>">
 <link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
 <script type="text/javascript" src="scripts/jquery.js"></script>
+<script type="text/javascript" src="scripts/jquery_extend.js"></script>
 <script type="text/javascript"  src="plug/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript">
 layui.use(['form', 'layedit', 'laydate'], function(){
@@ -43,7 +44,7 @@ function callBack(req){
 			style="margin-top: 20px;">
 			<legend>${VIEWNAME}</legend>
 		</fieldset>
-		<form class="layui-form" onsubmit="return false;" action="">
+		<form class="layui-form" name="form" onsubmit="return false;" action="">
 <%
 if(request.getAttribute("COL")!=null){
 	@SuppressWarnings("unchecked")

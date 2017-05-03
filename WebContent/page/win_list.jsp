@@ -43,11 +43,7 @@ function getWinParam(){
 	return parent.layer["winParam"];
 }
 </script>
-<%
-if(request.getAttribute("SCRIPT")!=null){
-	out.println("<script type=\"text/javascript\" src=\""+request.getAttribute("SCRIPT")+"\"></script>");
-}
-%>
+
 </head>
 
 <body class="mainBody">

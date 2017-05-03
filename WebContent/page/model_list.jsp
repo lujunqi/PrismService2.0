@@ -39,11 +39,7 @@ if(mapping.startsWith("/*")){
 %>
 </script>
 <script type="text/javascript" src="page/model_list.js"></script>
-<%
-if(request.getAttribute("SCRIPT")!=null){
-	out.println("<script type=\"text/javascript\" src=\""+request.getAttribute("SCRIPT")+"\"></script>");
-}
-%>
+
 </head>
 
 <body class="mainBody">

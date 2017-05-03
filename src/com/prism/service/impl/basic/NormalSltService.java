@@ -34,6 +34,7 @@ public class NormalSltService extends BaseService {
 	public void service() throws ServletException, IOException {
 
 		super.service();
+		vc = new VelocityContext();
 		PrintWriter out = getResponse().getWriter();
 		try {
 			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -45,8 +46,8 @@ public class NormalSltService extends BaseService {
 			}
 			
 			String action = (String) reqMap.get("_action");
+			
 			// list 内容修饰
-
 			if (sourceMap.containsKey("AFTER_RESULT")) {
 				ApplicationContext context = (ApplicationContext) getRequest().getAttribute("context");
 				getRequest().setAttribute("this", list);
@@ -60,8 +61,9 @@ public class NormalSltService extends BaseService {
 				getRequest().setAttribute(action, list);
 				vc.put(action, list);
 				vc.put("this", list);
+				
 			}
-
+			vc.put("session",this.getRequest().getSession());
 			// 视图模板
 			if (sourceMap.containsKey("VIEW")) {
 				VMResponse vm = new VMResponse();

@@ -11,27 +11,98 @@
 <link rel="stylesheet" href="css/common.css">
 <script type="text/javascript" src="scripts/jquery.js"></script>
 <script type="text/javascript" src="scripts/common.js"></script>
+<script type="text/javascript" src="scripts/jquery_extend.js"></script>
 <script type="text/javascript" src="plug/layer/layer.js"></script>
 <script type="text/javascript">
-$(function(){
-<%
-session.setAttribute("user_acc","ljq");
-session.setAttribute("user_id","1");
-if(session.getAttribute("user_acc")!=null){
-	out.println("$('#my_user_acc').val('"+session.getAttribute("user_acc")+"');");
-	out.println("$('#my_user_id').val('"+session.getAttribute("user_id")+"');");
-	
-}
+	$(function() {
+<%if (session.getAttribute("user_acc") != null) {
+				out.println("$('#my_user_acc').val('"
+						+ session.getAttribute("user_acc") + "');");
+				out.println("$('#my_user_id').val('"
+						+ session.getAttribute("user_id") + "');");
+				out.println("$('span','#my_user_name').html('"
+						+ session.getAttribute("user_name") + "')");
+			} else {
+				out.println("login();");
+			}
 %>
-});
+	$("span", "#my_user_name").click(function(){
+		if($(this).text()==""){
+			login();
+		}else{
+			logout();
+		}
+	});
+	});
+	//退出
+	function logout() {
+		layer.closeAll();
+		layer.confirm('是否要退出？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			 $.get("pa/lb_user_logout.s",{},function(data){
+				if(data["status"]=="Y"){
+					top.document.main.location.reload();
+					layer.closeAll();
+					$("span", "#my_user_name").html("");
+					login();
+				}
+			 },"JSON");
+		}, function() {
+			
+		});
+	}
+	var isLogin = false;
+	function login() {
+		if(isLogin){
+			return;
+		}
+		var area_t = [ '400px', '230px' ];
+		isLogin = true;
+		layer.open({
+			type : 2,
+			id:"login_layer",
+			area : area_t,
+			fix : false, // 不固定
+			maxmin : false,
+			title : false,
+			btn : [ "提交", "关闭" ],
+			content : "pa/lb_user_login.v",
+			yes : function(index, layero) {
+				var body = layer.getChildFrame('body', index);
 
+				var param = $("form", $(body)).serializeObject();
+				if (param["user_acc"] == "" || param["user_pwd"] == "") {
 
+					layer.alert("请输入账号和密码");
+					return;
+				}
+
+				$.post("pa/lb_user_login.s", param, function(data, textStatus, jqXHR) {
+
+					if (data.length > 0) {
+						$("span", "#my_user_name").html(data[0]["user_name"]);
+						top.document.main.location.reload();
+						layer.closeAll();
+					} else {
+						layer.alert("请输入正确的账号和密码");
+					}
+
+				}, "json");
+
+			},
+			cancel: function(index, layero) {
+				isLogin = false;
+			}
+		});
+
+	}
 </script>
 </head>
 
 <body class="fluid">
-<input id="my_user_id" type="hidden"/>
-<input id="my_user_acc" type="hidden"/>
+	<input id="my_user_id" type="hidden" />
+	<input id="my_user_acc" type="hidden" />
 
 	<div class="container">
 		<div id="header">
@@ -45,7 +116,7 @@ if(session.getAttribute("user_acc")!=null){
 					<!--a class="pngfix" href="#">退出登录</a-->
 				</div>
 				<ul id="site-nav" class="clearfix">
-					<li class="user"><span></span>欢迎您</li>
+					<li class="user" id="my_user_name"><span></span>欢迎您</li>
 
 					<li class="timer"><span id="date"></span></li>
 				</ul>
@@ -70,7 +141,7 @@ if(session.getAttribute("user_acc")!=null){
 						<ul class="sublist">
 							<li><a target="main" href="pa/lb_gathers.v">信息员管理</a></li>
 							<li><a target="main" href="pa/lb_cust_infos.v">客户管理</a></li>
-							
+
 						</ul>
 					</li>
 
@@ -81,9 +152,9 @@ if(session.getAttribute("user_acc")!=null){
 						<ul class="sublist">
 							<li><a target="main" href="pa/lb_user.v">用户管理</a></li>
 						</ul>
-						
+
 					</li>
-					
+
 				</ul>
 			</div>
 			<!--/.sidebar -->

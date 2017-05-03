@@ -49,7 +49,8 @@ public class SourceMap extends HashMap<String, Object> {
 				}
 
 			}
-			if (!map.containsKey("VIEW")) {// 默认值
+
+			if (!super.containsKey("VIEW")) {// 默认值
 				super.put("VIEW", "$v.toJson()");
 			}
 		} catch (DAOException e) {

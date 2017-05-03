@@ -13,16 +13,25 @@
 			<map>
 				<entry key="TEXT">
 					<value><![CDATA[
-<input type="text" name="${KEY}" data-exp='${VAL}' data-method="${TYPE}" id="${KEY}" class="layui-input">
+<input type="text" name="${KEY}" data-exp='${VAL}' data-method="${TYPE}" id="${KEY}"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+ class="layui-input">
 ]]>
 					</value>
 				</entry>
 
 				<entry key="RADIO">
 					<value><![CDATA[
-<div data-exp='${VAL}' data-method="${TYPE}">
+<div data-exp='${VAL}' data-method="${TYPE}"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+name="${KEY}"
+>
 #foreach($m in ${LIST}) 
-<input type="radio" name="${KEY}" id="${KEY}" value="$m.K" title="$m.V">
+<input type="radio" name="${KEY}" ${m.C} value="$m.K" title="$m.V">
 #end
 </div>
 ]]>
@@ -30,37 +39,26 @@
 				</entry>
 				<entry key="SELECT">
 					<value><![CDATA[
-<select data-exp='${VAL}' name="${KEY}" id="${KEY}" data-method="${TYPE}">
+<select data-exp='${VAL}' name="${KEY}" id="${KEY}" data-method="${TYPE}"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+
+>
 #foreach($m in ${LIST}) 
-<option value="$m.K">$m.V </option>
+<option  ${m.C} value="$m.K">$m.V </option>
 #end
 </select>
 ]]>
 					</value>
 				</entry>
-								
-				<entry key="HIDDEN">
+				<entry key="PASSWORD">
 					<value><![CDATA[
-<input type="hidden" name="%1$s" value="%2$s" >
+<input type="password" name="${KEY}" id="${KEY}" class="layui-input">
 ]]>
 					</value>
 				</entry>
 
-				<entry key="DATE">
-					<value><![CDATA[
-<input type="text" name="begin_%1$s" style="width:84px;" class="text" value="%2$s" readonly="readonly"
- onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" />-
-<input type="text" name="end_%1$s" style="width:84px;" class="text" value="%3$s" readonly="readonly"
- onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" />
-]]>
-					</value>
-				</entry>
-				<entry key="WIN">
-					<value><![CDATA[
-<input type="hidden" name="%1$s" ><a href="javascript:win('%2$s')">选择</a>
-]]>
-					</value>
-				</entry>
 			</map>
 		</constructor-arg>
 	</bean>

@@ -2,8 +2,7 @@
 * 主工作区的侧边缩放
 */
 
-// current page
-var curPage = 1;
+
 
 // init sidebar
 function initSide() {

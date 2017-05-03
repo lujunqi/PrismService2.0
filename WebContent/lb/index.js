@@ -1,14 +1,4 @@
-function opt1(data) {
-	var html = "";
 
-	html += '<span class="operate"> <a href="javascript:del('
-			+ data["user_id"] + ')">[删除]</a> </span>';
-	html += '<span class="operate"> <a href="javascript:upt('
-			+ data["user_id"] + ')">[修改]</a> </span>';
-	html += '<span class="operate"> <a href="javascript:auth(\''
-			+ data["user_acc"] + '\')">[赋权]</a> </span>';
-	return html;
-}
 function auth(user_acc){
 	var winParam = {};
 	winParam["user_acc"] = user_acc;
