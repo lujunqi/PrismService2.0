@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"  
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-    xmlns:aop="http://www.springframework.org/schema/aop"  
-    xmlns:context="http://www.springframework.org/schema/context"  
-    xsi:schemaLocation="  
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="  
        http://www.springframework.org/schema/beans  
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
        http://www.springframework.org/schema/aop  
@@ -21,7 +20,8 @@
 			<map>
 				<entry key="username" value="root" />
 				<entry key="password" value="lost" />
-				<entry key="url" value="jdbc:mysql://127.0.0.1:3306/prism?useUnicode=true&amp;characterEncoding=UTF-8" />
+				<entry key="url"
+					value="jdbc:mysql://127.0.0.1:3306/prism?useUnicode=true&amp;characterEncoding=UTF-8" />
 				<entry key="driverClassName" value="com.mysql.jdbc.Driver" />
 			</map>
 		</property>
@@ -32,5 +32,7 @@
 	<import resource="controlConf.xml" />
 	<import resource="serviceConf.xml" />
 
-	<context:component-scan base-package="templete"/>
+
+
+	<context:component-scan base-package="templete" />
 </beans>

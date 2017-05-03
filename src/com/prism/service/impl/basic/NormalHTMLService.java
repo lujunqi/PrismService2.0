@@ -25,6 +25,7 @@ public class NormalHTMLService extends BaseService{
 				ApplicationContext context = (ApplicationContext)getRequest().getAttribute("context");
 				Templete templete = (Templete)context.getBean(sourceMap.get("BEAN")+"");
 				templete.service(sourceMap, getRequest());
+				
 			}else{
 				
 				Iterator<Entry<String, Object>> it = sourceMap.entrySet().iterator();

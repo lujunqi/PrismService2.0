@@ -44,26 +44,23 @@ public class NormalSltService extends BaseService {
 			} else if (sourceMap.containsKey("SQL")) {
 				list = selectResult("SQL");
 			}
-			
-			String action = (String) reqMap.get("_action");
-			
-			// list 内容修饰
-			if (sourceMap.containsKey("AFTER_RESULT")) {
-				ApplicationContext context = (ApplicationContext) getRequest().getAttribute("context");
-				getRequest().setAttribute("this", list);
-				Templete templete = (Templete) context.getBean(sourceMap.get("AFTER_RESULT") + "");
-				templete.service(sourceMap, getRequest());
-			} else {
 
-				reqMap.put(action, list);
-				reqMap.put("this", list);
-				getRequest().setAttribute("this", list);
-				getRequest().setAttribute(action, list);
-				vc.put(action, list);
-				vc.put("this", list);
-				
+			String action = (String) reqMap.get("_action");
+			reqMap.put(action, list);
+			reqMap.put("this", list);
+			getRequest().setAttribute("this", list);
+			getRequest().setAttribute(action, list);
+			// 模板类处理
+			if (sourceMap.containsKey("BEAN")) {
+				ApplicationContext context = (ApplicationContext) getRequest().getAttribute("context");
+				Templete templete = (Templete) context.getBean(sourceMap.get("BEAN") + "");
+				templete.service(sourceMap, getRequest());
+				vc.put("sourceMap", sourceMap);
 			}
-			vc.put("session",this.getRequest().getSession());
+			vc.put(action, list);
+			vc.put("this", list);
+
+			vc.put("session", this.getRequest().getSession());
 			// 视图模板
 			if (sourceMap.containsKey("VIEW")) {
 				VMResponse vm = new VMResponse();

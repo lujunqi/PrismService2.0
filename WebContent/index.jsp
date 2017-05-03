@@ -24,15 +24,14 @@
 						+ session.getAttribute("user_name") + "')");
 			} else {
 				out.println("login();");
+			}%>
+	$("span", "#my_user_name").click(function() {
+			if ($(this).text() == "") {
+				login();
+			} else {
+				logout();
 			}
-%>
-	$("span", "#my_user_name").click(function(){
-		if($(this).text()==""){
-			login();
-		}else{
-			logout();
-		}
-	});
+		});
 	});
 	//退出
 	function logout() {
@@ -40,28 +39,28 @@
 		layer.confirm('是否要退出？', {
 			btn : [ '确定', '取消' ]
 		}, function() {
-			 $.get("pa/lb_user_logout.s",{},function(data){
-				if(data["status"]=="Y"){
+			$.get("pa/lb_user_logout.s", {}, function(data) {
+				if (data["status"] == "Y") {
 					top.document.main.location.reload();
 					layer.closeAll();
 					$("span", "#my_user_name").html("");
 					login();
 				}
-			 },"JSON");
+			}, "JSON");
 		}, function() {
-			
+
 		});
 	}
 	var isLogin = false;
 	function login() {
-		if(isLogin){
+		if (isLogin) {
 			return;
 		}
 		var area_t = [ '400px', '230px' ];
 		isLogin = true;
 		layer.open({
 			type : 2,
-			id:"login_layer",
+			id : "login_layer",
 			area : area_t,
 			fix : false, // 不固定
 			maxmin : false,
@@ -91,7 +90,7 @@
 				}, "json");
 
 			},
-			cancel: function(index, layero) {
+			cancel : function(index, layero) {
 				isLogin = false;
 			}
 		});
@@ -112,9 +111,7 @@
 					<a href="#"><img class="pngfix" src="images/logo.png" alt=""
 						width="579" height="80" /></a>
 				</div>
-				<div id="logout">
-					<!--a class="pngfix" href="#">退出登录</a-->
-				</div>
+
 				<ul id="site-nav" class="clearfix">
 					<li class="user" id="my_user_name"><span></span>欢迎您</li>
 
@@ -133,29 +130,7 @@
 			<!--/.content-->
 
 			<div class="sidebar" id="sidebar">
-				<ul class="sideNav">
-					<li class="major">
-						<h2 class="subtit">
-							<a class="" href="#" target="main"><span class="">业务管理</span></a>
-						</h2>
-						<ul class="sublist">
-							<li><a target="main" href="pa/lb_gathers.v">信息员管理</a></li>
-							<li><a target="main" href="pa/lb_cust_infos.v">客户管理</a></li>
 
-						</ul>
-					</li>
-
-					<li class="major">
-						<h2 class="subtit">
-							<a class="" href="#"><span class="">系统管理</span></a>
-						</h2>
-						<ul class="sublist">
-							<li><a target="main" href="pa/lb_user.v">用户管理</a></li>
-						</ul>
-
-					</li>
-
-				</ul>
 			</div>
 			<!--/.sidebar -->
 

@@ -69,13 +69,19 @@ function initComTablist() {
 		return false;
 	});
 }
-
+function initMenu(){
+	$.get("pa/lb_menu.s",{},function(data){
+		$("#sidebar").html(data);
+		initSide();
+		switchBar();
+	},"html");
+}
 $(window).resize(function(e) {
 	resizeContent();
 });
 $(document).ready(function(e) {
 	resizeContent();
-	initSide();
-	switchBar();
+	initMenu();
+	
 	initComTablist();
 });

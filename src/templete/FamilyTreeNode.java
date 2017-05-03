@@ -16,24 +16,21 @@ public class FamilyTreeNode implements Templete {
 
 	public void service(Map<String, Object> sourceMap, HttpServletRequest req) {
 		@SuppressWarnings("unchecked")
-		List<Map<String, Object>> list = (List<Map<String, Object>>) req
-				.getAttribute("this");
-		makeNodes(list,req);
-		
+		List<Map<String, Object>> list = (List<Map<String, Object>>) req.getAttribute("this");
+		makeNodes(list, req);
+
 		sourceMap.remove("VIEW");
 
 	}
 
-	private void makeNodes(List<Map<String, Object>> list,HttpServletRequest req) {
+	private void makeNodes(List<Map<String, Object>> list, HttpServletRequest req) {
 		Map<String, MyNode> nodes = new HashMap<String, MyNode>();
 		MyNode root = new MyNode();
 		Map<String, Map<String, Object>> mjson = new HashMap<String, Map<String, Object>>();
 		for (Map<String, Object> map : list) {
 			String ft_id = "id" + map.get("ft_id");
 			String sup_ft_id = "id" + map.get("sup_ft_id");
-			String ft_name = "<span data-sup_id='" + sup_ft_id + "' data-id='"
-					+ ft_id + "'>" + iNull(map.get("ft_name")) + "</span><a>"
-					+ iNull(map.get("ft_nick")) + "</a>";
+			String ft_name = "<span data-sup_id='" + sup_ft_id + "' data-id='" + ft_id + "'>" + iNull(map.get("ft_name")) + "</span><a>" + iNull(map.get("ft_nick")) + "</a>";
 			MyNode node = new MyNode();
 			node.id = ft_id;
 			node.pid = sup_ft_id;
@@ -51,7 +48,7 @@ public class FamilyTreeNode implements Templete {
 			mjson.put(ft_id, map);
 		}
 		JsonUtil json = new JsonUtil();
-		String strJson =json.toJson(mjson);
+		String strJson = json.toJson(mjson);
 		req.setAttribute("view", outNode(root));
 		req.setAttribute("script", strJson);
 	}
