@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component("ManagerMenu")
 public class ManagerMenu implements Templete {
 	@Override
-	public void service(Map<String, Object> sourceMap, HttpServletRequest req) {
+	public void service(Map<String, Object> sourceMap, HttpServletRequest req,HttpServletResponse res) {
 
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> list = (List<Map<String, Object>>) req.getAttribute("this");

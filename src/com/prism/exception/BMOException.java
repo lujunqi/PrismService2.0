@@ -5,4 +5,7 @@ public class BMOException extends Exception {
 	public BMOException(Exception e){
 		super(e);
 	}
+	public BMOException(String e){
+		super(e);
+	}
 }

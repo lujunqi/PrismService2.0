@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import com.prism.common.JsonUtil;
 @Component("FamilyTreeNode")
 public class FamilyTreeNode implements Templete {
 
-	public void service(Map<String, Object> sourceMap, HttpServletRequest req) {
+	public void service(Map<String, Object> sourceMap, HttpServletRequest req,HttpServletResponse res) {
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> list = (List<Map<String, Object>>) req.getAttribute("this");
 		makeNodes(list, req);

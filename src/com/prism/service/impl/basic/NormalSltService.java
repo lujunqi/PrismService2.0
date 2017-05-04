@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -55,13 +56,18 @@ public class NormalSltService extends BaseService {
 			if (sourceMap.containsKey("BEAN")) {
 				ApplicationContext context = (ApplicationContext) getRequest().getAttribute("context");
 				Templete templete = (Templete) context.getBean(sourceMap.get("BEAN") + "");
-				templete.service(sourceMap, getRequest());
+				templete.service(sourceMap, getRequest(),getResponse());
 				vc.put("sourceMap", sourceMap);
 			}
 			vc.put(action, list);
 			vc.put("this", list);
 
 			vc.put("session", this.getRequest().getSession());
+			vc.put("request", getRequest());
+			vc.put("response", this.getResponse());
+//			Cookie cookie = new Cookie("WEBSIGN", "xxx");
+//			cookie.setPath("/");
+//			getResponse().addCookie(cookie);
 			// 视图模板
 			if (sourceMap.containsKey("VIEW")) {
 				VMResponse vm = new VMResponse();

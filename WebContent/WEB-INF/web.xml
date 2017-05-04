@@ -24,15 +24,7 @@
 		<servlet-name>PrismAction2</servlet-name>
 		<url-pattern>/pa/*</url-pattern>
 	</servlet-mapping>
-	<servlet>
-		<servlet-name>PrismAction</servlet-name>
-		<servlet-class>com.prism.action.PrismAction</servlet-class>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>PrismAction</servlet-name>
-		<url-pattern>*.do</url-pattern>
-	</servlet-mapping>
+
 
 	<context-param>
 		<param-name>basePath</param-name>

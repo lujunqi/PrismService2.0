@@ -36,9 +36,6 @@ public class DBConnection {
 				// 找到DataSource
 				BasicDataSource ds = (BasicDataSource)envContext.lookup(JNDI);
 				CONN = ds.getConnection();
-				// InitialContext ctx = new InitialContext(); 
-				// Context envContext = (Context) ctx.lookup("java:comp/env"); 
-				// DataSource ds = (DataSource) envContext.lookup("jdbc/TestDB");
 			} else {
 				// System.out.println(JDBC);
 				if (!JDBC.isEmpty()) {

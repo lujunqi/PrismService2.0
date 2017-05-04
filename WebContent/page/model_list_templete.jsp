@@ -31,6 +31,7 @@ long v = new Date().getTime();
 	var param = {};
 	param["_page"]=0;
 	param["_offset"]=20;
+	param["xx"]=[1,2];
 	
 	var dataUrl = "${DATAURL}";
 	$(init);
@@ -40,7 +41,7 @@ long v = new Date().getTime();
 		total();
 	}
 function slt(){
-	$.get(dataUrl, param, function(res, textStatus, jqXHR) {
+	$.post(dataUrl, param, function(res, textStatus, jqXHR) {
 
 		var cmd = new prismTemplete();
 
@@ -50,6 +51,7 @@ function slt(){
 		cmd.data("d", res);
 		cmd.preview($("#list"));
 	}, "json");
+	
 }
 function total(){
 	layui.use([ 'laypage', 'layer' ], function() {
