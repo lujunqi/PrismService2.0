@@ -63,7 +63,7 @@ public class BaseService implements Service {
 
 			if (!"YES".equals(sourceMap.get("FILTER"))) {
 				res.setStatus(250);
-				return;
+				throw new ServletException("系统未登录或登录超时");
 			}
 		}
 		// 调试

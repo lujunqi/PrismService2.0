@@ -14,8 +14,9 @@
 	<bean id="DBConnection" class="com.prism.dbutil.DBConnection"
 		scope="prototype">
 		<!-- JNDI方式连接数据库 -->
-		<!-- <property name="JNDI" value="jdbc/MyDB" /> -->
+		 <property name="JNDI" value="jdbc/BookDB" /> 
 		<!-- JDBC方式连接数据库 -->
+		<!-- 
 		<property name="JDBC">
 			<map>
 				<entry key="username" value="root" />
@@ -25,6 +26,7 @@
 				<entry key="driverClassName" value="com.mysql.jdbc.Driver" />
 			</map>
 		</property>
+		 -->
 		<!-- 自定的数据库连接 -->
 		<!-- <property name="CONN"> <ref bean="otherConnection"/> </property> -->
 	</bean>

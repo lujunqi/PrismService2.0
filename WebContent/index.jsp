@@ -44,6 +44,7 @@
 					top.document.main.location.reload();
 					layer.closeAll();
 					$("span", "#my_user_name").html("");
+					initMenu();
 					login();
 				}
 			}, "JSON");
@@ -83,6 +84,7 @@
 						$("span", "#my_user_name").html(data[0]["user_name"]);
 						top.document.main.location.reload();
 						layer.closeAll();
+						initMenu();
 					} else {
 						layer.alert("请输入正确的账号和密码");
 					}

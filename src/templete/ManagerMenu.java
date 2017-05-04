@@ -56,7 +56,10 @@ public class ManagerMenu implements Templete {
 			} else {
 				Element a = new Element("a");
 				a.setAttribute("target", "main");
-				a.setAttribute("href", map.get("url") + "");
+				if(map.get("url")!=null){
+					a.setAttribute("href", map.get("url") + "");
+				}
+				
 				a.setText(map.get("name") + "");
 				int user_opt = -10;
 				if (session.getAttribute("user_opt") != null) {

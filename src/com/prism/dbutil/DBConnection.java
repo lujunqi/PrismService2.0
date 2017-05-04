@@ -11,18 +11,18 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+
 import com.prism.exception.DAOException;
 
 public class DBConnection {
 	public static void main(String[] args) throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection CONN = DriverManager.getConnection(
-				"jdbc:mysql://127.0.01:3306/prism",
-				"root",
-				"lost");
+		Connection CONN = DriverManager.getConnection("jdbc:mysql://127.0.01:3306/prism", "root", "lost");
 		CONN.createStatement().executeQuery("SELECT * FROM SM_BEAN");
-		System.out.println(CONN.isClosed()+"=============");
+		System.out.println(CONN.isClosed() + "=============");
 	}
+
 	private Connection CONN = null;
 	private String JNDI = null;
 	private Map<String, String> JDBC = new HashMap<String, String>();
@@ -31,22 +31,19 @@ public class DBConnection {
 	public Connection getConnection() {
 		try {
 			if (JNDI != null) {
-				Context ctx = new InitialContext();
-				Context envContext=(Context)ctx.lookup("java:comp/env");
-				DataSource ds = (DataSource) envContext.lookup(JNDI);
+				Context initContext = new InitialContext();
+				Context envContext = (Context)initContext.lookup("java:/comp/env");
+				// 找到DataSource
+				BasicDataSource ds = (BasicDataSource)envContext.lookup(JNDI);
 				CONN = ds.getConnection();
-				
-//				InitialContext ctx = new InitialContext(); 
-//				Context envContext = (Context) ctx.lookup("java:comp/env"); 
-//				DataSource ds = (DataSource) envContext.lookup("jdbc/TestDB");
+				// InitialContext ctx = new InitialContext(); 
+				// Context envContext = (Context) ctx.lookup("java:comp/env"); 
+				// DataSource ds = (DataSource) envContext.lookup("jdbc/TestDB");
 			} else {
 				// System.out.println(JDBC);
 				if (!JDBC.isEmpty()) {
 					Class.forName((String) JDBC.get("driverClassName"));
-					CONN = DriverManager.getConnection(
-							(String) JDBC.get("url"),
-							(String) JDBC.get("username"),
-							(String) JDBC.get("password"));
+					CONN = DriverManager.getConnection((String) JDBC.get("url"), (String) JDBC.get("username"), (String) JDBC.get("password"));
 				}
 			}
 		} catch (NamingException e) {

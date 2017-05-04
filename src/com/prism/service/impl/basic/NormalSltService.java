@@ -32,11 +32,12 @@ public class NormalSltService extends BaseService {
 	private VelocityContext vc = new VelocityContext();
 
 	public void service() throws ServletException, IOException {
-
-		super.service();
-		vc = new VelocityContext();
 		PrintWriter out = getResponse().getWriter();
+		
 		try {
+			super.service();
+			vc = new VelocityContext();
+			
 			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 			if (sourceMap.containsKey("DSQL")) {
 				convertSql("DSQL", "NSQL");
