@@ -1,59 +1,39 @@
-<%@ page language="java" contentType="text/html; charset=GB2312"
-    pageEncoding="GB2312"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
-<%@ page import="java.io.*" %>
-<%@ page import="java.util.*" %>
-<%@ page import="java.sql.*" %>
-<%@ page import="javax.sql.*" %>
-<%@ page import="javax.naming.*" %>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
 
-<title>Ê¹ÓÃtomcat×Ô´øµÄÊı¾İ¿âÁ¬½Ó³Ø</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="scripts/jquery.js"></script>
+<script type="text/javascript" src="plug/layer/layer.js"></script>
+<script type="text/javascript" src="plug/layui/layui.js"></script>
+<script type="text/javascript">
+	layui.use('upload', function() {
+		layui.upload({
+			url : 'upload',
+			ext : 'jpg|png|gif', //é‚£ä¹ˆï¼Œå°±åªä¼šæ”¯æŒè¿™ä¸‰ç§æ ¼å¼çš„ä¸Šä¼ ã€‚æ³¨æ„æ˜¯ç”¨|åˆ†å‰²ã€‚
+
+			success : function(res, input) {
+				if(res.result=="Y"){
+					$("#myImg").attr("src","upload/"+res.fileName);
+				}
+			}
+		});
+	});
+</script>
 </head>
 <body>
- <%
- try{
-  Connection conn;
-  Statement stmt;
-  ResultSet rs;
-  //´ÓÊı¾İÔ´ÖĞ»ñµÃÊı¾İ¿âÁ¬½Ó
-  Context ctx = new InitialContext();
-  DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/BookDB");
-  conn = ds.getConnection();
-  
-  //´´½¨Ò»¸öSQLÉùÃ÷
-  stmt = conn.createStatement();
-  //²éÑ¯¼ÇÂ¼
-  rs = stmt.executeQuery("select * from lb_cust_info");
-  //Êä³ö²éÑ¯½á¹û
-  out.println("<table border=1 width=400>");
-  while (rs.next()){
-   String col1 = rs.getString(1);
-   String col2 = rs.getString(2);
-   String col3 = rs.getString(3);
-   String col4 = rs.getString(4);
-   
-   //×ª»»×Ö·û±àÂë
-   //col1 = new String(col1.getBytes("ISO-8859-1"),"GB2312");
-   //col2 = new String(col2.getBytes("ISO-8859-1"),"GB2312");
-   //col3 = new String(col3.getBytes("ISO-8859-1"),"GB2312");
-   
-   //´òÓ¡ÏÔÊ¾µÄÊı¾İ
-   out.println("<tr><td>"+col1+"</td><td>"+col2+"</td><td>"+col3+"</td><td>"+col4+"</td></tr>");
-  }
-  out.println("</table>");
-  
-  //¹Ø±Õ½á¹û¼¯¡¢SQLÉùÃ÷ºÍÊı¾İ¿âÁ¬½Ó
-  rs.close();
-  stmt.close();
-  conn.close();
- }catch(Exception e){
-  out.println(e.getMessage());
-  e.printStackTrace();
- }
- %>
-</body>
+
+	é€‰æ‹©ä¸€ä¸ªæ–‡ä»¶:
+	<input type="file" name="uploadFile" lay-ext="jpg|png|gif"
+		class="layui-upload-file" />
+	<br />
+	<br />
+	<div>
+	<img src="" id="myImg" width="300">
+	</div>
+</body>	
 </html>

@@ -30,16 +30,7 @@ var prismTemplete = function() {
 	this.attr = function(obj, val) {
 		this.currentElement = obj;
 		var data_attr = obj.attr("data-attr");
-		this.$prism__property["attr"] = val;
-		var data_attr_obj = $.parseJSON(data_attr);
-		for (key in data_attr_obj) {
-			var data_exp = data_attr_obj[key];
-			var data_value = this.getValue(data_exp);
-			if (data_value != null) {
-				obj.attr(key, data_value);
-			}
-		}
-		delete this.$prism__property["attr"];
+		obj.attr(data_attr,val);
 	};// 设置属性
 	this.text = function(obj, val) {
 		this.currentElement = obj;

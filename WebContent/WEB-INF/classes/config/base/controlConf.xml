@@ -31,7 +31,7 @@ ${en.key}="${en.value}"
 name="${KEY}"
 >
 #foreach($m in ${LIST}) 
-<input type="radio" name="${KEY}" ${m.C} value="$m.K" title="$m.V">
+<input type="radio" name="${KEY}" $!{m.C} value="$m.K" title="$m.V">
 #end
 </div>
 ]]>
@@ -46,7 +46,7 @@ ${en.key}="${en.value}"
 
 >
 #foreach($m in ${LIST}) 
-<option  ${m.C} value="$m.K">$m.V </option>
+<option  $!{m.C} value="$!m.K">$!m.V </option>
 #end
 </select>
 ]]>
@@ -55,6 +55,37 @@ ${en.key}="${en.value}"
 				<entry key="PASSWORD">
 					<value><![CDATA[
 <input type="password" name="${KEY}" id="${KEY}" class="layui-input">
+]]>
+					</value>
+				</entry>
+				<entry key="UPLOAD">
+					<value><![CDATA[
+<div id="${KEY}" data-upload-key="${KEY}" STYLE="width:300px;"></div>
+<input type="hidden" id="INPUT_${KEY}" name="${KEY}">
+<img id="IMG_${KEY}" width="50%" data-exp='${VAL}' data-method="attr" data-attr="src" >
+<script>
+upload($("#${KEY}"),$("#IMG_${KEY}"),$("#INPUT_${KEY}"));
+</script>
+]]>
+					</value>
+				</entry>
+				<entry key="AREA">
+					<value><![CDATA[
+<input name="${KEY}" id="${KEY}"  type="text" class="city_input layui-input" data-exp='${VAL}' data-method="TEXT" readonly="readonly">
+
+]]>
+					</value>
+				</entry>
+				<entry key="HTML">
+					<value><![CDATA[
+<div style="display: block; padding: 9px 15px;color:#999; font-weight: 400;" data-exp='${VAL}'>
+</div>
+]]>
+					</value>
+				</entry>
+				<entry key="TEXTAREA">
+					<value><![CDATA[
+<textarea name="${KEY}" data-exp="${VAL}" data-method="${TYPE}" id="${KEY}" class="layui-textarea"></textarea>
 ]]>
 					</value>
 				</entry>

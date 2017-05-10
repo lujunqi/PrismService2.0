@@ -6,6 +6,7 @@ $.ajaxSetup({
     statusCode: {
 
     	250: function(){
+    		console.log("---")
     		top.login();
         },
         401:function(){

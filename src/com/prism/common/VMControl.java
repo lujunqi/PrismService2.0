@@ -39,36 +39,28 @@ public class VMControl {
 	private VelocityContext vc = new VelocityContext();
 
 	public String control(Map<String, Object> map) {
+		myString ms = new myString() {
+			@Override
+			public String get() {
+				String html = m_unit.get(map.get("TYPE"));
+				vc = new VelocityContext();
+				for (Map.Entry<String, Object> en : map.entrySet()) {
+					vc.put(en.getKey(), en.getValue());
+				}
 
+				return getResultfromContent(html);
+			}
+		};
 		Map<String, myString> result = new HashMap<String, myString>();
-		result.put("TEXT", new myString() {
-			@Override
-			public String get() {
-				String html = m_unit.get(map.get("TYPE"));
-				vc = new VelocityContext();
-				for (Map.Entry<String, Object> en : map.entrySet()) {
-					vc.put(en.getKey(), en.getValue());
-				}
 
-				return getResultfromContent(html);
-			}
-		});
-		result.put("PASSWORD", new myString() {
-			@Override
-			public String get() {
-				String html = m_unit.get(map.get("TYPE"));
-				vc = new VelocityContext();
-				for (Map.Entry<String, Object> en : map.entrySet()) {
-					vc.put(en.getKey(), en.getValue());
-				}
-				return getResultfromContent(html);
-			}
-		});
+		
+
 
 		result.put("RADIO", new myString() {
 			@Override
 			public String get() {
 				String html = m_unit.get(map.get("TYPE"));
+				initData(map);
 				vc = new VelocityContext();
 				for (Map.Entry<String, Object> en : map.entrySet()) {
 					vc.put(en.getKey(), en.getValue());
@@ -94,7 +86,7 @@ public class VMControl {
 		if (result.containsKey(map.get("TYPE"))) {
 			return result.get(map.get("TYPE")).get();
 		} else {
-			return "";
+			return ms.get();
 		}
 
 	}

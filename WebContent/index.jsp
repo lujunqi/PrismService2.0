@@ -13,6 +13,8 @@
 <script type="text/javascript" src="scripts/common.js"></script>
 <script type="text/javascript" src="scripts/jquery_extend.js"></script>
 <script type="text/javascript" src="plug/layer/layer.js"></script>
+<script type="text/javascript" src="plug/layui/layui.js"></script>
+
 <script type="text/javascript">
 	$(function() {
 <%if (session.getAttribute("user_acc") != null) {
@@ -25,8 +27,8 @@
 			} else {
 				out.println("login();");
 			}%>
-	$("span", "#my_user_name").click(function() {
-			if ($(this).text() == "") {
+	$( "#my_user_name").click(function() {
+			if ($("span",this).text() == "") {
 				login();
 			} else {
 				logout();
@@ -82,9 +84,11 @@
 
 					if (data.length > 0) {
 						$("span", "#my_user_name").html(data[0]["user_name"]);
+						
+						isLogin = false;
 						top.document.main.location.reload();
-						layer.closeAll();
 						initMenu();
+						layer.closeAll();
 					} else {
 						layer.alert("请输入正确的账号和密码");
 					}

@@ -21,17 +21,18 @@ long v = new Date().getTime();
 <script type="text/javascript" src="scripts/jquery_extend.js?<%=v%>"></script>
 
 <script type="text/javascript" src="prism/prismTemplete.js?<%=v%>"></script>
-<script type="text/javascript" src="plug/layer/layer.js"></script>
-<script type="text/javascript" src="plug/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="plug/layui/layui.js"></script>
 
 <script type="text/javascript">
-	if (top.layer != undefined) {
-		layer = top.layer;
-	}
+var my_user_acc = "${sessionScope.user_acc}";
+var my_user_name = "${sessionScope.user_name}";
+var my_user_id = "${sessionScope.user_id}";
+
+layer = top.layer;
 	var param = {};
 	param["_page"]=0;
 	param["_offset"]=20;
-	param["xx"]=[1,2];
+
 	
 	var dataUrl = "${DATAURL}";
 	$(init);
@@ -54,8 +55,8 @@ function slt(){
 	
 }
 function total(){
-	layui.use([ 'laypage', 'layer' ], function() {
-		var laypage = layui.laypage, layer = layui.layer;
+	layui.use([ 'laypage' ], function() {
+		var laypage = layui.laypage;
 		
 <%if(request.getAttribute("TOTAL")!=null){%>
 var total_url = "${TOTAL}";

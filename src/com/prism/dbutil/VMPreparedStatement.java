@@ -245,7 +245,7 @@ public class VMPreparedStatement implements XStatement {
 			Map<String, Object> remap = new HashMap<String, Object>();
 			colsname = new ArrayList<String>();
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-				String name = rsmd.getColumnName(i);
+				String name = rsmd.getColumnLabel(i);
 				colsname.add(name);
 				Object value = rs.getObject(i);
 				/** CLOB *****************************/

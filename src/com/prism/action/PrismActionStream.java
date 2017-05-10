@@ -1,112 +1,95 @@
+/**
+ * 上传文件
+ */
 package com.prism.action;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.prism.service.Service;
-import com.prism.source.SourceMap;
-
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+@WebServlet("/upload")
 public class PrismActionStream extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final String[] xmls = { "config/base/baseConf.xml" };
-	private static ApplicationContext context;
-
-	public void init() throws ServletException {
-		System.out.println("PrismActionEx正在加载....");
-		context = new ClassPathXmlApplicationContext(xmls[0],"config/base/taskConf.xml");
-	}
-
-	public void service(HttpServletRequest req, HttpServletResponse res)
-			throws ServletException, IOException {
-		try {
-			context = new ClassPathXmlApplicationContext(xmls);
-			req.setCharacterEncoding("UTF-8");
-			res.setContentType("text/html;charset=UTF-8");
-			String action = getAction(req);
-			String exName = getExtendName(req);
-			Service vm = (Service) context.getBean(exName);
-			if (context.containsBean(action)) {// 优先XML配置
-				Service s = (Service) context.getBean(action);
-				vm.setSourceMap(s.getSourceMap());
-			} else {
-				SourceMap smap = new SourceMap();
-				smap.putAll(vm.getSourceMap());
-				smap.setKey(action, context.getBean("DBConnection"));
-				vm.setSourceMap(smap);
+	 private static final long serialVersionUID = 1L;
+     
+	    // 上传文件存储目录
+	    private static final String UPLOAD_DIRECTORY = "upload";
+	 
+	    // 上传配置
+	    private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
+	    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
+	    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
+	 
+	    protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+			// 检测是否为多媒体上传
+			if (!ServletFileUpload.isMultipartContent(request)) {
+			    // 如果不是则停止
+			    PrintWriter writer = response.getWriter();
+			    writer.println("Error: 表单必须包含 enctype=multipart/form-data");
+			    writer.flush();
+			    return;
 			}
-			Map<String, Object> reqMap = new HashMap<String, Object>();
-			Enumeration<String> en = req.getParameterNames();
-			while (en.hasMoreElements()) {
-				String name = en.nextElement();
-				if (!isNull(req.getParameter(name))) {
-					reqMap.put(name, req.getParameter(name));
-				}
-			}
-			
-			
-			reqMap.put("_action", action);
-			req.setAttribute("reqMap", reqMap);
-			req.setAttribute("context", context);
-			req.setAttribute("DBConnection", context.getBean("DBConnection"));
-			vm.setRequest(req);
-			vm.setResponse(res);
-			vm.service();
+	 
+	        // 配置上传参数
+	        DiskFileItemFactory factory = new DiskFileItemFactory();
+	        // 设置内存临界值 - 超过后将产生临时文件并存储于临时目录中
+	        factory.setSizeThreshold(MEMORY_THRESHOLD);
+	        // 设置临时存储目录
+	        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+	 
+	        ServletFileUpload upload = new ServletFileUpload(factory);
+	         
+	        // 设置最大文件上传值
+	        upload.setFileSizeMax(MAX_FILE_SIZE);
+	         
+	        // 设置最大请求值 (包含文件和表单数据)
+	        upload.setSizeMax(MAX_REQUEST_SIZE);
+	 
+	        // 构造临时路径来存储上传的文件
+	        // 这个路径相对当前应用的目录
+//	        String uploadPath = getServletContext().getRealPath("./") + File.separator + UPLOAD_DIRECTORY;
+	       
+	         
+	        // 如果目录不存在则创建
+	        File uploadDir = new File(new File(getServletContext().getRealPath("./")), UPLOAD_DIRECTORY);
+	        if (!uploadDir.exists()) {
+	            uploadDir.mkdir();
+	        }
+	 
+	        try {
+	            // 解析请求的内容提取文件数据
+	            @SuppressWarnings("unchecked")
+	            List<FileItem> formItems = upload.parseRequest(request);
+	 
+	            if (formItems != null && formItems.size() > 0) {
+	                // 迭代表单数据
+	                for (FileItem item : formItems) {
+	                    // 处理不在表单中的字段
+	                    if (!item.isFormField()) {
+	                        String fileName = new File(item.getName()).getName();
+	                        File storeFile = new File(uploadDir,fileName);
+	                        // 在控制台输出文件的上传路径
+	                        System.out.println(storeFile.getAbsolutePath());
+	                        // 保存文件到硬盘
+	                        item.write(storeFile);
+	                        response.getWriter().print("{\"result\":\"Y\",\"fileName\":\""+storeFile.getName()+"\"}");
+	                    }
+	                }
+	            }
+	        } catch (Exception ex) {
+	        	response.getWriter().print("{\"result\":\"N\"}");
+	        }
+	        
+	    }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			req.getRequestDispatcher("/error.jsp").forward(req, res);
-		}
-	}
-
-	private String getAction(HttpServletRequest req) {
-		try {
-			String relativeuri = req.getRequestURI().replaceFirst(
-					req.getContextPath(), "");
-			relativeuri = relativeuri.replaceAll("/pa/", "");
-			int exLen = relativeuri.lastIndexOf(".");
-			StringBuffer sb = new StringBuffer(relativeuri);
-			return sb.substring(0, exLen);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "error";
-		}
-	}
-
-	private String getExtendName(HttpServletRequest req) {
-		try {
-			String relativeuri = req.getRequestURI().replaceFirst(
-					req.getContextPath(), "");
-			// relativeuri = relativeuri.replaceAll("/", "");
-			int exLen = relativeuri.lastIndexOf(".");
-			StringBuffer sb = new StringBuffer(relativeuri);
-			return sb.substring(exLen + 1);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "error";
-		}
-	}
-
-	public void destroy() {
-		super.destroy();
-	}
-
-	private boolean isNull(String param) {
-		if (param == null) {
-			return true;
-		} else if ("".equals(param)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }

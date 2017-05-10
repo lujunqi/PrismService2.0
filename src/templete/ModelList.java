@@ -43,11 +43,11 @@ public class ModelList implements Templete {
 			String key = en.getKey();
 			Object val = en.getValue();
 			if ("MAPPING".equals(key)) {
-
 				try {
 					vc.put("Req", req);
 					getResultfromContent(val + "");
 				} catch (Exception e) {
+					System.out.println(val);
 					e.printStackTrace();
 				}
 			}
@@ -57,8 +57,6 @@ public class ModelList implements Templete {
 				String sign = "xx";
 				Map<String, Integer> mark = new HashMap<String, Integer>();
 				if ("POST".equals(req.getMethod())) {
-
-
 					for (String fd : req.getHeader("FormData").split("&")) {
 						if (fd.indexOf("%5B%5D") == -1) {
 							sign += "&" + fd + "=" + req.getParameter(fd);
@@ -71,7 +69,6 @@ public class ModelList implements Templete {
 							}
 							sign += "&" + fd + "=" + req.getParameterMap().get(markkey + "[]")[mark.get(markkey)];
 						}
-
 					}
 					
 				} else if ("GET".equals(req.getMethod())) {

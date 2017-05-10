@@ -1,3 +1,5 @@
+
+ 	
 function del(v_id) {
 	layer.confirm('是否删除该记录？', {
 		btn : [ '确定', '取消' ]
@@ -142,7 +144,8 @@ function add(req) {
 		content : req["win"],
 		yes : function(index, layero) {
 			var body = layer.getChildFrame('body', index);
-			var param = $("form", $(body)).serializeObject();
+			var param = $("#layui-form", $(body)).serializeObject();
+
 			if(!req["param"]){
 				req["param"] = {}
 			}
