@@ -29,7 +29,7 @@ var $req = {};
 function callBack(req){
 	$req = req;
 	$req["param"]["_page"]=0;
-	$req["param"]["_offset"]=5;
+	$req["param"]["_offset"]=15;
 	slt();
 	
 	total();
@@ -41,8 +41,11 @@ function total(){
 		
 <%if(request.getAttribute("TOTAL")!=null){%>
 var total_url = "${TOTAL}";
+$("#page_total").hide();
 $.get(total_url,$req["param"],function(data){
 	var $total =  data[0]["total"];
+	$("#page_total").show();
+	$("span",$("#page_total")).html("共"+$total+"条记录");
 	laypage({
 		cont : 'pages',
 		pages : Math.ceil($total/$req["param"]["_offset"]),
@@ -133,9 +136,11 @@ ${CALLBACK}
 			</table>
 
 			<div>
-				<div class="plr10 ptb5" id="pages">
-					
+				<div class="plr10 ptb5" style="float:left;" id="pages"></div>
+				<div class="plr10 ptb5" style="float:left;display:none;" id="page_total">
+					 <div class="layui-box layui-laypage layui-laypage-default" ><span class="layui-laypage-curr">的点点</span> </div>
 				</div>
+				
 			</div>
 		</div>
 		<div class="wrap-btm clearfix">

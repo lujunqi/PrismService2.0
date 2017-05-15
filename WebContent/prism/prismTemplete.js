@@ -20,6 +20,7 @@ var prismTemplete = function() {
 		obj.val(val);
 	};//文本控件
 	this.RADIO = function(obj, val) {
+
 		$(":radio",obj).each(function(){
 			 if($(this).val()==val){
 				 $(this).attr("checked","checked");
@@ -98,7 +99,7 @@ var prismTemplete = function() {
 				}
 
 			}
-			val[i]["_index"] = i;
+			//val[i]["_index"] = i;
 			$cmd.data(map, val[i]);
 			$cmd.preview($div);
 			obj.append($div.children());

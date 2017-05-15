@@ -60,6 +60,17 @@ VMControl vm = new VMControl(request);
 					$img.attr("src","<%=basePath%>upload/" + data.fileName);
 					$input.val("upload/"+data.fileName);
 					$(".delfilebtn").trigger("click");
+				}else{
+					var msg = {};
+					msg["ERROR"]="系统内部错误";
+					msg["EXIST"]="文件已存在";
+					if(data.code=="EXIST"){
+						$img.attr("src","<%=basePath%>upload/" + data.fileName);
+						$input.val("upload/"+data.fileName);
+						$(".delfilebtn").trigger("click");
+					}
+					//$input.val("");
+					layer.msg(msg[data.code]);
 				}
 			}
 		});

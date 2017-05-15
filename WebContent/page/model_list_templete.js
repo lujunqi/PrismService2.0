@@ -18,7 +18,7 @@ function del(v_id) {
 	});
 }
 function win(req) {
-	var area_t = [ '600px', '530px' ];
+	var area_t = [ '800px', '630px' ];
 	if (req["area"] != null) {
 		area_t = req["area"];
 	}
@@ -42,7 +42,7 @@ function win(req) {
 	});
 }
 function info(req) {
-	var area_t = [ '600px', '530px' ];
+	var area_t = [ '800px', '630px' ];
 	if (req["area"] != null) {
 		area_t = req["area"];
 	}
@@ -71,7 +71,7 @@ function info(req) {
 	});
 }
 function upt(req) {
-	var area_t = [ '600px', '530px' ];
+	var area_t = [ '800px', '630px' ];
 	if (req["area"] != null) {
 		area_t = req["area"];
 	}
@@ -86,7 +86,7 @@ function upt(req) {
 		yes : function(index, layero) {
 			var body = layer.getChildFrame('body', index);
 
-			var param = $("form", $(body)).serializeObject();
+			var param = $("#layui-form", $(body)).serializeObject();
 			$.extend(req["param"], param);
 			
 			if(!verify($(body),$(layero).find("iframe")[0].contentWindow.p_verify)){
@@ -113,12 +113,7 @@ function upt(req) {
 				if (data.length > 0) {
 					var cmd = new prismTemplete();
 					cmd.data("map", data[0]);
-					cmd.TEXT = function(obj, val) {
-						obj.val(val);
-					};
-					cmd.RADIO = function(obj, val) {
-						obj.val(val);
-					};
+					
 					
 					cmd.preview($("form", $(body)));
 					
@@ -130,7 +125,7 @@ function upt(req) {
 }
 
 function add(req) {
-	var area_t = [ '600px', '530px' ];
+	var area_t = [ '800px', '630px' ];
 	if (req["area"] != null) {
 		area_t = req["area"];
 	}

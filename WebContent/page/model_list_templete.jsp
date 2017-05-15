@@ -1,7 +1,15 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
 	isELIgnored="false"%>
+<%@page import="org.springframework.context.ApplicationContext"%>
+<%@page import="com.prism.common.VMControl"%>
 
+<%
+ApplicationContext context = (ApplicationContext)request.getAttribute("context");
+@SuppressWarnings("unchecked")
+Map<String,String> from = (Map<String,String>)context.getBean("m_unit");
+VMControl vm = new VMControl(request);
+%>
 <!doctype html>
 <html>
 <head>
@@ -27,19 +35,34 @@ long v = new Date().getTime();
 var my_user_acc = "${sessionScope.user_acc}";
 var my_user_name = "${sessionScope.user_name}";
 var my_user_id = "${sessionScope.user_id}";
-
 layer = top.layer;
+
 	var param = {};
 	param["_page"]=0;
-	param["_offset"]=20;
+	param["_offset"]=15;
 
+	layui.use(['form'], function(){
+		layer = top.layer;
+		layui.form().render();
+	});
 	
 	var dataUrl = "${DATAURL}";
 	$(init);
 	function init() {
+		param = {};
 		param["_page"]=0;
+		param["_offset"]=15;
 		slt();
 		total();
+		search();
+	}
+	function search(){
+		$("#search_btn").click(function(){
+			var param1 = $("#layui-form-search").serializeObject();
+			param["_page"]=0;
+			$.extend(param, param1);
+			slt();
+		});
 	}
 function slt(){
 	$.post(dataUrl, param, function(res, textStatus, jqXHR) {
@@ -60,8 +83,11 @@ function total(){
 		
 <%if(request.getAttribute("TOTAL")!=null){%>
 var total_url = "${TOTAL}";
+$("#page_total").hide();
 $.get(total_url,param,function(data){
 	var $total =  data[0]["total"];
+	$("#page_total").show();
+	$("span",$("#page_total")).html("共"+$total+"条记录");
 	laypage({
 		cont : 'pages',
 		pages : Math.ceil($total/param["_offset"]),
@@ -98,6 +124,7 @@ $.get(total_url,param,function(data){
 		<div class="wrap-tit clearfix">
 			<h3 class="wrap-tit-l">
 				<span class="icon icon-list-alt mr5"></span>${VIEWNAME}</h3>
+			
 			<p class="wrap-tit-r">
 
 				<%
@@ -112,9 +139,34 @@ $.get(total_url,param,function(data){
 					}}
 				%>
 			</p>
+
+			
 		</div>
 		<div class="wrap-inner">
-			<div id="search_div" class="frmList clearfix"></div>
+			<div id="search_div" class="frmList clearfix">
+<form class="layui-form" id="layui-form-search" style="padding:10px" name="form" onsubmit="return false;"
+action="">	
+<%
+if(request.getAttribute("SEARCH")!=null){
+	@SuppressWarnings("unchecked")
+	Map<String,Object> map_val = (Map<String,Object>)request.getAttribute("SEARCH");
+	for(Map.Entry<String,Object> en: map_val.entrySet()){
+		@SuppressWarnings("unchecked")
+		Map<String,Object> tmap = (Map<String,Object>)en.getValue();
+		String div = String.format("<div class=\"layui-inline\">"+
+				"	<label>%1$s：</label>"+
+				"	<div class=\"layui-input-inline\">%2$s</div></div>",en.getKey(),vm.control(tmap));
+	 	out.println(div);
+	};
+	out.println("<div class=\"layui-input-inline\"><button id=\"search_btn\" class=\"layui-btn\">查询</button></div>");
+	
+}
+%>
+
+
+</form>
+
+			</div>
 		</div>
 		<div class="layui-form">
 			<table class="layui-table">
@@ -160,7 +212,11 @@ $.get(total_url,param,function(data){
 			</table>
 
 			<div>
-				<div class="plr10 ptb5" id="pages"></div>
+				<div class="plr10 ptb5" style="float:left;" id="pages"></div>
+				<div class="plr10 ptb5" style="float:left;display:none;" id="page_total">
+					 <div class="layui-box layui-laypage layui-laypage-default" ><span class="layui-laypage-curr">的点点</span> </div>
+				</div>
+				
 			</div>
 		</div>
 		<div class="wrap-btm clearfix">

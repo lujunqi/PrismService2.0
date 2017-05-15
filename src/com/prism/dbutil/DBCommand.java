@@ -23,6 +23,8 @@ public class DBCommand {
 			cmd.putAll(map);
 			list = cmd.getListColValue(sql);
 		} catch (SQLException e) {
+			System.out.println(sql);
+			System.out.println(map);
 			throw new DAOException(e);
 		} finally {
 			dbconn.closeConnection();

@@ -78,14 +78,18 @@ upload($("#${KEY}"),$("#IMG_${KEY}"),$("#INPUT_${KEY}"));
 				</entry>
 				<entry key="HTML">
 					<value><![CDATA[
-<div style="display: block; padding: 9px 15px;color:#999; font-weight: 400;" data-exp='${VAL}'>
+<div style="display: block; padding: 9px 15px;color:#999; font-weight: 400;" data-exp='${VAL}'
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+>
 </div>
 ]]>
 					</value>
 				</entry>
 				<entry key="TEXTAREA">
 					<value><![CDATA[
-<textarea name="${KEY}" data-exp="${VAL}" data-method="${TYPE}" id="${KEY}" class="layui-textarea"></textarea>
+<textarea name="${KEY}" data-exp="${VAL}" data-method="TEXT" id="${KEY}" class="layui-textarea"></textarea>
 ]]>
 					</value>
 				</entry>

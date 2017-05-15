@@ -53,9 +53,6 @@ public class VMControl {
 		};
 		Map<String, myString> result = new HashMap<String, myString>();
 
-		
-
-
 		result.put("RADIO", new myString() {
 			@Override
 			public String get() {
@@ -65,7 +62,7 @@ public class VMControl {
 				for (Map.Entry<String, Object> en : map.entrySet()) {
 					vc.put(en.getKey(), en.getValue());
 				}
-			
+
 				return getResultfromContent(html);
 			}
 		});
@@ -73,6 +70,7 @@ public class VMControl {
 			@Override
 			public String get() {
 				String html = m_unit.get(map.get("TYPE"));
+
 				initData(map);
 
 				vc = new VelocityContext();
@@ -82,7 +80,6 @@ public class VMControl {
 				return getResultfromContent(html);
 			}
 		});
-
 		if (result.containsKey(map.get("TYPE"))) {
 			return result.get(map.get("TYPE")).get();
 		} else {
@@ -103,14 +100,37 @@ public class VMControl {
 			vc = new VelocityContext();
 			vc.put("v", v);
 			String nSql = getResultfromContent(sql);
-			map.put("LIST", getList(nSql, reqMap));
+			List<Map<String, Object>> list = getList(nSql, reqMap);
+			if (map.containsKey("ISNULL")) {
+				list.add(0, new HashMap<String, Object>() {
+					private static final long serialVersionUID = 1L;
+					{
+						put("K", map.get("ISNULL"));
+						put("V", "请选择");
+
+					}
+				});
+			}
+			map.put("LIST", list);
 
 		}
 		if (map.containsKey("SQL")) {
 			String action = "" + map.get("SQL");
 			String sql = sourceMap.get(action) + "";
-			map.put("LIST", getList(sql, reqMap));
+			List<Map<String, Object>> list = getList(sql, reqMap);
+			if (map.containsKey("ISNULL")) {
+				list.add(0, new HashMap<String, Object>() {
+					private static final long serialVersionUID = 1L;
+					{
+						put("K", map.get("ISNULL"));
+						put("V", "请选择");
+
+					}
+				});
+			}
+			map.put("LIST", list);
 		}
+
 	}
 
 	private List<Map<String, Object>> getList(String sql, Map<String, Object> reqMap) {
