@@ -17,16 +17,7 @@
 
 <script type="text/javascript">
 	$(function() {
-<%if (session.getAttribute("user_acc") != null) {
-				out.println("$('#my_user_acc').val('"
-						+ session.getAttribute("user_acc") + "');");
-				out.println("$('#my_user_id').val('"
-						+ session.getAttribute("user_id") + "');");
-				out.println("$('span','#my_user_name').html('"
-						+ session.getAttribute("user_name") + "')");
-			} else {
-				out.println("login();");
-			}%>
+
 	$( "#my_user_name").click(function() {
 			if ($("span",this).text() == "") {
 				login();
@@ -34,7 +25,20 @@
 				logout();
 			}
 		});
+	
+	<%if (session.getAttribute("user_acc") != null) {
+		out.println("$('#my_user_acc').val('"
+				+ session.getAttribute("user_acc") + "');");
+		out.println("$('#my_user_id').val('"
+				+ session.getAttribute("user_id") + "');");
+		out.println("$('span','#my_user_name').html('"
+				+ session.getAttribute("user_name") + "')");
+	} else {
+		out.println("setTimeout(login,100);");
+	}%>
+	
 	});
+	
 	//退出
 	function logout() {
 		layer.closeAll();

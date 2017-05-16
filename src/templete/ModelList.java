@@ -44,6 +44,9 @@ public class ModelList implements Templete {
 			Object val = en.getValue();
 			if ("MAPPING".equals(key)) {
 				try {
+					System.out.println(val);
+					System.out.println(req);
+					
 					vc.put("Req", req);
 					getResultfromContent(val + "");
 				} catch (Exception e) {
@@ -51,7 +54,7 @@ public class ModelList implements Templete {
 					e.printStackTrace();
 				}
 			}
-			// System.out.println(req.getMethod()+"============="+req.getRequestURI());
+//			 System.out.println(req.getMethod()+"============="+req.getQueryString());
 			// 验证签名
 			if ("SIGN".equals(key) && !"v".endsWith(getExtendName(req))) {
 				String sign = "xx";
@@ -72,7 +75,8 @@ public class ModelList implements Templete {
 					}
 					
 				} else if ("GET".equals(req.getMethod())) {
-					sign += "&"+req.getRequestURI();
+					
+					sign += "&"+req.getRequestURI().replaceAll(req.getContextPath(), "")+"?"+req.getQueryString();
 				}
 				Map<String, String> cookieMap = new HashMap<String, String>();
 				for (Cookie cookie : req.getCookies()) {
@@ -97,7 +101,6 @@ public class ModelList implements Templete {
 					e.printStackTrace();
 				}
 				
-
 				if (!buffer.toString().equals(cookieMap.get("SIGN"))) {
 					res.setStatus(401);
 					throw new BMOException("用户未授权访问");

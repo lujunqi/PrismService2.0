@@ -17,7 +17,7 @@ $.ajaxSetup({
     	
     	var obj = $(this)[0];
     	if(obj.type=="GET"){
-    		$.cookie("SIGN",MD5("xx&"+obj.url));
+    		$.cookie("SIGN",MD5("xx&/"+obj.url),{ path: '/'});
     	}else if(obj.type=="POST"){
     		var fd = "";
     		var t23 = obj.data.split("&");

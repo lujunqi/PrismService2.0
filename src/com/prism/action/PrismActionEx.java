@@ -25,15 +25,17 @@ public class PrismActionEx extends HttpServlet {
 		System.out.println("PrismActionEx正在加载....");
 		context = new ClassPathXmlApplicationContext(xmls);
 	}
-
+	
 	public void service(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		try {
+			System.out.println(req.getRequestURI());
 			context = new ClassPathXmlApplicationContext(xmls);
 			req.setCharacterEncoding("UTF-8");
 			res.setContentType("text/html;charset=UTF-8");
 			String action = getAction(req);
 			String exName = getExtendName(req);
+		
 			Service vm = (Service) context.getBean(exName);
 			
 			if (context.containsBean(action)) {// 优先XML配置

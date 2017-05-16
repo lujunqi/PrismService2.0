@@ -65,7 +65,7 @@ layer = top.layer;
 		});
 	}
 function slt(){
-	$.post(dataUrl, param, function(res, textStatus, jqXHR) {
+	$.get(dataUrl, param, function(res, textStatus, jqXHR) {
 
 		var cmd = new prismTemplete();
 
@@ -85,6 +85,7 @@ function total(){
 var total_url = "${TOTAL}";
 $("#page_total").hide();
 $.get(total_url,param,function(data){
+	
 	var $total =  data[0]["total"];
 	$("#page_total").show();
 	$("span",$("#page_total")).html("共"+$total+"条记录");
@@ -153,7 +154,7 @@ if(request.getAttribute("SEARCH")!=null){
 	for(Map.Entry<String,Object> en: map_val.entrySet()){
 		@SuppressWarnings("unchecked")
 		Map<String,Object> tmap = (Map<String,Object>)en.getValue();
-		String div = String.format("<div class=\"layui-inline\">"+
+		String div = String.format("<div class=\"layui-inline\" style='margin:3px;'>"+
 				"	<label>%1$s：</label>"+
 				"	<div class=\"layui-input-inline\">%2$s</div></div>",en.getKey(),vm.control(tmap));
 	 	out.println(div);
