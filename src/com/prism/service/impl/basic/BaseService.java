@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -166,7 +167,7 @@ public class BaseService implements Service {
 		}
 	}
 
-	protected Map<String, Object> sourceMap = new HashMap<String, Object>();
+	protected Map<String, Object> sourceMap = new Hashtable<String, Object>();
 
 	public void setSourceMap(Map<String, Object> sourceMap) {
 		this.sourceMap = sourceMap;

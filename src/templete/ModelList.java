@@ -44,8 +44,8 @@ public class ModelList implements Templete {
 			Object val = en.getValue();
 			if ("MAPPING".equals(key)) {
 				try {
-					System.out.println(val);
-					System.out.println(req);
+//					System.out.println(val);
+//					System.out.println(req);
 					
 					vc.put("Req", req);
 					getResultfromContent(val + "");

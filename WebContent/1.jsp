@@ -11,6 +11,17 @@
 <script type="text/javascript" src="plug/layer/layer.js"></script>
 <script type="text/javascript" src="plug/layui/layui.js"></script>
 <script type="text/javascript">
+$(function(){
+	$.get("pa/lb_cust_infos.s",{},function(res){
+		console.log(res,"lb_cust")
+	},"json");
+	$.get("pa/lb_user.s",{},function(res){
+		console.log(res,"lb_user")
+	},"json");
+
+	
+});
+
 	layui.use('upload', function() {
 		layui.upload({
 			url : 'upload',

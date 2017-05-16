@@ -10,49 +10,49 @@
     http://www.springframework.org/schema/aop/spring-aop.xsd">
 	
 	
-	<bean id="slt" class="com.prism.service.impl.basic.NormalSltService">
+	<bean id="slt" class="com.prism.service.impl.basic.NormalSltService" scope="prototype">
 		<property name="sourceMap">
 			<bean class="com.prism.source.SourceMap"/>
 		</property>
 	</bean>
-	<bean id="upt" class="com.prism.service.impl.basic.NormalUptService">
+	<bean id="upt" class="com.prism.service.impl.basic.NormalUptService" scope="prototype">
 		<property name="sourceMap">
 			<bean class="com.prism.source.SourceMap"/>
 		</property>
 	</bean>
-	<bean id="total" class="com.prism.service.impl.basic.NormalSltService">
-		<property name="sourceMap">
-			<bean class="com.prism.source.SourceMap"/>
-		</property>
-	</bean>
-	
-	<bean id="s" class="com.prism.service.impl.basic.NormalSltService">
+	<bean id="total" class="com.prism.service.impl.basic.NormalSltService" scope="prototype">
 		<property name="sourceMap">
 			<bean class="com.prism.source.SourceMap"/>
 		</property>
 	</bean>
 	
-	
-	<bean id="excel" class="com.prism.service.impl.basic.ExcelOutputService">
-		<property name="sourceMap">
-			<bean class="com.prism.source.SourceMap"/>
-		</property>
-	</bean>
-	
-	<bean id="c" class="com.prism.service.impl.basic.NormalCallService">
+	<bean id="s" class="com.prism.service.impl.basic.NormalSltService"  scope="prototype">
 		<property name="sourceMap">
 			<bean class="com.prism.source.SourceMap"/>
 		</property>
 	</bean>
 	
 	
-	<bean id="u" class="com.prism.service.impl.basic.NormalUptService">
+	<bean id="excel" class="com.prism.service.impl.basic.ExcelOutputService" scope="prototype">
 		<property name="sourceMap">
 			<bean class="com.prism.source.SourceMap"/>
 		</property>
 	</bean>
 	
-	<bean id="v" class="com.prism.service.impl.basic.NormalHTMLService">
+	<bean id="c" class="com.prism.service.impl.basic.NormalCallService" scope="prototype">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	
+	
+	<bean id="u" class="com.prism.service.impl.basic.NormalUptService" scope="prototype">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
+	
+	<bean id="v" class="com.prism.service.impl.basic.NormalHTMLService" scope="prototype">
 		<property name="sourceMap">
 			<bean class="com.prism.source.SourceMap"/>
 		</property>

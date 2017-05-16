@@ -29,8 +29,8 @@ public class PrismActionEx extends HttpServlet {
 	public void service(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		try {
-			System.out.println(req.getRequestURI());
-			context = new ClassPathXmlApplicationContext(xmls);
+			
+//			context = new ClassPathXmlApplicationContext(xmls);
 			req.setCharacterEncoding("UTF-8");
 			res.setContentType("text/html;charset=UTF-8");
 			String action = getAction(req);
@@ -43,7 +43,6 @@ public class PrismActionEx extends HttpServlet {
 				vm.setSourceMap(s.getSourceMap());
 			} else {
 				SourceMap smap = new SourceMap();
-				
 				smap.putAll(vm.getSourceMap());
 				smap.setKey(action, context.getBean("DBConnection"));
 				vm.setSourceMap(smap);
