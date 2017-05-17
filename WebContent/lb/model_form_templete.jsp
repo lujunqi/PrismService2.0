@@ -18,18 +18,18 @@ VMControl vm = new VMControl(request);
 	String basePath =  path + "/";
 %>
 <base href="<%=basePath%>">
-<link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
-<script type="text/javascript" src="scripts/jquery.js"></script>
-<script type="text/javascript" src="scripts/jquery_extend.js"></script>
-<script type="text/javascript" src="prism/prismTemplete.js?ZZ"></script>
-<script type="text/javascript" src="plug/layui/layui.js" charset="utf-8"></script>
-<script type="text/javascript" src="plug/cityselect/cityselect.js?"></script>
-<link href="plug/cityselect/cityLayout.css?x" type="text/css"
+<link rel="stylesheet" href="<%=basePath%>plug/layui/css/layui.css" media="all">
+<script type="text/javascript" src="<%=basePath%>scripts/jquery.js"></script>
+<script type="text/javascript" src="<%=basePath%>scripts/jquery_extend.js"></script>
+<script type="text/javascript" src="<%=basePath%>prism/prismTemplete.js?ZZ"></script>
+<script type="text/javascript" src="<%=basePath%>plug/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="<%=basePath%>plug/cityselect/cityselect.js?"></script>
+<link href="<%=basePath%>plug/cityselect/cityLayout.css?x" type="text/css"
 	rel="stylesheet">
-<script src="plug/huploadify/jquery.Huploadify.js"
+<script src="<%=basePath%>plug/huploadify/jquery.Huploadify.js"
 	type="text/javascript"></script>
 <link rel="stylesheet" type="text/css"
-	href="plug/huploadify/Huploadify.css">
+	href="<%=basePath%>plug/huploadify/Huploadify.css">
 
 <script type="text/javascript">
 	var my_user_acc = "${sessionScope.user_acc}";
