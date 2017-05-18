@@ -37,6 +37,7 @@ public class NormalHTMLService extends BaseService{
 			}
 			
 			getRequest().setAttribute("sourceMap", sourceMap);
+			
 			if (sourceMap.containsKey("TEMPLATE")){
 				getRequest().getRequestDispatcher((String) sourceMap.get("TEMPLATE")).forward(getRequest(), getResponse());
 			}

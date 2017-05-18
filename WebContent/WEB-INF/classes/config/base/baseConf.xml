@@ -22,7 +22,7 @@
 				<entry key="username" value="root" />
 				<entry key="password" value="lost" />
 				<entry key="url"
-					value="jdbc:mysql://127.0.0.1:3306/prism?useUnicode=true&amp;characterEncoding=UTF-8" />
+					value="jdbc:mysql://127.0.0.1:3306/xiaom?useUnicode=true&amp;characterEncoding=UTF-8" />
 				<entry key="driverClassName" value="com.mysql.jdbc.Driver" />
 			</map>
 		</property>

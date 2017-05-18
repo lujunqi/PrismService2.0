@@ -21,6 +21,16 @@ ${en.key}="${en.value}"
 ]]>
 					</value>
 				</entry>
+				<entry key="MTEXT">
+					<value><![CDATA[
+<input type="text" name="${KEY}" data-exp='${VAL}' data-method="TEXT" id="${KEY}"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+ class="span12">
+]]>
+					</value>
+				</entry>
 
 				<entry key="RADIO">
 					<value><![CDATA[
@@ -40,6 +50,21 @@ name="${KEY}"
 				<entry key="SELECT">
 					<value><![CDATA[
 <select data-exp='${VAL}' name="${KEY}" id="${KEY}" data-method="${TYPE}"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+
+>
+#foreach($m in ${LIST}) 
+<option  $!{m.C} value="$!m.K">$!m.V </option>
+#end
+</select>
+]]>
+					</value>
+				</entry>
+				<entry key="MSELECT">
+					<value><![CDATA[
+<select data-exp='${VAL}' name="${KEY}" id="${KEY}" class="input-xlarge" data-method="${TYPE}"
 #foreach($en in $OTHER.entrySet())
 ${en.key}="${en.value}" 
 #end

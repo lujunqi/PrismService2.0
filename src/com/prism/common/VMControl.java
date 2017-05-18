@@ -47,7 +47,6 @@ public class VMControl {
 				for (Map.Entry<String, Object> en : map.entrySet()) {
 					vc.put(en.getKey(), en.getValue());
 				}
-
 				return getResultfromContent(html);
 			}
 		};
@@ -80,6 +79,21 @@ public class VMControl {
 				return getResultfromContent(html);
 			}
 		});
+		result.put("MSELECT", new myString() {
+			@Override
+			public String get() {
+				String html = m_unit.get(map.get("TYPE"));
+
+				initData(map);
+
+				vc = new VelocityContext();
+				for (Map.Entry<String, Object> en : map.entrySet()) {
+					vc.put(en.getKey(), en.getValue());
+				}
+				return getResultfromContent(html);
+			}
+		});
+		
 		if (result.containsKey(map.get("TYPE"))) {
 			return result.get(map.get("TYPE")).get();
 		} else {
