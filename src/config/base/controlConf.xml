@@ -8,6 +8,45 @@
                         http://www.springsource.org/schema/aop/spring-aop-3.0.xsd  
                         http://www.springframework.org/schema/tx  
                             http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	<bean name="m_app_unit" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="TEXT">
+					<value><![CDATA[
+<label>$!{HTML}</label>
+<input type="text" name="$!{KEY}" data-exp='$!{VAL}' data-method="TEXT" id="$!{KEY}"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+ class="span12">
+]]>
+					</value>
+				</entry>
+				<entry key="ABTN">
+					<value><![CDATA[
+<a class="btn btn-primary pull-right"  name="$!{KEY}" id="$!{KEY}"  style="margin-left: 3px;">$!{HTML}</a>
+]]>
+					</value>
+				</entry>
+				<entry key="SELECT">
+					<value><![CDATA[
+<label>$!{HTML}</label>
+<select data-exp='$!{VAL}' name="$!{KEY}" id="$!{KEY}" class="input-xlarge" data-method="$!{TYPE}"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+
+>
+#foreach($m in ${LIST}) 
+<option  $!{m.C} value="$!m.K">$!m.V </option>
+#end
+</select>
+]]>
+					</value>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
 	<bean name="m_unit" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
@@ -21,16 +60,7 @@ ${en.key}="${en.value}"
 ]]>
 					</value>
 				</entry>
-				<entry key="MTEXT">
-					<value><![CDATA[
-<input type="text" name="${KEY}" data-exp='${VAL}' data-method="TEXT" id="${KEY}"
-#foreach($en in $OTHER.entrySet())
-${en.key}="${en.value}" 
-#end
- class="span12">
-]]>
-					</value>
-				</entry>
+
 
 				<entry key="RADIO">
 					<value><![CDATA[
@@ -47,6 +77,7 @@ name="${KEY}"
 ]]>
 					</value>
 				</entry>
+
 				<entry key="SELECT">
 					<value><![CDATA[
 <select data-exp='${VAL}' name="${KEY}" id="${KEY}" data-method="${TYPE}"
@@ -62,21 +93,7 @@ ${en.key}="${en.value}"
 ]]>
 					</value>
 				</entry>
-				<entry key="MSELECT">
-					<value><![CDATA[
-<select data-exp='${VAL}' name="${KEY}" id="${KEY}" class="input-xlarge" data-method="${TYPE}"
-#foreach($en in $OTHER.entrySet())
-${en.key}="${en.value}" 
-#end
 
->
-#foreach($m in ${LIST}) 
-<option  $!{m.C} value="$!m.K">$!m.V </option>
-#end
-</select>
-]]>
-					</value>
-				</entry>
 				<entry key="PASSWORD">
 					<value><![CDATA[
 <input type="password" name="${KEY}" id="${KEY}" class="layui-input">

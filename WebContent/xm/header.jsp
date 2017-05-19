@@ -3,13 +3,15 @@
 	isELIgnored="false"%>
 <link rel="stylesheet" type="text/css"
 	href="/prism/xm/lib/bootstrap/css/bootstrap.css">
-
+<script src="/prism/scripts/jquery.js" type="text/javascript"></script>
+<script src="/prism/scripts/jquery_extend.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="/prism/xm/stylesheets/theme.css">
 <link rel="stylesheet"
 	href="/prism/xm/lib/font-awesome/css/font-awesome.css">
-
-<script src="/prism/xm/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src="/prism/prism/prismTemplete.js" type="text/javascript"></script>
+
+
+<script src="/prism/xm/lib/bootstrap/js/bootstrap.js"></script>
 <!-- Demo page code -->
 
 
