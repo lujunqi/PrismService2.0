@@ -27,11 +27,22 @@ public class NormalCallService extends BaseService {
 		PrintWriter out = getResponse().getWriter();
 		try {
 			Map<String,Object> obj = new HashMap<String,Object>();
-			if (sourceMap.containsKey("DSQL")) {
-				convertSql("DSQL", "NSQL");
-				obj = callResult("NSQL");
-			} else if (sourceMap.containsKey("SQL")) {
-				obj = callResult("SQL");
+			
+			if (getRequest().getAttribute("SQLCMD") == null) {
+				if (sourceMap.containsKey("DSQL")) {
+					convertSql("DSQL", "NSQL");
+					obj = callResult("NSQL");
+				} else if (sourceMap.containsKey("SQL")) {
+					obj = callResult("SQL");
+				}
+			} else {
+				String s = getRequest().getAttribute("SQLCMD") + "";
+				if (s.startsWith("d:")) {
+					convertSql(s, "NSQL");
+					obj = callResult("NSQL");;
+				} else {
+					obj = callResult(s);
+				}
 			}
 			if (sourceMap.containsKey("ALIAS")) {
 				String alias = (String)sourceMap.get("ALIAS");

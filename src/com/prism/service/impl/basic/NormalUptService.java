@@ -21,23 +21,34 @@ import com.prism.common.VMResponse;
 public class NormalUptService extends BaseService {
 	private VelocityContext vc = new VelocityContext();
 
-	public void service()
-			throws ServletException, IOException {
+	public void service() throws ServletException, IOException {
 		super.service();
 		PrintWriter out = getResponse().getWriter();
 		try {
-			Map<String,Object> obj = new HashMap<String,Object>();
-			if (sourceMap.containsKey("DSQL")) {
-				convertSql("DSQL", "NSQL");
-				obj.put("code",1);
-				obj.put("result",updateResult("NSQL"));
-			} else if (sourceMap.containsKey("SQL")) {
-				obj.put("code",1);
-				System.out.println(sourceMap.get("SQL"));
-				obj.put("result",updateResult("SQL"));
+			Map<String, Object> obj = new HashMap<String, Object>();
+
+			if (getRequest().getAttribute("SQLCMD") == null) {
+				if (sourceMap.containsKey("DSQL")) {
+					convertSql("DSQL", "NSQL");
+					obj.put("code", 1);
+					obj.put("result", updateResult("NSQL"));
+				} else if (sourceMap.containsKey("SQL")) {
+					obj.put("code", 1);
+					obj.put("result", updateResult("SQL"));
+				}
+			} else {
+				String s = getRequest().getAttribute("SQLCMD") + "";
+				if (s.startsWith("d:")) {
+					convertSql(s, "NSQL");
+					obj.put("code", 1);
+					obj.put("result", updateResult("NSQL"));
+				} else {
+					obj.put("code", 1);
+					obj.put("result", updateResult(s));
+				}
 			}
 			if (sourceMap.containsKey("ALIAS")) {
-				String alias = (String)sourceMap.get("ALIAS");
+				String alias = (String) sourceMap.get("ALIAS");
 				getRequest().setAttribute(alias, obj);
 				getRequest().setAttribute("this", obj);
 			}
@@ -48,7 +59,7 @@ public class NormalUptService extends BaseService {
 				reqMap.put(action, obj);
 				reqMap.put("this", obj);
 				getRequest().setAttribute("this", obj);
-				VMResponse  vm = new VMResponse();
+				VMResponse vm = new VMResponse();
 				vm.setReqMap(reqMap);
 				vc.put("v", vm);
 				String content = getResultfromContent("VIEW");
@@ -59,11 +70,10 @@ public class NormalUptService extends BaseService {
 				getRequest().setAttribute("this", obj);
 				reqMap.put(action, obj);
 				getRequest().setAttribute(action, obj);
-				getRequest().getRequestDispatcher((String) sourceMap.get("FORWARD"))
-						.forward(getRequest(),getResponse());
+				getRequest().getRequestDispatcher((String) sourceMap.get("FORWARD")).forward(getRequest(), getResponse());
 			}
 		} catch (Exception e) {
-			Map<String,Object> m = new HashMap<String,Object>();
+			Map<String, Object> m = new HashMap<String, Object>();
 			m.put("code", -1);
 			m.put("info", e.getMessage());
 			JsonUtil ju = new JsonUtil();

@@ -18,7 +18,7 @@
 #foreach($en in $OTHER.entrySet())
 ${en.key}="${en.value}" 
 #end
- class="span12">
+ class="span12 ">
 ]]>
 					</value>
 				</entry>

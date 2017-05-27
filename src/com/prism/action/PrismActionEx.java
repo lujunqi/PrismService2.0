@@ -25,19 +25,18 @@ public class PrismActionEx extends HttpServlet {
 		System.out.println("PrismActionEx正在加载....");
 		context = new ClassPathXmlApplicationContext(xmls);
 	}
-	
-	public void service(HttpServletRequest req, HttpServletResponse res)
-			throws ServletException, IOException {
+
+	public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		try {
-			
-//			context = new ClassPathXmlApplicationContext(xmls);
+
+			// context = new ClassPathXmlApplicationContext(xmls);
 			req.setCharacterEncoding("UTF-8");
 			res.setContentType("text/html;charset=UTF-8");
 			String action = getAction(req);
 			String exName = getExtendName(req);
-		
+			getCmdname(req);
 			Service vm = (Service) context.getBean(exName);
-			
+
 			if (context.containsBean(action)) {// 优先XML配置
 				Service s = (Service) context.getBean(action);
 				vm.setSourceMap(s.getSourceMap());
@@ -55,29 +54,27 @@ public class PrismActionEx extends HttpServlet {
 					reqMap.put(name, req.getParameter(name));
 				}
 			}
-			
-			
+
 			reqMap.put("_action", action);
 			req.setAttribute("reqMap", reqMap);
 			req.setAttribute("context", context);
 			req.setAttribute("DBConnection", context.getBean("DBConnection"));
-			
+
 			vm.setRequest(req);
 			vm.setResponse(res);
 			vm.service();
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			//req.getRequestDispatcher("/error.jsp").forward(req, res);
+			// req.getRequestDispatcher("/error.jsp").forward(req, res);
 		}
 	}
 
 	private String getAction(HttpServletRequest req) {
 		try {
-			String relativeuri = req.getRequestURI().replaceFirst(
-					req.getContextPath(), "");
+			String relativeuri = req.getRequestURI().replaceFirst(req.getContextPath(), "");
 			relativeuri = relativeuri.replaceAll("/pa/", "");
-			int exLen = relativeuri.lastIndexOf(".");
+			int exLen = relativeuri.indexOf(".");
 			StringBuffer sb = new StringBuffer(relativeuri);
 			return sb.substring(0, exLen);
 		} catch (Exception e) {
@@ -86,10 +83,22 @@ public class PrismActionEx extends HttpServlet {
 		}
 	}
 
+	private void getCmdname(HttpServletRequest req) {
+		try {
+			String relativeuri = req.getRequestURI().replaceFirst(req.getContextPath(), "");
+			relativeuri = relativeuri.replaceAll("/pa/", "");
+			String[] urls = relativeuri.split("\\.");
+			if(urls.length==3){
+				req.setAttribute("SQLCMD", urls[1]);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private String getExtendName(HttpServletRequest req) {
 		try {
-			String relativeuri = req.getRequestURI().replaceFirst(
-					req.getContextPath(), "");
+			String relativeuri = req.getRequestURI().replaceFirst(req.getContextPath(), "");
 			// relativeuri = relativeuri.replaceAll("/", "");
 			int exLen = relativeuri.lastIndexOf(".");
 			StringBuffer sb = new StringBuffer(relativeuri);

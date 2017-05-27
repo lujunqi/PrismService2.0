@@ -53,17 +53,20 @@ VMControl vm = new VMControl(request,"m_app_unit");
 			<div class="block">
 				<p class="block-heading">${VIEWNAME}</p>
 				<div class="block-body">
-					<form>
+					
+
+					<form name="form">
+
 						<%
 							if(request.getAttribute("COL")!=null){
-											@SuppressWarnings("unchecked")
-											List<Map<String,Object>> list_val = (List<Map<String,Object>>)request.getAttribute("COL");
-											for(Object en: list_val ){
-												@SuppressWarnings("unchecked")
-												Map<String,Object> tmap = (Map<String,Object>)en;
-											 	out.println(vm.control(tmap));
-											}
-										}
+															@SuppressWarnings("unchecked")
+															List<Map<String,Object>> list_val = (List<Map<String,Object>>)request.getAttribute("COL");
+															for(Object en: list_val ){
+																@SuppressWarnings("unchecked")
+																Map<String,Object> tmap = (Map<String,Object>)en;
+															 	out.println(vm.control(tmap));
+															}
+														}
 						%>
 						<div class="clearfix"></div>
 					</form>
@@ -71,11 +74,11 @@ VMControl vm = new VMControl(request,"m_app_unit");
 			</div>
 
 			<p style="text-align: center;">
-				<a href="user_login.jsp">已有账号，直接登录</a>
+				${FOOTER}
 			</p>
 		</div>
 	</div>
- 
+
 	<jsp:include page="/xm/bootstrap_include.jsp"></jsp:include>
 
 

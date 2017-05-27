@@ -4,12 +4,13 @@ function verify(body, $verify) {
 		var v = $(this).attr("p_verify");
 		$verify[v]($(this));
 		if ($(this).attr("v_check") != "Y") {
-			$(this).addClass("layui-form-danger");
-			$(this).focus();
+			$(this).attr("placeholder",$(this).attr("v_check"));
 			msg($(this).attr("v_check"));
+			$(this).focus();
 			flag = false;
 		} else {
-			$(this).removeClass("layui-form-danger");
+ 
+			$(this).removeAttr("placeholder");
 		}
 	});
 	return flag;
@@ -23,7 +24,7 @@ function msg(info, title) {
 		"title" : title,
 		"button" : [ {
 			"name" : "关闭",
-			"type" : "cancel"
+			"type" : "cancel" 
 
 		} ]
 	});
@@ -55,26 +56,6 @@ function modal(p) {
 	$('#myModal').modal({backdrop: 'static'});
 }
 $(function() {
-	 $('#myModal').modal('hide');
-	$("#xxx").click(function() {
-		msg("tttt")
-		// modal({
-		// "title" : "提示",
-		// "body" : "学习学习",
-		// "button" : [ {
-		// "name" : "按钮1",
-		// "func" : function(m) {
-		// m.modal('hide');
-		// }
-		// }, {
-		// "name" : "关闭",
-		// "type" : "cancel"
-		//
-		// }, {
-		// "name" : "提交",
-		// "type" : "primary"
-		//
-		// } ]
-		// });
-	});
+	// $('#myModal').modal('hide');
+	
 });

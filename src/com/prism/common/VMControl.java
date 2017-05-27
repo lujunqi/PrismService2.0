@@ -123,6 +123,7 @@ public class VMControl {
 		if (map.containsKey("SQL")) {
 			String action = "" + map.get("SQL");
 			String sql = sourceMap.get(action) + "";
+			System.err.println(action);
 			List<Map<String, Object>> list = getList(sql, reqMap);
 			if (map.containsKey("ISNULL")) {
 				list.add(0, new HashMap<String, Object>() {

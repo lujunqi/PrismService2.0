@@ -40,13 +40,24 @@ public class NormalSltService extends BaseService {
 			vc = new VelocityContext();
 			
 			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-			if (sourceMap.containsKey("DSQL")) {
-				convertSql("DSQL", "NSQL");
-				list = selectResult("NSQL");
-			} else if (sourceMap.containsKey("SQL")) {
-				list = selectResult("SQL");
+			if(getRequest().getAttribute("SQLCMD")==null){
+				if (sourceMap.containsKey("DSQL")) {
+					convertSql("DSQL", "NSQL");
+					list = selectResult("NSQL");
+				} else if (sourceMap.containsKey("SQL")) {
+					list = selectResult("SQL");
+				}
+			}else{
+				String s  = getRequest().getAttribute("SQLCMD")+"";
+				if(s.startsWith("d:")){
+					convertSql(s, "NSQL");
+					list = selectResult("NSQL");
+				}else{
+					list = selectResult(s);
+				}
 			}
-
+			
+			
 			String action = (String) reqMap.get("_action");
 			reqMap.put(action, list);
 			reqMap.put("this", list);

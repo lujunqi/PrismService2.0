@@ -60,13 +60,13 @@ public class BaseService implements Service {
 		}
 		reqMap.put("session", sessionMap);
 		// 登录验证
-		if (session.getAttribute("user_acc") == null) {
-
-			if (!"YES".equals(sourceMap.get("FILTER"))) {
-				res.setStatus(250);
-				throw new ServletException("系统未登录或登录超时");
-			}
-		}
+//		if (session.getAttribute("user_acc") == null) {
+//
+//			if (!"YES".equals(sourceMap.get("FILTER"))) {
+//				res.setStatus(250);
+//				throw new ServletException("系统未登录或登录超时");
+//			}
+//		}
 		// 调试
 		if ("TRUE".equals(sourceMap.get("DEBUGGER"))) {
 			System.out.println(sourceMap);
