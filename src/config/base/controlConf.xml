@@ -13,7 +13,7 @@
 			<map>
 				<entry key="TEXT">
 					<value><![CDATA[
-<input type="text" name="${KEY}" data-exp='${VAL}' data-method="${TYPE}" id="${KEY}"
+<input type="text" name="${KEY}" data-exp='$!{VAL}' data-method="${TYPE}" id="${KEY}"
 #foreach($en in $OTHER.entrySet())
 ${en.key}="${en.value}" 
 #end
@@ -61,7 +61,11 @@ ${en.key}="${en.value}"
 				<entry key="UPLOAD">
 					<value><![CDATA[
 <div id="${KEY}" data-upload-key="${KEY}" STYLE="width:300px;"></div>
-<input type="hidden" id="INPUT_${KEY}" name="${KEY}">
+<input type="hidden" id="INPUT_${KEY}" name="${KEY}"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+>
 <img id="IMG_${KEY}" width="50%" data-exp='${VAL}' data-method="attr" data-attr="src" >
 <script>
 upload($("#${KEY}"),$("#IMG_${KEY}"),$("#INPUT_${KEY}"));
@@ -89,7 +93,11 @@ ${en.key}="${en.value}"
 				</entry>
 				<entry key="TEXTAREA">
 					<value><![CDATA[
-<textarea name="${KEY}" data-exp="${VAL}" data-method="TEXT" id="${KEY}" class="layui-textarea"></textarea>
+<textarea name="${KEY}" data-exp="${VAL}" data-method="TEXT" id="${KEY}" class="layui-textarea"
+#foreach($en in $OTHER.entrySet())
+${en.key}="${en.value}" 
+#end
+></textarea>
 ]]>
 					</value>
 				</entry>

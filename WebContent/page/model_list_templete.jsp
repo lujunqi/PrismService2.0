@@ -20,10 +20,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 long v = new Date().getTime();
 %>
 <base href="<%=basePath%>">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="css/global-min.css" />
 <link rel="stylesheet" type="text/css" href="css/common.css" />
-<link rel="stylesheet" href="plug/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="plug/layui/css/layui.css" >
+ 
 <!-- 引入jquery -->
 <script type="text/javascript" src="scripts/jquery.js"></script>
 <script type="text/javascript" src="scripts/jquery_extend.js?<%=v%>"></script>
@@ -52,8 +54,18 @@ layer = top.layer;
 		param = {};
 		param["_page"]=0;
 		param["_offset"]=15;
+		try{
+			<%
+			Enumeration<String> en2 = request.getParameterNames();
+			while(en2.hasMoreElements()){
+				String key = en2.nextElement();
+				String val = request.getParameter(key);
+				out.println("param."+key+"=\""+val+"\"");
+			}
+			%>
+		}catch(e){}
 		slt();
-		total();
+		
 		search();
 	}
 	function search(){
@@ -65,6 +77,8 @@ layer = top.layer;
 		});
 	}
 function slt(){
+	
+	total();
 	$.get(dataUrl, param, function(res, textStatus, jqXHR) {
 
 		var cmd = new prismTemplete();
@@ -84,6 +98,18 @@ function total(){
 <%if(request.getAttribute("TOTAL")!=null){%>
 var total_url = "${TOTAL}";
 $("#page_total").hide();
+try{
+	<%
+	/* 
+	Enumeration<String> en3 = request.getParameterNames();
+	while(en3.hasMoreElements()){
+		String key = en3.nextElement();
+		String val = request.getParameter(key);
+		out.println("param."+key+"=\""+val+"\"");
+	}
+	 */
+	%>
+}catch(e){}
 $.get(total_url,param,function(data){
 	
 	var $total =  data[0]["total"];

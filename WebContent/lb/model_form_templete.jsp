@@ -18,6 +18,7 @@ VMControl vm = new VMControl(request);
 	String basePath =  path + "/";
 %>
 <base href="<%=basePath%>">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="<%=basePath%>plug/layui/css/layui.css" media="all">
 <script type="text/javascript" src="<%=basePath%>scripts/jquery.js"></script>
 <script type="text/javascript" src="<%=basePath%>scripts/jquery_extend.js"></script>

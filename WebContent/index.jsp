@@ -18,32 +18,41 @@
 <script type="text/javascript">
 	$(function() {
 
-	$( "#my_user_name").click(function() {
-			if ($("span",this).text() == "") {
+		$("#my_user_name").click(function() {
+			if ($("span", this).text() == "") {
 				login();
 			} else {
 				logout();
 			}
 		});
-	
-	<%if (session.getAttribute("user_acc") != null) {
-		out.println("$('#my_user_acc').val('"
-				+ session.getAttribute("user_acc") + "');");
-		out.println("$('#my_user_id').val('"
-				+ session.getAttribute("user_id") + "');");
-		out.println("$('span','#my_user_name').html('"
-				+ session.getAttribute("user_name") + "')");
-	} else {
-		out.println("setTimeout(login,100);");
-	}%>
-	
+<%if (session.getAttribute("user_acc") != null) {
+				out.println("$('#my_user_acc').val('"
+						+ session.getAttribute("user_acc") + "');");
+				out.println("$('#my_user_id').val('"
+						+ session.getAttribute("user_id") + "');");
+				out.println("$('span','#my_user_name').html('"
+						+ session.getAttribute("user_name") + "')");
+			} else {
+				out.println("setTimeout(login,100);");
+			}%>
 	});
-	
+
 	//退出
 	function logout() {
 		layer.closeAll();
 		layer.confirm('是否要退出？', {
-			btn : [ '确定', '取消' ]
+			btn : [ '确定', '取消' ],
+			success : function(layero, index) {
+				$(document).on('keydown', function(e) {
+					if (e.keyCode == 13) {
+						$(".layui-layer-btn0", layero).trigger("click");
+					}
+					if (e.keyCode == 27) {
+						$(".layui-layer-btn1", layero).trigger("click");
+					}
+
+				});
+			}
 		}, function() {
 			$.get("pa/lb_user_logout.s", {}, function(data) {
 				if (data["status"] == "Y") {
@@ -88,7 +97,7 @@
 
 					if (data.length > 0) {
 						$("span", "#my_user_name").html(data[0]["user_name"]);
-						
+
 						isLogin = false;
 						top.document.main.location.reload();
 						initMenu();
@@ -102,6 +111,26 @@
 			},
 			cancel : function(index, layero) {
 				isLogin = false;
+			},
+			success : function(layero, index) {
+				var body = layer.getChildFrame('body', index);
+				$(body).on('keydown', function(e) {
+					if (e.keyCode == 13) {
+						$(".layui-layer-btn0", layero).trigger("click");
+					}
+					if (e.keyCode == 27) {
+						$(".layui-layer-btn1", layero).trigger("click");
+					}
+				});
+				$(document).on('keydown', function(e) {
+					if (e.keyCode == 13) {
+						$(".layui-layer-btn0", layero).trigger("click");
+					}
+					if (e.keyCode == 27) {
+						$(".layui-layer-btn1", layero).trigger("click");
+					}
+
+				});
 			}
 		});
 
@@ -139,9 +168,7 @@
 			</div>
 			<!--/.content-->
 
-			<div class="sidebar" id="sidebar">
-
-			</div>
+			<div class="sidebar" id="sidebar"></div>
 			<!--/.sidebar -->
 
 			<div class="addBar">
