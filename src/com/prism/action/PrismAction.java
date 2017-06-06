@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 //import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -37,7 +38,6 @@ public class PrismAction extends HttpServlet {
 
 			Map<String, Object> reqMap = new HashMap<String, Object>();
 
-			@SuppressWarnings("unchecked")
 			Enumeration<String> en = req.getParameterNames();
 			while (en.hasMoreElements()) {
 				String name = en.nextElement();
@@ -75,6 +75,7 @@ public class PrismAction extends HttpServlet {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private String getExtendName(HttpServletRequest req) {
 		try {
 			String relativeuri = req.getRequestURI().replaceFirst(
