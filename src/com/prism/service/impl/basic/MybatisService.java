@@ -21,6 +21,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.dom4j.Element;
 
 import com.prism.exception.BMOException;
 import com.prism.service.Service;
@@ -38,18 +39,29 @@ public class MybatisService implements Service {
 		sqlSession = (SqlSession) req.getAttribute("sqlSession");
 	}
 
+	private String getSqlKey(String key, String type) {
+		String sqlKey = (String) reqMap.get("_action");// (String)
+														// sourceMap.get(key);
+		if (sourceMap.get(key) instanceof String) {
+			sqlKey = (String) sourceMap.get(key);
+		} else if (sourceMap.get(key) instanceof Element) {
+			Element el = (Element) sourceMap.get(key);
+			sqlKey = el.element(type).attributeValue("id");
+		}
+		return sqlKey;
+	}
+
 	// SELECT
 	protected List<Object> selectResult(String key) throws BMOException {
 
-		String sqlKey = (String) sourceMap.get(key);
+		String sqlKey = getSqlKey(key, "select");
 		try {
-			SqlSession sqlSession = getSession();
-//			System.out.println(reqMap);
+			SqlSession sqlSession = getSession(key);
+			// System.out.println(reqMap);
 			if (reqMap.containsKey("@minnum") && reqMap.containsKey("@maxnum")) {
 				int minnum = Integer.parseInt(reqMap.get("@minnum") + "");
 				int maxnum = Integer.parseInt(reqMap.get("@maxnum") + "");
-				List<Object> l = sqlSession.selectList(sqlKey, reqMap,
-						new RowBounds(minnum, maxnum - minnum));
+				List<Object> l = sqlSession.selectList(sqlKey, reqMap, new RowBounds(minnum, maxnum - minnum));
 				sqlSession.close();
 				return l;
 			} else {
@@ -66,8 +78,9 @@ public class MybatisService implements Service {
 	// UPDATE
 	protected int updateResult(String key) throws BMOException {
 		try {
-			SqlSession sqlSession = getSession();
-			String sqlKey = (String) sourceMap.get(key);
+			SqlSession sqlSession = getSession(key);
+			String sqlKey = getSqlKey(key, "update");
+//			String sqlKey = (String) sourceMap.get(key);
 			int result = sqlSession.update(sqlKey, reqMap);
 			sqlSession.commit();
 			sqlSession.close();
@@ -80,25 +93,48 @@ public class MybatisService implements Service {
 	}
 
 	// INSERT
-	protected int insertResult(String key) throws BMOException {
+	protected Map<String,Object> insertResult(String key) throws BMOException {
 		try {
-			String sqlKey = (String) sourceMap.get(key);
-			SqlSession sqlSession = getSession();
-			int r = sqlSession.insert(sqlKey, reqMap);
+			String type = "insert";
+			String sqlKey = getSqlKey(key, type);
+			SqlSession sqlSession = getSession(key);
+			if (sourceMap.get(key) instanceof Element) {
+				Element el = (Element) sourceMap.get(key);
+				Element child = el.element(type);
+				//方式一
+				String useGeneratedKeys = child.attributeValue("useGeneratedKeys");
+				if(useGeneratedKeys!=null){
+					String keyProperty = child.attributeValue("keyProperty");
+					reqMap.put(keyProperty, null);
+				}
+				
+				//方式二
+				Element selectKey = child.element("selectKey");
+				if(selectKey!=null){
+					String keyProperty = selectKey.attributeValue("keyProperty");
+					reqMap.put(keyProperty, null);
+				}
+			}
+			Map<String,Object> param = new HashMap<String,Object>();
+			param.putAll(reqMap);
+			int r = sqlSession.insert(sqlKey, param);
 			sqlSession.commit();
 			sqlSession.close();
-			return r;
+			param.put("_result", r);
+			return param;
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new BMOException(e);
+			
 		}
 	}
 
 	// DELETE
 	protected int deleteResult(String key) throws BMOException {
 		try {
-			SqlSession sqlSession = getSession();
-			String sqlKey = (String) sourceMap.get(key);
+			SqlSession sqlSession = getSession(key);
+//			String sqlKey = (String) sourceMap.get(key);
+			String sqlKey = getSqlKey(key, "delete");
 			int result = sqlSession.delete(sqlKey, reqMap);
 			sqlSession.commit();
 			sqlSession.close();
@@ -109,13 +145,13 @@ public class MybatisService implements Service {
 		}
 	}
 
-	// PROCEDURE
+	// PROCEDURE 待定
 	protected Map<String, Object> callResult(String key) throws BMOException {
 		try {
 			String sqlKey = (String) sourceMap.get(key);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.putAll(reqMap);
-			SqlSession sqlSession = getSession();
+			SqlSession sqlSession = getSession(key);
 			sqlSession.selectOne(sqlKey, map);
 			sqlSession.commit();
 			sqlSession.close();
@@ -138,7 +174,7 @@ public class MybatisService implements Service {
 	public static void main(String[] args) {
 		MybatisService ms = new MybatisService();
 		try {
-			SqlSession sqlSession = ms.getSession();
+			SqlSession sqlSession = ms.getSession("sm_priSpec");
 			Object obj = sqlSession.selectList("sm_priSpec");
 			System.out.println(obj);
 		} catch (IOException e) {
@@ -146,9 +182,32 @@ public class MybatisService implements Service {
 		}
 	}
 
-	protected SqlSession getSession() throws IOException {
-		String resource = "SqlMapConfig.xml";
-		Reader reader = Resources.getResourceAsReader(resource);
+	protected SqlSession getSession(String key) throws IOException {
+		
+		Reader reader = null;
+
+		if (sourceMap.get(key) instanceof Element) {
+			Element el = (Element) sourceMap.get(key);
+			String sql = "";
+			@SuppressWarnings("unchecked")
+			List<Element> list = el.elements();
+			for (Element element : list) {
+				sql += element.asXML();
+			}
+			sql = java.net.URLEncoder.encode(sql,"utf-8");
+			String path = getRequest().getContextPath();
+			String basePath = getRequest().getScheme() + "://" + getRequest().getServerName() + ":" + getRequest().getServerPort() + path;
+			String urlpath = basePath + "/mybatisConfig/SqlMapConfig.jsp?sql=" + sql;
+			
+			
+			
+			reader =  Resources.getUrlAsReader(urlpath);
+		}else{
+			String resource = "SqlMapConfig.xml";
+			reader = Resources.getResourceAsReader(resource);
+
+		}
+
 		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
 		SqlSessionFactory factory = builder.build(reader);
 		if (sqlSession != null) {

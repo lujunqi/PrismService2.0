@@ -26,7 +26,7 @@ public class MybatisTransService extends MybatisService {
 	public void service() throws ServletException, IOException {
 		super.service();
 		// PrintWriter out = getResponse().getWriter();
-		SqlSession sqlSession = getSession();
+		SqlSession sqlSession = getSession("");
 		TransactionFactory transactionFactory = new JdbcTransactionFactory();
 		Transaction tran = null;
 		PrintWriter out = getResponse().getWriter();

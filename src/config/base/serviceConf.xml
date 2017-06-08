@@ -9,12 +9,18 @@
     http://www.springframework.org/schema/aop 
     http://www.springframework.org/schema/aop/spring-aop.xsd">
 	
+	<bean id="ns" class="com.prism.service.impl.basic.MybatisAllService" scope="prototype">
+		<property name="sourceMap">
+			<bean class="com.prism.source.SourceMap"/>
+		</property>
+	</bean>
 	
 	<bean id="slt" class="com.prism.service.impl.basic.NormalSltService" scope="prototype">
 		<property name="sourceMap">
 			<bean class="com.prism.source.SourceMap"/>
 		</property>
 	</bean>
+	
 	<bean id="upt" class="com.prism.service.impl.basic.NormalUptService" scope="prototype">
 		<property name="sourceMap">
 			<bean class="com.prism.source.SourceMap"/>

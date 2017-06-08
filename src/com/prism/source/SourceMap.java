@@ -35,7 +35,12 @@ public class SourceMap extends HashMap<String, Object> {
 							if(ele.attributeValue("value")!=null){
 								super.put(ele.attributeValue("name"),ele.attributeValue("value"));
 							}else{
-								super.put(ele.attributeValue("name"), ele.getText());
+								if(ele.attributeValue("node")!=null){
+									super.put(ele.attributeValue("name"), ele  );
+								}else{
+									super.put(ele.attributeValue("name"), ele.getText());
+								}
+								
 							}
 							
 						}
