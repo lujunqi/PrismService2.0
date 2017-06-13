@@ -76,7 +76,7 @@ public class MybatisService implements Service {
 	}
 
 	// UPDATE
-	protected int updateResult(String key) throws BMOException {
+	protected Map<String,Object> updateResult(String key) throws BMOException {
 		try {
 			SqlSession sqlSession = getSession(key);
 			String sqlKey = getSqlKey(key, "update");
@@ -84,7 +84,9 @@ public class MybatisService implements Service {
 			int result = sqlSession.update(sqlKey, reqMap);
 			sqlSession.commit();
 			sqlSession.close();
-			return result;
+			Map<String,Object> resultmap = new HashMap<String,Object>();
+			resultmap.put("_result", result);
+			return resultmap;
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -130,7 +132,7 @@ public class MybatisService implements Service {
 	}
 
 	// DELETE
-	protected int deleteResult(String key) throws BMOException {
+	protected Map<String,Object> deleteResult(String key) throws BMOException {
 		try {
 			SqlSession sqlSession = getSession(key);
 //			String sqlKey = (String) sourceMap.get(key);
@@ -138,7 +140,9 @@ public class MybatisService implements Service {
 			int result = sqlSession.delete(sqlKey, reqMap);
 			sqlSession.commit();
 			sqlSession.close();
-			return result;
+			Map<String,Object> resultmap = new HashMap<String,Object>();
+			resultmap.put("_result", result);
+			return resultmap;
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new BMOException(e);
