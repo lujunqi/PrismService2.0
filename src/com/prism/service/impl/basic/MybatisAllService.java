@@ -18,27 +18,29 @@ public class MybatisAllService extends MybatisService {
 		PrintWriter out = getResponse().getWriter();
 		try {
 			String key = "SQL";
+			System.out.println(reqMap);
 			Map<String, Object> obj = new HashMap<String, Object>();
 			if (sourceMap.get(key) instanceof Element) {
 				Element el = (Element) sourceMap.get(key);
 
 				Element el1 = (Element) (el.elements().get(0));
 				if ("select".equals(el1.getName())) {
-					obj.put("session", true);
+					obj.put("success", true);
 					obj.put("data", selectResult(key));
 				} else if ("insert".equals(el1.getName())) {
-					obj.put("session", true);
+					obj.put("success", true);
 					obj.put("data", this.insertResult(key));
 				} else if ("update".equals(el1.getName())) {
-					obj.put("session", true);
+					obj.put("success", true);
 					obj.put("data", this.updateResult(key));
 				} else if ("delete".equals(el1.getName())) {
-					obj.put("session", true);
+					obj.put("success", true);
 					obj.put("data", this.deleteResult(key));
 
 				}
 
 			}
+			System.out.println(obj);
 			String action = (String) reqMap.get("_action");
 			reqMap.put(action, obj);
 			reqMap.put("this", obj);
