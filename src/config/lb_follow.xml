@@ -1,0 +1,70 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:m="http://www.example.org/schema/prism"
+
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.example.org/schema/prism
+       http://www.example.org/schema/prism.xsd
+       ">
+    
+	<m:prism id="follow.add" dataSource="dataSource">
+    	<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+INSERT INTO lb_follow (
+	follow_info,
+	follow_type,
+	follow_name,
+	other_id	
+)
+VALUES
+(
+	$str(follow_info),
+	$str(follow_type),
+	$str(my_user_name),
+	$str(other_id)
+)
+
+			]]>
+			</m:sql>
+		</m:db>
+    </m:prism>
+	<m:prism id="follow.list" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data" ><![CDATA[
+select follow_id , date_format(follow_create_date,'%Y-%m-%d') follow_create_date,follow_name,
+follow_info 
+from lb_follow 
+where follow_type=$str(follow_type)
+  and other_id=$int(other_id)
+order by follow_id desc
+limit $int(_p),$int(limit)
+
+			]]>
+			</m:sql>
+			<m:sql type="selectObj"   id="count"><![CDATA[
+select count(1) 
+from lb_follow 
+where follow_type=$str(follow_type)
+  and other_id=$int(other_id)
+			]]>
+			</m:sql>
+
+			<m:return>
+				$result.put("data",$db.get("data"));
+				$result.put("count",$db.get("count"));
+
+			</m:return>
+		</m:db>
+	</m:prism>
+
+
+
+</beans>

@@ -1,0 +1,249 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:m="http://www.example.org/schema/prism"
+
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.example.org/schema/prism
+       http://www.example.org/schema/prism.xsd
+       ">
+      <m:prism id="cust.work" dataSource="dataSource">
+		<m:db>
+			<m:sql type="update" id="data" ><![CDATA[       
+update lb_cust_info set cust_status = $str(cust_status)
+where cust_id = $int(id)
+      ]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	
+    <m:prism id="cust.one" dataSource="dataSource">
+		<m:db>
+			<m:sql type="selectOne" id="data" ><![CDATA[       
+select
+    *
+from lb_cust_info
+where cust_id = $int(id)
+      ]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	
+	<m:prism id="cust.del" dataSource="dataSource">
+		
+		<m:db>
+			<m:sql type="insert" id="bak" ><![CDATA[
+insert into bak_lb_cust_info
+select c.*,$str(my_user_id),$str(my_user_name),now()
+from lb_cust_info c
+where cust_id = $int(id)
+      ]]>
+			</m:sql>
+		
+			<m:sql type="delete" id="data" ><![CDATA[       
+delete
+from lb_cust_info
+where cust_id = $int(id)
+      ]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	
+	
+	<m:prism id="cust.upd" dataSource="dataSource">
+		<m:db>
+			<m:sql type="update" id="data" ><![CDATA[       
+update lb_cust_info set
+    
+    cust_name = $str(cust_name),
+	cust_tel = $str(cust_tel),
+	cust_sex = $str(cust_sex),
+	cust_area = $str(cust_area),
+	cust_address = $str(cust_address),
+	cust_space = $str(cust_space),
+	gather_id = $str(gather_id),
+	cust_memo = $str(cust_memo) 
+ 
+where cust_id = $int(cust_id)
+      ]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+    <m:prism id="cust.list" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data" ><![CDATA[
+SELECT
+	c.cust_id,
+	u.user_id,
+	c.cust_name,
+	c.cust_tel,
+	CASE
+WHEN c.cust_measure = 'N' THEN
+	'未支付'
+WHEN c.cust_measure = 'Y' THEN
+	'支付'
+ELSE
+	'未知'
+END AS cust_measure_pay,
+ CASE
+WHEN c.cust_status = 'FOLLOW' THEN
+	'跟进'
+WHEN c.cust_status = 'SIGN' THEN
+	'签单'
+WHEN c.cust_status = 'MEASURE' THEN
+	'量房'
+WHEN c.cust_status = 'DELETE' THEN
+	'删除'
+ELSE
+	'未知'
+END AS cust_status_e,
+ c.cust_measure,
+ g.gather_name,
+ g.gather_id,
+ c.cust_status,
+ DATE_FORMAT(c.cust_create_date,'%Y-%m-%d') cust_create_date,
+ u.user_name,
+ (
+	SELECT
+		count(1)
+	FROM
+		lb_follow f
+	WHERE
+		f.other_id = c.cust_id
+	AND f.follow_type = 'cust'
+) follow_num,
+ datediff(
+	NOW(),
+	(
+		SELECT
+			max(f.follow_create_date)
+		FROM
+			lb_follow f
+		WHERE
+			f.other_id = c.cust_id
+		AND f.follow_type = 'cust'
+	)
+) follow_day,
+c.cust_space,
+c.opt_user_type,
+(select max(u1.user_name) from lb_user u1 where u1.user_id = c.opt_user_id) opt_user_name,
+c.opt_user_id,
+(select CONCAT("【",DATE_FORMAT(f.follow_create_date,'%m月%d日'),"】",follow_info )
+ from lb_follow f where f.follow_type='cust' and f.other_id = c.cust_id order by follow_id desc limit 0,1) as follow_info
+FROM
+	v_lb_cust_info c,
+	v_lb_gather g,
+	lb_user u
+WHERE
+	g.gather_id = c.gather_id
+
+AND u.user_id = g.user_id
+
+#if($my_opt=='X')
+and u.user_id = $str(my_user_id)
+#elseif($my_opt == "BOSS")
+and 1=1 
+#elseif(!$fn.isN($my_opt))
+and (
+u.user_id = $str(my_user_id)
+#foreach ($opt in $my_opt.split(","))
+  or FIND_IN_SET($opt,u.user_dep)
+#end
+)
+#else
+and 1=2
+#end
+order by c.cust_id desc
+limit $int(_p),$int(limit)
+			]]>
+			</m:sql>
+			<m:sql type="selectObj"   id="count"><![CDATA[
+select count(1) 
+from v_lb_cust_info c,
+	v_lb_gather g 
+where g.gather_id = c.gather_id
+  
+  
+  
+#if($my_opt=='X')
+and u.user_id = $str(my_user_id)
+#elseif($my_opt == "BOSS")
+and 1=1 
+#elseif(!$fn.isN($my_opt))
+and (
+u.user_id = $str(my_user_id)
+#foreach ($opt in $my_opt.split(","))
+  or FIND_IN_SET($opt,u.user_dep)
+#end
+)
+#else
+and 1=2
+#end
+			]]>
+			</m:sql>
+
+			<m:return>
+				$result.put("data",$db.get("data"));
+				$result.put("count",$db.get("count"));
+
+			</m:return>
+		</m:db>
+	</m:prism>
+    
+    
+	<m:prism id="cust.gather" dataSource="dataSource">
+    	<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+select gather_id as K,gather_name AS V from v_lb_gather where user_id = $str(my_user_id)
+
+			]]>
+			</m:sql>
+		</m:db>
+    </m:prism>
+
+	<m:prism id="cust.add" dataSource="dataSource">
+    	<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+INSERT INTO lb_cust_info (
+	cust_name,
+	gather_id,
+	cust_tel,
+	cust_sex,
+	cust_memo,
+	cust_class_id,
+	cust_class_info,
+	cust_area,
+	cust_address,
+	cust_space,
+	cust_create_date
+)
+VALUES
+(
+$str(cust_name),
+$str(gather_id),
+$str(cust_tel),
+$str(cust_sex),
+$str(cust_memo),
+$str(cust_class_id),
+$str(cust_class_info),
+$str(cust_area),
+$str(cust_address),
+$str(cust_space),
+now()
+)
+
+			]]>
+			</m:sql>
+		</m:db>
+    </m:prism>
+
+
+
+</beans>

@@ -1,0 +1,255 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:m="http://www.example.org/schema/prism"
+
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.example.org/schema/prism
+       http://www.example.org/schema/prism.xsd
+       ">
+	
+	<m:prism id="hetong.del" dataSource="dataSource">
+		<m:db>
+			<m:sql type="delete" id="data"><![CDATA[
+delete from t_hetong where  ht_id = $int(ht_id) and ht_jz_yn='y'
+			]]>
+			</m:sql>
+			<m:return>
+<![CDATA[
+$db.get("data")
+#if($db.get("data") ==  0)
+$result.put("msg","删除失败");
+$result.put("code",2);
+#end   
+
+]]>
+			</m:return>
+		</m:db>
+	</m:prism>
+	<m:prism id="hetong.add" dataSource="dataSource">
+		<m:db>
+			<m:sql id="data" type="insert">
+<![CDATA[
+insert into t_hetong(
+		ht_zu_type,
+		ht_kh_name,
+		ht_no,
+		ht_jz_yn,
+		ht_b_date,
+		ht_e_date,
+		ht_dun_yn,
+		ht_dz,
+		ht_frdb,
+		ht_wtdlr,
+		ht_bzr,
+		ht_tel,
+		ht_xm_name,
+		ht_other,
+		user_co,
+		user_id,
+		l_date
+		)values(
+		$str(ht_zu_type),
+		$str(ht_kh_name),
+		$str(ht_no),
+		$str(ht_jz_yn),
+		$str(ht_b_date),
+		$str(ht_e_date),
+		$str(ht_dun_yn),
+		$str(ht_dz),
+		$str(ht_frdb),
+		$str(ht_wtdlr),
+		$str(ht_bzr),
+		$str(ht_tel),
+		$str(ht_xm_name),
+		$str(ht_other),
+		$str(my_user_co),
+		$str(my_user_id),
+		now()
+		)
+]]>
+			</m:sql>
+		</m:db>
+		<m:view template="/frame/template/frm.jsp">
+			<m:text>
+				$v.put("name","新增合同信息");
+				$v.put("cols",$cols);
+
+			</m:text>
+			<m:var name="cols" type="json"><![CDATA[
+			[
+{name:'ht_id',type:"hidden"},
+{name:"ht_zu_type","title":"租赁类型","type":"radio","val":[{"k":"out","v":"租出"},{"k":"in","v":"租入",c:"checked"}]},
+{name:'ht_kh_name',title:'客户名称',type:"text",attr:{placeholder:"请输入客户名称"}},
+{name:'ht_no',title:'合同号',type:"text",attr:{placeholder:"请输入合同号"}},
+{name:'ht_jz_yn',title:'是否结账',type:"radio",val:[{k:"y",v:"是"},{k:"n",v:"否",c:"checked"}]},
+{name:'ht_be_date',title:'租赁期限',type:"mdate",field:'s_ht_b_date,s_ht_e_date'},
+{name:'ht_dun_yn',title:'是否按吨计算',type:"radio",val:[{k:"y",v:"是"},{k:"n",v:"否",c:'checked'}]},
+{name:'ht_dz',title:'地址',type:"text",attr:{placeholder:"请输入地址"}},
+{name:'ht_frdb',title:'法人代表',type:"text",attr:{placeholder:"请输入法人代表"}},
+{name:'ht_wtdlr',title:'委托代理人',type:"text",attr:{placeholder:"请输入委托代理人"}},
+{name:'ht_bzr',title:'保证人',type:"text",attr:{placeholder:"请输入保证人"}},
+{name:'ht_tel',title:'联系电话',type:"text",attr:{placeholder:"请输入联系电话"}},
+{name:'ht_xm_name',title:'工程项目名称',type:"text",attr:{placeholder:"请输入工程项目名称"}},
+{name:'ht_other',title:'其他说明',type:"textarea",attr:{placeholder:"请输入其他说明"}} 
+			]
+			]]>
+			</m:var>
+		</m:view>
+	</m:prism>
+
+
+	<m:prism id="hetong.upd" dataSource="dataSource">
+		<m:db>
+			<m:sql id="data" type="update">
+<![CDATA[
+update t_hetong set
+		ht_zu_type = $str(ht_zu_type),
+		ht_kh_name=$str(ht_kh_name),
+		ht_no=$str(ht_no),
+		ht_jz_yn=$str(ht_jz_yn),
+		ht_b_date=$str(s_ht_b_date),
+		ht_e_date=$str(s_ht_e_date),
+		ht_dun_yn=$str(ht_dun_yn),
+		ht_dz = $str(ht_dz),
+		ht_frdb = $str(ht_frdb),
+		ht_wtdlr = $str(ht_wtdlr),
+		ht_bzr = $str(ht_bzr),
+		ht_tel = $str(ht_tel),
+		ht_xm_name=$str(ht_xm_name),
+		ht_other=$str(ht_other)
+	where ht_id = $int(ht_id)
+]]>
+			</m:sql>
+		</m:db>
+		<m:view template="/frame/template/frm.jsp">
+			<m:text>
+				$v.put("name","修改合同信息");
+				$v.put("cols",$cols);
+
+			</m:text>
+			<m:var name="cols" type="json"><![CDATA[
+			[
+{name:'ht_id',type:"hidden"},
+{name:"ht_zu_type","title":"租赁类型","type":"radio","val":[{"k":"out","v":"租出"},{"k":"in","v":"租入",c:"checked"}]},
+{name:'ht_kh_name',title:'客户名称',type:"text",attr:{placeholder:"请输入客户名称"}},
+{name:'ht_no',title:'合同号',type:"text",attr:{placeholder:"请输入合同号"}},
+{name:'ht_jz_yn',title:'是否结账',type:"radio",val:[{k:"y",v:"是"},{k:"n",v:"否",c:"checked"}]},
+{name:'ht_be_date',title:'租赁期限',type:"mdate",field:'s_ht_b_date,s_ht_e_date'},
+{name:'ht_dun_yn',title:'是否按吨计算',type:"radio",val:[{k:"y",v:"是"},{k:"n",v:"否",c:'checked'}]},
+{name:'ht_dz',title:'地址',type:"text",attr:{placeholder:"请输入地址"}},
+{name:'ht_frdb',title:'法人代表',type:"text",attr:{placeholder:"请输入法人代表"}},
+{name:'ht_wtdlr',title:'委托代理人',type:"text",attr:{placeholder:"请输入委托代理人"}},
+{name:'ht_bzr',title:'保证人',type:"text",attr:{placeholder:"请输入保证人"}},
+{name:'ht_tel',title:'联系电话',type:"text",attr:{placeholder:"请输入联系电话"}},
+{name:'ht_xm_name',title:'工程项目名称',type:"text",attr:{placeholder:"请输入工程项目名称"}},
+{name:'ht_other',title:'其他说明',type:"textarea",attr:{placeholder:"请输入其他说明"}} 
+			]
+			]]>
+			</m:var>
+		</m:view>
+	</m:prism>
+
+	<m:prism id="hetong.list" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data" depend="t_hetong"><![CDATA[
+			select
+		*,
+		date_format(ht_b_date, '%Y-%m-%d')  s_ht_b_date,
+		date_format(ht_e_date, '%Y-%m-%d') s_ht_e_date,
+		ht_dun_yn
+		from t_hetong ht where ht.user_co = $str(my_user_co)
+		#if(!$fn.isN($info))
+		and ht_no like concat('%', $str(info),'%')
+		#end  
+		order by ht_id
+		limit $int(_p),$int(limit)
+		
+			]]>
+			</m:sql>
+			<m:sql type="selectObj" depend="t_hetong" id="count"><![CDATA[
+			select count(1)
+		from t_hetong
+		ht where ht.user_co = $str(my_user_co)
+		#if(!$fn.isN($info))
+		and ht_no like concat('%', $str(info),'%')
+		#end  
+			]]>
+			</m:sql>
+
+			<m:return>
+				$result.put("data",$db.get("data"));
+				$result.put("count",$db.get("count"));
+
+			</m:return>
+		</m:db>
+
+		<m:view template="/frame/template/table.jsp">
+
+			<m:text>
+
+				$v.put("name","合同管理");
+				$v.put("cols",$cols);
+				$v.put("event",$event);
+				$v.put("where",$where)
+				$v.put("header",$header)
+
+			</m:text>
+			<m:var name="header"><![CDATA[
+[
+{"title":"搜索：",type:"text"},
+{id:"search_info",type:"input", placeholder:"请输入合同号"},
+{"title":"搜索",type:"btn","fn":{"key":"set_table"}},
+{"title":"新增",type:"btn","fn":{key:"from","page_url":"hetong.add"}}
+
+
+]			
+			]]>
+			</m:var>
+			<m:var name="event"><![CDATA[
+[
+{"title":"删除","fn":{"key":"confirm","msg":"是否删除","data_url":"/data/hetong.del","begin":"check"}},
+{"title":"修改","fn":{key:"from","page_url":"hetong.upd"}}
+]
+			]]>
+			</m:var>
+
+			<m:var name="cols"><![CDATA[
+			[
+{field:'ht_id',title:'ID'},
+{field:'ht_kh_name',title:'客户名称'},
+{field:'ht_no',title:'合同号'},
+{title:'是否结账',templet:function(res){var m={"y":"是","n":"否"};return m[res.ht_jz_yn];}},
+{title:'租赁类型',templet:function(res){var m={"out":"租出","in":"租入"};return m[res.ht_zu_type];}},
+{field:'s_ht_b_date',title:'租赁开始日期'},
+{field:'s_ht_e_date',title:'租赁结束日期'},
+{title:'按吨计算',templet:function(res){var m={"y":"是","n":"否"};return m[res.ht_dun_yn];}}
+			]
+			]]>
+			</m:var>
+			<m:var name="ht_jz_yn">var m = {"y" : "是","n" : "否"}; return
+				m[res.ht_jz_yn];
+			</m:var>
+			<m:var name="where">
+				{
+				"my_user_id" : cou.my().user_id,
+				"my_user_co" :
+				cou.my().user_co,
+				"info" :$("#search_info").val()
+				}
+			</m:var>
+
+		</m:view>
+
+
+	</m:prism>
+
+
+</beans>

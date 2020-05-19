@@ -1,0 +1,179 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:m="http://www.example.org/schema/prism"
+
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.example.org/schema/prism
+       http://www.example.org/schema/prism.xsd
+       ">
+    
+    
+	<m:prism id="msg.upd" dataSource="dataSource">
+		<m:db>
+
+			<m:sql type="update" id="data"><![CDATA[
+			update t_msg set
+			  msg_title = $str(msg_title),
+			  user_ids = $str(user_ids),
+			  msg_text = $str(msg_text),
+			  msg_desc = $str(msg_desc),
+			  b_date = $str(b_date),
+			  e_date = $str(e_date),
+			  cycle_type = $str(cycle_type),
+			  msg_ans = $str(msg_ans)
+			  
+			 
+			 where msg_id=$int(msg_id)
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	<m:prism id="msg.del" dataSource="dataSource">
+		<m:db>
+			<m:sql type="delete" id="data"><![CDATA[
+			delete from t_msg where msg_id=$int(msg_id)
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+	<m:prism id="msg.add" dataSource="dataSource">
+		<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+insert into t_msg
+(msg_title,user_ids,msg_text,msg_desc,msg_co,b_date,e_date,cycle_type,c_user_id,msg_ans,c_date)
+values
+($str(msg_title),$str(user_ids),$str(msg_text),$str(msg_desc),$str(my_user_co),$str(b_date),$str(e_date),$str(cycle_type),$str(my_user_id),$str(msg_ans),now())
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+
+	<m:prism id="msg.user2org" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+			select user_id,user_name from t_user
+			 where FIND_IN_SET(user_org,$str(orgs))
+			   and user_co = $str(my_user_co) 
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+	<m:prism id="msg.status" dataSource="dataSource">
+		<m:db>
+			<m:sql type="update" id="data"><![CDATA[
+			update t_msg set msg_status=1 where msg_id=$int(msg_id)
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+
+	<m:prism id="msg.list" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+			select msg_id,
+				   msg_title,
+				   (select GROUP_CONCAT(user_name) from t_user u where FIND_IN_SET(u.user_id,m.user_ids)) user_names,
+				   cycle_type,
+				   CONCAT(DATE_FORMAT(b_date,'%Y-%m-%d'),' - ',DATE_FORMAT(e_date,'%Y-%m-%d')) be_date,
+				   DATE_FORMAT(c_date,'%Y-%m-%d') c_date,
+				   msg_status,
+				   msg_text,
+				   msg_ans,
+				   user_ids
+			  from t_msg m
+			 where m.msg_co = $str(my_user_co)
+			   and c_user_id = $str(my_user_id) 
+#if(!$fn.isN($info))
+and msg_title like concat('%', $str(info),'%')
+#end
+limit $int(_p),$int(limit)
+			]]>
+			</m:sql>
+			<m:sql type="selectObj" id="count"><![CDATA[
+			select count(1) 
+ from t_msg m
+			 where m.msg_co = $str(my_user_co)
+			   and c_user_id = $str(my_user_id)
+#if(!$fn.isN($info))
+and 
+msg_title like concat('%', $str(info),'%')
+
+#end
+			]]>
+			</m:sql>
+			<m:return>
+				$result.put("data",$db.get("data"));
+				$result.put("count",$db.get("count"));
+			</m:return>
+		</m:db>
+
+		<m:view template="/frame/template/table.jsp">
+
+			<m:text>
+
+				$v.put("name","信息管理");
+				$v.put("cols",$cols);
+				$v.put("event",$event);
+				$v.put("where",$where);
+				$v.put("header",$header);
+				$v.put("url","/data/msg.list");
+
+
+			</m:text>
+			<m:var name="header"><![CDATA[
+[
+{"title":"搜索：",type:"text"},
+{id:"search_info",type:"input", placeholder:"请输入标题"},
+{"title":"搜索",type:"btn","fn":{"key":"set_table"}},
+{"title":"新增",type:"btn","fn":{key:"from","page_url":"/page/msg/item.jsp"}}
+]			
+			]]>
+			</m:var>
+			<m:var name="event"><![CDATA[
+[
+{"title":"删除","fn":{"key":"confirm","msg":"是否删除","data_url":"/data/msg.del"}},
+{"title":"发布","check":"d.msg_status==0","fn":{"key":"confirm","msg":"是否发布","data_url":"/data/msg.status"}},
+{"title":"修改","fn":{key:"from","page_url":"/page/msg/item.jsp"}}
+]
+			]]>
+			</m:var>
+
+			<m:var name="cols"><![CDATA[
+			[
+{field:'msg_id',title:'ID',width:50},
+{field:'msg_title',title:'活动名称'},
+{field:'be_date',title:'开始/结束时间',width:280},
+{title:'周期',width:80,templet:function(res){var m=["单次","天","周","月","季","年"];return m[res.cycle_type];}},
+{title:'状态',width:80,templet:function(res){var m=["未发布","已发布"];return m[res.msg_status];}},
+{title:'参与人',field:'user_names'}
+
+			]
+			]]>
+			</m:var>
+			<m:var name="where">
+				{
+				"my_user_id" : cou.my().user_id,
+				"my_user_co" :
+				cou.my().user_co,
+				"info" :$("#search_info").val()
+				}
+			</m:var>
+
+		</m:view>
+	</m:prism>
+
+
+
+</beans>

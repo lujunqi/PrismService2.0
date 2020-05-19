@@ -1,0 +1,50 @@
+{
+	"data": [
+		{
+			"text": "业务管理",
+			"icon": "&#xe68e;",
+			"role":"m1",
+			"subset": [
+				{
+					"text": "信息员管理",
+					"role":"m2",
+					"href": "page/lb_gather/index.jsp"
+				},
+				{
+					"text": "客户管理",
+					"role":"m3",
+					"href": "page/lb_cust/index.jsp"
+				}
+			]
+		},
+		{
+			"text": "设计管理",
+			"icon": "&#xe68e;",
+			"role":"m7",
+			"subset": [
+				
+				{
+					"text": "量房管理",
+					"role":"m4",
+					"href": "page/member/index.jsp"
+				}
+			]
+		},
+		{
+			"text": "系统管理",
+			"icon": "&#xe653;",
+			"role":"m5",
+			"subset": [
+				 
+				{
+					"text": "授权管理",
+					"role":["m5"],
+					"href": "page/roles/index.jsp"
+				}
+				
+				
+			]
+		} 
+		
+	]
+}

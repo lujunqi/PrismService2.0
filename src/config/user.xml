@@ -1,0 +1,102 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:m="http://www.example.org/schema/prism"
+
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.example.org/schema/prism
+       http://www.example.org/schema/prism.xsd
+       ">
+    <!-- 操作日志 -->
+    <m:prism id="lb.log" dataSource="dataSource">
+		<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+insert into lb_log(user_id,log_body,log_action)
+values(
+$str(my_user_id),$str(log_body),$str(log_action)
+)
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+    
+	<m:prism id="lb.roles" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+select * from lb_roles  
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+
+	<m:prism id="lb.users" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+select * from lb_user where (user_id !=old_user_id or old_user_id is NULL) 		]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	<!-- 添加员工 -->
+	<m:prism id="lb.users.add" dataSource="dataSource">
+		<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+insert into lb_user(user_id,user_name,user_dep,user_body) value
+(
+$str(user_id),
+$str(user_name),
+$str(user_dep),
+$str(user_body)
+) 
+on duplicate key update 
+user_name= $str(user_name),
+user_dep= $str(user_dep),
+user_body= $str(user_body)
+]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	<!-- 删除原 -->
+	<m:prism id="lb.users.leave" dataSource="dataSource">
+		<m:db>
+			<m:sql type="update" id="data"><![CDATA[
+update lb_user set user_status = 'N' where user_id = $str(user_id)
+]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+	<!-- 移交用户 -->
+	<m:prism id="lb.user4Dep" aop="User4Dep"
+		dataSource="dataSource">
+
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+select user_id,user_name,user_dep from lb_user where FIND_IN_SET(user_id, $str(user_ids)) and user_id != $str(my_user_id)
+order by user_dep
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	<!-- 量房用户 -->
+	<m:prism id="lb.user4DepM" aop="User4DepM"
+		dataSource="dataSource">
+
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+select user_id,user_name,user_dep from lb_user where FIND_IN_SET(user_id, $str(user_ids)) and user_id != $str(my_user_id)
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+
+
+</beans>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>湘ICP备18013994号</title>
+<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.10.3/dingtalk.open.js"></script>
+
+<script type="text/javascript">
+dd.biz.ding.create({
+    users : ['TEST001'],// 用户列表，工号
+    corpId: '', // 企业id
+    type: 1, // 附件类型 1：image  2：link
+    alertType: 2, // 钉发送方式 0:电话, 1:短信, 2:应用内
+    alertDate: {"format":"yyyy-MM-dd HH:mm","value":"2015-05-09 08:00"},
+    attachment: {
+        images: [''],
+    }, // 附件信息
+    text: '',  // 正文
+    bizType :0, // 业务类型 0：通知DING；1：任务；2：会议；
+    confInfo:{
+       bizSubType:0, // 子业务类型如会议：0：预约会议；1：预约电话会议；2：预约视频会议；（注：目前只有会议才有子业务类型）
+       location:'某某会议室' , //会议地点；（非必填）
+       startTime:{"format":"yyyy-MM-dd HH:mm","value":"2015-05-09 08:00"},// 会议开始时间
+       endTime:{"format":"yyyy-MM-dd HH:mm","value":"2015-05-09 08:00"}, // 会议结束时间
+       remindMinutes:30, // 会前提醒。单位分钟-1：不提醒；0：事件发生时提醒；5：提前5分钟；15：提前15分钟；30：提前30分钟；60：提前1个小时；1440：提前一天；
+       remindType:2 // 会议提前提醒方式。0:电话, 1:短信, 2:应用内
+    },
+ 
+    taskInfo:{
+       ccUsers: ['TEST001'], // 抄送用户列表，工号
+       deadlineTime:{"format":"yyyy-MM-dd HH:mm","value":"2015-05-09 08:00"} , // 任务截止时间
+       taskRemind:30// 任务提醒时间，单位分钟0：不提醒；15：提前15分钟；60：提前1个小时；180：提前3个小时；1440：提前一天；
+    },
+ 
+    onSuccess : function() {
+         //onSuccess将在点击发送之后调用
+    },
+    onFail : function() {}
+});
+
+</script> 
+</head>
+<body>
+	<div style="height: 600px;">
+	
+	</div>
+
+	<div class="weui-footer">
+		<p class="weui-footer__links">
+			<a href="javascript:void(0);" class="weui-footer__link">郴州市坤元养老服务有限公司</a>
+		</p>
+		<p class="weui-footer__text">Copyright © 2008-2016 郴州市坤元养老服务有限公司 <a href="http://www.miitbeian.gov.cn">湘ICP备18013994号</a> </p>
+	</div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:m="http://www.example.org/schema/prism"
+
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.example.org/schema/prism
+       http://www.example.org/schema/prism.xsd
+       ">
+    
+    <m:prism id="weix.user_group" dataSource="dataSource">
+    	<m:db>
+			<m:sql type="selectOne" id="data"><![CDATA[
+select user_group from t_user where user_id = $int(my_user_id)  
+			]]>
+			</m:sql>
+		</m:db>
+    </m:prism>
+    <m:prism id="weix.slt_user_group" dataSource="dataSource">
+    	<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+select user_id,user_name from t_user where FIND_IN_SET($str(group),my_group)
+			]]>
+			</m:sql>
+		</m:db>
+    </m:prism>
+    
+    <m:prism id="weix.msg.inst.del" dataSource="dataSource">
+    	<m:db>
+			<m:sql type="delete" id="data"><![CDATA[
+delete
+ from t_msg_inst 
+  where msg_inst_id = $int(msg_inst_id) 
+			]]>
+			</m:sql>
+		</m:db>
+    </m:prism>
+    <m:prism id="weix.msg.inst.list" dataSource="dataSource">
+    	<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+select
+msg_inst_id,
+DATE_FORMAT(mi.c_date,'%Y-%m-%d') c_date,
+msg_result
+ from t_msg_inst mi
+  where user_id =  $str(my_user_id)
+   and msg_id = $str(msg_id)
+ order by c_date desc 
+			]]>
+			</m:sql>
+		</m:db>
+    </m:prism>
+    
+	<m:prism id="weix.repwd" dataSource="dataSource">
+		<m:db>
+			<m:sql type="update" id="data"><![CDATA[
+			update t_user set user_pwd = $str(user_pwd_new) where user_acc=$str(user_acc) and user_pwd = $str(user_pwd) 
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	<m:prism id="weix.login" dataSource="dataSource">
+		<m:db>
+			<m:sql type="selectOne" id="data"><![CDATA[
+			select u.user_id,u.user_acc user_acc,u.user_name user_name,
+			md5(CONCAT(user_id,user_acc,user_name,'ewrdfjk')) vcode
+			  from t_user u 
+			 where u.user_acc = $str(user_acc) and u.user_pwd = $str(user_pwd)
+			]]>
+			</m:sql>
+			<!-- <m:sql type="insert" id="u_xw"><![CDATA[
+#if(!$fn.isN($openid))
+			insert into t_user_wx(user_id,openid,nickname)values(
+			IFNULL($p._str($data.get('user_id')),0),$str(openid),$str(nickname))
+			on duplicate key update
+			nickname = $str(nickname)
+#else  
+delete from t_user where 1=2
+#end 
+			]]>
+			</m:sql> -->
+
+		</m:db>
+	</m:prism>
+
+	<m:prism id="weix.msg.inst.add" dataSource="dataSource">
+		<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+insert into t_msg_inst(msg_id,user_id,msg_result)values
+(
+$str(msg_id),$str(my_user_id),$str(msg_result)
+)
+on duplicate key update
+msg_result = $str(msg_result)
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	<m:prism id="weix.msg.visit.add" dataSource="dataSource">
+		<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+insert into t_msg_visit(msg_id,user_id)values
+(
+$str(msg_id),$str(my_user_id)
+)
+on duplicate key update
+visit_count = visit_count+1
+
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+
+	<m:prism id="weix.msg.list" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+SELECT
+	m.msg_id,
+	m.msg_title,
+	m.msg_desc,
+	u.user_name,
+	(select count(1) from t_msg_visit v where v.msg_id = m.msg_id) msg_visit_count,
+	(select count(1) from t_msg_inst v where v.msg_id = m.msg_id) msg_inst_count,
+	DATE_FORMAT(m.c_date,'%Y-%m-%d') c_date
+FROM
+	t_msg m,
+	t_user u 
+WHERE
+	find_in_set ( $str(my_user_id), m.user_ids ) 
+	AND m.c_user_id = u.user_id 
+	AND msg_status = 1
+	order by m.msg_id desc
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+	<m:prism id="weix.msg.one" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+select msg_title,
+	   DATE_FORMAT(c_date,'%Y-%m-%d') c_date,
+	   msg_ans,
+	   msg_text 
+  from t_msg
+ where msg_id = $int(id)
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+</beans>

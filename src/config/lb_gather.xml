@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:m="http://www.example.org/schema/prism"
+
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.example.org/schema/prism
+       http://www.example.org/schema/prism.xsd
+       ">
+	<m:prism id="gather.tel_only" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[       
+SELECT 1 AS TEL FROM v_lb_cust_info c where c.cust_tel = $str(tel)
+#if(!$fn.isN($c_id))
+and cust_id != $int(c_id)
+#end
+UNION ALL
+SELECT 1 FROM v_lb_gather G WHERE G.gather_tel =  $str(tel)
+#if(!$fn.isN($g_id))
+and g.gather_id != $int(g_id)
+#end
+      ]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	<m:prism id="gather.one" dataSource="dataSource">
+		<m:db>
+			<m:sql type="selectOne" id="data"><![CDATA[       
+select
+    gather_id,
+    gather_name,
+	gather_co,
+	gather_tel,
+	gather_type,
+	gather_level,
+	gather_weixin,
+	gather_weixin_jion,
+	gather_area,
+	gather_address,
+	gather_card
+from lb_gather 
+where gather_id = $int(id)
+      ]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+	<m:prism id="gather.del" dataSource="dataSource">
+		<m:db>
+			<m:sql type="insert" id="bak"><![CDATA[
+insert into bak_lb_gather
+select c.*,$str(my_user_id),$str(my_user_name),now()
+from lb_gather c
+where gather_id = $int(gather_id)
+			]]>
+			</m:sql>
+			<m:sql type="delete" id="data"><![CDATA[       
+delete
+from lb_gather 
+where gather_id = $int(gather_id)
+      ]]>
+			</m:sql>
+		</m:db>
+
+	</m:prism>
+	<m:prism id="gather.move" dataSource="dataSource">
+		<m:db>
+			<m:sql type="update" id="data"><![CDATA[       
+update lb_gather set
+    
+    user_id = $str(user_id)
+where gather_id = $int(gather_id)
+      ]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+	<m:prism id="gather.upd" dataSource="dataSource">
+		<m:db>
+			<m:sql type="update" id="data"><![CDATA[       
+update lb_gather set
+    
+    gather_name = $str(gather_name),
+	gather_co = $str(gather_co),
+	gather_tel = $str(gather_tel),
+	gather_type = $str(gather_type),
+	gather_level = $str(gather_level),
+	gather_weixin = $str(gather_weixin),
+	gather_weixin_jion = $str(gather_weixin_jion),
+	gather_area = $str(gather_area),
+	gather_address = $str(gather_address)
+ 
+where gather_id = $int(gather_id)
+      ]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+
+	<m:prism id="gather.add" dataSource="dataSource">
+		<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+INSERT INTO lb_gather (
+	gather_name,
+	gather_co,
+	gather_tel,
+	gather_type,
+	gather_level,
+	gather_weixin,
+	gather_weixin_jion,
+	gather_area,
+	gather_address,
+	gather_card,
+	
+	user_id
+)
+VALUES
+	(
+	$str(gather_name),
+	$str(gather_co),
+	$str(gather_tel),
+	$str(gather_type),
+	$str(gather_level),
+	$str(gather_weixin),
+	$str(gather_weixin_jion),
+	$str(gather_area),
+	$str(gather_address),
+	$str(gather_card),
+	$str(my_user_id)
+)
+
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+
+	<m:prism id="gather.list" dataSource="dataSource">
+		<m:db>
+			<m:sql type="select" id="data"><![CDATA[
+SELECT
+	g.gather_id,
+	g.gather_name,
+	g.gather_co,
+	g.gather_tel,
+	g.gather_level,
+	g.gather_type,
+	g.gather_weixin,
+	g.gather_weixin_jion,
+	DATE_FORMAT(g.gather_create_date,'%Y-%m-%d') gather_create_date,
+	u.user_name,
+	u.user_id,
+	(select max(f.follow_create_date) from lb_follow f where f.other_id = g.gather_id and f.follow_type='gather') follow_max,
+	datediff(NOW(),(select max(f.follow_create_date) from lb_follow f where f.other_id = g.gather_id and f.follow_type='gather')) follow_day,
+	(select count(1) from lb_follow f where f.other_id = g.gather_id and f.follow_type='gather') follow_num,
+	(select count(1) from v_lb_cust_info c where c.gather_id = g.gather_id) cust_num,
+	(select count(1) from v_lb_cust_info c where c.gather_id = g.gather_id and c.cust_status in('measure','sign')) measure_num,
+	(select count(1) from v_lb_cust_info c where c.gather_id = g.gather_id and c.cust_measure='Y' and c.cust_status in('measure','sign')) measure_pay_num,
+	(select count(1) from v_lb_cust_info c where c.gather_id = g.gather_id and c.cust_measure='Y' and c.cust_status in('sign')) 
+	sign_num
+
+FROM
+	v_lb_gather g,
+	lb_user u
+WHERE
+	u.user_id = g.user_id
+  
+#if($my_opt=='X')
+and u.user_id = $str(my_user_id)
+#elseif($my_opt == "BOSS")
+and 1=1 
+#elseif(!$fn.isN($my_opt))
+and (
+u.user_id = $str(my_user_id)
+#foreach ($opt in $my_opt.split(","))
+  or FIND_IN_SET($opt,u.user_dep)
+#end
+)
+#else
+and 1=2
+#end
+
+
+order by g.gather_id desc
+limit $int(_p),$int(limit)
+
+			]]>
+			</m:sql>
+			<m:sql type="selectObj" id="count"><![CDATA[
+SELECT
+	count(1)
+
+FROM
+	v_lb_gather g,
+	lb_user u
+WHERE
+	u.user_id = g.user_id
+	
+#if($my_opt=='X')
+and u.user_id = $str(my_user_id)
+#elseif($my_opt == "BOSS")
+and 1=1 
+#elseif(!$fn.isN($my_opt))
+and (
+u.user_id = $str(my_user_id)
+#foreach ($opt in $my_opt.split(","))
+  or FIND_IN_SET($opt,u.user_dep)
+#end
+)
+#else
+and 1=2
+#end
+			]]>
+			</m:sql>
+
+			<m:return>
+				$result.put("data",$db.get("data"));
+				$result.put("count",$db.get("count"));
+
+			</m:return>
+		</m:db>
+	</m:prism>
+</beans>

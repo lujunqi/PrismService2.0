@@ -1,0 +1,60 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:m="http://www.example.org/schema/prism"
+
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.example.org/schema/prism
+       http://www.example.org/schema/prism.xsd
+       ">
+	<bean id="Jobs" class="com.prism.job.Jobs">
+		<property name="list">
+			<list>
+				<bean id="QuartzJob" class="com.prism.job.MsgInstJob">
+
+					<property name="cron" value="*/10 * * * * ?" />
+					<property name="jobName" value="jobName2" />
+					<property name="triggerName" value="triggerName2" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<m:prism id="jobs.msg.inst" dataSource="dataSource">
+		<m:db>
+			<m:sql type="insert" id="data"><![CDATA[
+			
+INSERT INTO t_msg_inst ( msg_id, user_id, msg_cycle ) (
+	SELECT
+		msg_id,
+		u.user_id,
+		func_now_key ( m.cycle_type ) 
+	FROM
+		t_msg m,
+		t_user u 
+	WHERE
+		b_date < now( ) AND e_date >= now( ) 
+		AND m.msg_status = 1 
+		AND FIND_IN_SET( u.user_id, m.user_ids ) 
+		AND NOT EXISTS (
+		SELECT
+			1 
+		FROM
+			t_msg_inst mi 
+		WHERE
+			mi.msg_id = m.msg_id 
+			AND u.user_id = mi.user_id 
+			AND mi.msg_cycle = func_now_key ( m.cycle_type ) 
+		) 
+	)
+			]]>
+			</m:sql>
+		</m:db>
+	</m:prism>
+</beans>

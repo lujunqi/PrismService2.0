@@ -1,0 +1,124 @@
+{
+	"data": [
+		{
+			"text": "数据维护",
+			"icon": "&#xe620;",
+			"subset": [
+				{
+					"text": "租赁单数据录入",
+					"icon": "&#xe621;",
+					"href": "page/member/index.jsp"
+				},
+				{
+					"text": "维修赔偿等数据录入",
+					"icon": "&#xe621;",
+					"subset": [
+						{
+							"text": "维修保养费数据录入",
+							"icon": "&#xe621;",
+							"href": "page/member/index.jsp"
+						},
+						{
+							"text": "报废赔偿费数据录入",
+							"icon": "&#xe621;",
+							"href": "page/member/index.jsp"
+						},
+						{
+							"text": "预算押金数据录入",
+							"icon": "&#xe621;",
+							"href": "page/member/index.jsp"
+						},
+						{
+							"text": "已收租金数据录入",
+							"icon": "&#xe621;",
+							"href": "page/member/index.jsp"
+						},
+						{
+							"text": "其他费用数据录入",
+							"icon": "&#xe621;",
+							"href": "page/member/index.jsp"
+						}
+					]
+				},
+				{
+					"text": "合同号录入",
+					"icon": "&#xe621;",
+					"href": "page/hetong/index.jsp"
+				},
+				{
+					"text": "材料名称录入",
+					"icon": "&#xe621;",
+					"href": "page/clmc/index.jsp"
+				},
+				{
+					"text": "材料规格录入",
+					"icon": "&#xe621;",
+					"href": "page/member/index.jsp"
+				},
+				{
+					"text": "进销数据录入",
+					"icon": "&#xe621;",
+					"subset": [
+						{
+							"text": "材料进货数据录入",
+							"icon": "&#xe621;",
+							"href": "page/member/index.jsp"
+						},
+						{
+							"text": "材料销售数据录入",
+							"icon": "&#xe621;",
+							"href": "page/member/index.jsp"
+						}
+						
+					]
+				}
+			]
+		},
+		{
+			"text": "数据统计",
+			"icon": "&#xe620;",
+			"subset": [
+				{
+					"text": "客户租金结算单",
+					"icon": "&#xe621;",
+					"href": "page/kaquan/index.jsp"
+				},
+				{
+					"text": "材料分布汇总表",
+					"icon": "&#xe621;",
+					"href": "page/hexiao/index.jsp"
+				},
+				{
+					"text": "租赁费结算汇总表",
+					"icon": "&#xe621;",
+					"href": "page/hexiao/index.jsp"
+				},
+				{
+					"text": "客户结余量汇总表",
+					"icon": "&#xe621;",
+					"href": "page/hexiao/index.jsp"
+				},
+				{
+					"text": "客户租赁明细统计",
+					"icon": "&#xe621;",
+					"href": "page/hexiao/index.jsp"
+				},
+				{
+					"text": "库存数据统计",
+					"icon": "&#xe621;",
+					"href": "page/hexiao/index.jsp"
+				}
+			]
+		},
+		{
+			"text": "数据查询",
+			"icon": "&#xe620;",
+			"href": "v/hetong.list"
+		},
+		{
+			"text": "系统维护",
+			"icon": "&#xe621;",
+			"href": "page/hexiao/index.jsp"
+		}
+	]
+}
